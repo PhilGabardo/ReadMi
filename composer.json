@@ -4,7 +4,8 @@
     "monolog/monolog": "^1.22",
     "twig/twig": "^2.0",
     "symfony/twig-bridge": "^3",
-    "csanquer/pdo-service-provider": "~1.1dev"
+    "csanquer/pdo-service-provider": "~1.1dev",
+    "kktsvetkov/krumo": "^0.4.0"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
