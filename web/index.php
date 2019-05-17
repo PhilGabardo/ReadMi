@@ -44,6 +44,7 @@ $app->get('/songs/', function() use($app) {
 		$app['monolog']->addDebug('Row ' . $row['name']);
 		$songs[] = $row;
 	}
+	krumo($songs);
 
 	return $app['twig']->render('songs.twig', array(
 		'songs' => $songs
