@@ -18,20 +18,6 @@ $app->register(new Csanquer\Silex\PdoServiceProvider\Provider\PDOServiceProvider
 		)
 	)
 );
-$app->get('/db/', function() use($app) {
-	$st = $app['pdo']->prepare('SELECT name FROM songs');
-	$st->execute();
-
-	$names = array();
-	while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-		$app['monolog']->addDebug('Row ' . $row['name']);
-		$names[] = $row;
-	}
-
-	return $app['twig']->render('database.twig', array(
-		'names' => $names
-	));
-});
 
 // Register the monolog logging service
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
@@ -44,10 +30,24 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 // Our web handlers
-
-$app->get('/', function() use($app) {
+// TODO: login
+$app->get('/index', function() use($app) {
   $app['monolog']->addDebug('logging output.');
   return $app['twig']->render('index.twig');
+});
+$app->get('/songs/', function() use($app) {
+	$st = $app['pdo']->prepare('SELECT name, key FROM songs');
+	$st->execute();
+
+	$songs = [];
+	while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+		$app['monolog']->addDebug('Row ' . $row['name']);
+		$songs[] = $row;
+	}
+
+	return $app['twig']->render('songs.twig', array(
+		'songs' => $songs
+	));
 });
 
 $app->run();
