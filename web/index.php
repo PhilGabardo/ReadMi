@@ -36,7 +36,7 @@ $app->get('/index', function() use($app) {
   return $app['twig']->render('index.twig');
 });
 $app->get('/songs/', function() use($app) {
-	$st = $app['pdo']->prepare('SELECT name, key FROM songs');
+	$st = $app['pdo']->prepare('SELECT name, key_signature FROM songs');
 	$st->execute();
 
 	$songs = [];
