@@ -1,17 +1,12 @@
 {% extends "layout.html" %}
-
 {% block content %}
-    <p>Choose a song!</p>
-
-    <table style="width:100%">
-        <tr>
-            <th>Name</th>
-            <th>Key</th>
-        </tr>
+    <link rel="stylesheet" href="/stylesheets/filterable_table.css">
+    <script src="/js/filter_table.js"></script>
+    <input type="text" id="myInput" onkeyup="filterSongs()" placeholder="Search for songs..">
+    <table id="myTable">
         {% for s in songs %}
             <tr>
                 <td>{{ s.name }}</td>
-                <td>{{ s.key_signature }}</td>
             </tr>
         {% endfor %}
     </table>
