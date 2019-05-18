@@ -31,9 +31,9 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 // Our web handlers
 // TODO: login
-$app->get('/index', function() use($app) {
+$app->get('/play_song', function() use($app) {
   $app['monolog']->addDebug('logging output.');
-  return $app['twig']->render('index.twig');
+  return $app['twig']->render('play_song.twig');
 });
 $app->get('/songs/', function() use($app) {
 	$st = $app['pdo']->prepare('SELECT name, key_signature FROM songs');
