@@ -2,8 +2,10 @@
 {% block content %}
     <link rel="stylesheet" href="/stylesheets/filterable_table.css">
     <script src="/js/filter_table.js"></script>
-    <input type="text" id="myInput" onkeyup="filterSongs()" placeholder="Search for songs..">
     <table id="myTable">
+        <thead>
+            <input type="text" id="myInput" onkeyup="filterSongs()" placeholder="Search for songs..">
+        </thead>
         {% for s in songs %}
             <tr>
                 <td>{{ s.name }}</td>

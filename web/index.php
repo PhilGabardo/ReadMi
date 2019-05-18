@@ -36,14 +36,28 @@ $app->get('/play_song', function() use($app) {
   return $app['twig']->render('play_song.twig');
 });
 $app->get('/songs/', function() use($app) {
-	$st = $app['pdo']->prepare('SELECT name FROM songs');
+	/*$st = $app['pdo']->prepare('SELECT name FROM songs');
 	$st->execute();
 
 	$songs = [];
 	while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
 		$app['monolog']->addDebug('Row ' . $row['name']);
 		$songs[] = $row;
-	}
+	}*/
+
+	$songs = [
+		['name' => 'test'],
+		['name' => 'test1'],
+		['name' => 'test2'],
+		['name' => 'test3'],
+		['name' => 'test4'],
+		['name' => 'test5'],
+		['name' => 'test6'],
+		['name' => 'test7'],
+		['name' => 'test8'],
+		['name' => 'test9'],
+		['name' => 'test10'],
+	];
 
 	return $app['twig']->render('songs.twig', array(
 		'songs' => $songs
