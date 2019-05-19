@@ -50,7 +50,7 @@ function createStaff(key, bars) {
 					formatter.tickContexts['array'][i].setX(offset);
 				}
 				// compute offset for next note
-				var percentage = getDurationAsPercentage(notes[i].duration, notes[i].dots > 0, beat_value, beats_per_measure);
+				var percentage = getDurationAsPercentage(notes[i].duration, notes[i].dots, beat_value, beats_per_measure);
 				offset += percentage * staveWidth;
 
 			}
@@ -75,11 +75,11 @@ function getNote(stavesPassed, percentageThroughStave) {
 		} else if (timePassed - percentageThroughStave > 0.07) {
 			return null;
 		}
-		timePassed += getDurationAsPercentage(note.duration, note.dots > 0, beat_value, beats_per_measure)
+		timePassed += getDurationAsPercentage(note.duration, note.dots, beat_value, beats_per_measure)
 	}
 }
 
-function getDurationAsPercentage(duration, dotted, beat_value, beats_per_measure) {
+function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per_measure) {
 	var percentage;
 	switch (duration) {
 		case '16':
@@ -103,9 +103,13 @@ function getDurationAsPercentage(duration, dotted, beat_value, beats_per_measure
 			percentage = (beat_value) / beats_per_measure;
 			break;
 	}
-	if (dotted) {
-		percentage *= 1.5;
+	var dot_factor = 1;
+	var multiplier = 0.5
+	for (var dot_count = 0; dot_count < number_of_dots; dot_count++) {
+		dot_factor += multiplier;
+		multiplier = multiplier / 2;
 	}
+	percentage *= dot_factor;
 	return percentage;
 }
 
@@ -130,7 +134,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 				key = key.concat(keySigInfo.type === 'sharp' ? '#' : 'b')
 			}
 			var octave = props.octave;
-			playNote(key, octave);
+			//playNote(key, octave);
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(currentNote.key, key) && currentNote.octave === octave)) {
 				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 			} else {

@@ -1,12 +1,12 @@
-function playSound(context, bpm, i) {
+function playSound(context, bpm, i, total_beats) {
 	_playSound(context)
 	setTimeout(function () {                     //  ..  setTimeout()
-		if (i++ < 4) {
-			playSound(context, bpm, i)
-		} else {
+		if (i === beats_per_measure) {
 			drawTimingBar(Date.now(), beats_per_minute, beats_per_measure, beat_value);
 		}
-		_playSound(context)
+		if (i++ < total_beats + beats_per_measure) {
+			playSound(context, bpm, i, total_beats)
+		}
 	}, 60000/bpm)
 
 }

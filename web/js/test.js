@@ -1,4 +1,3 @@
-var beats_per_minute = prompt("Please enter a beats per minute", 60);
 var beats_per_measure = beatsPerMeasure;
 var header = document.getElementById("header")
 header.innerHTML = '<h1 id="header" align="center" itemprop="headline">' + name + '</h1>'
@@ -9,6 +8,7 @@ var audioContext = new AudioContext();
 // Configure the rendering context.
 createStaff(keySig, bars);
 var currentNote = [];
+var beats_per_minute = prompt("Please enter a beats per minute", 60);
 
 var readStart = function(stream) {
 	var source = audioContext.createMediaStreamSource(stream);
@@ -50,7 +50,8 @@ var readStart = function(stream) {
 		}
 		sixteenthNoteSamples = leftoverSamples;
 	};
-	playSound(audioContext, beats_per_minute, 1);
+	window.scrollTo(0, 0);
+	playSound(audioContext, beats_per_minute, 1, beats_per_measure * bars.length);
 };
 
 navigator.mediaDevices.getUserMedia({ audio: true, video: false })
