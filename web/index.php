@@ -51,15 +51,16 @@ $app->post('/play_song', function(Request $request) use($app) {
 });
 
 $app->get('/songs/', function() use($app) {
-	/*$st = $app['pdo']->prepare('SELECT name, id FROM songs');
+	$st = $app['pdo']->prepare('SELECT name, id FROM songs');
 	$st->execute();
 
 	$songs = [];
 	while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
 		$app['monolog']->addDebug('Row ' . $row['name']);
 		$songs[] = $row;
-	}*/
+	}
 
+	/*
 	$songs = [
 		['name' => 'test'],
 		['name' => 'test1'],
@@ -72,7 +73,7 @@ $app->get('/songs/', function() use($app) {
 		['name' => 'test8'],
 		['name' => 'test9'],
 		['name' => 'test10'],
-	];
+	];*/
 
 	return $app['twig']->render('songs.twig', array(
 		'songs' => $songs
