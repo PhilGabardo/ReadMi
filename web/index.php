@@ -35,7 +35,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 // TODO: login
 $app->post('/play_song', function(Request $request) use($app) {
 	$song_name = $request->get('name');
-	$st = $app['pdo']->prepare("SELECT name, key_signature, beat_value, beats_per_measure, notes FROM songs where name = {$song_name}");
+	$st = $app['pdo']->prepare("SELECT name, key_signature, beat_value, beats_per_measure, notes FROM songs where name = '{$song_name}'");
 	$st->execute();
 	$song_row = $st->fetch(PDO::FETCH_ASSOC);
 	/*$song_row = [
