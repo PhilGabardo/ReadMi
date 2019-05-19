@@ -12,5 +12,12 @@
 <script type="text/javascript" src="/js/key_signatures.js"></script>
 <script type="text/javascript" src="/js/note_detection.js"></script>
 <script type="text/javascript" src="/js/staff_rendering.js"></script>
+<script type="text/javascript">
+		var name = '{{s.name}}';
+		var beatValue = {{s.beat_value}};
+		var beatsPerMeasure = {{ s.beats_per_measure }};
+		var keySignature = '{{s.key_signature}}';
+		var notes = {{s.notes|raw}};
+</script>
 <script type="text/javascript" src="/js/test.js"></script>
 {% endblock %}

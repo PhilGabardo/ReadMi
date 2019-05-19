@@ -2,6 +2,8 @@
 
 require('../vendor/autoload.php');
 
+use \Symfony\Component\HttpFoundation\Request;
+
 $app = new Silex\Application();
 $app['debug'] = true;
 
@@ -31,20 +33,33 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 // Our web handlers
 // TODO: login
-$app->get('/play_song', function() use($app) {
-  $app['monolog']->addDebug('logging output.');
-  return $app['twig']->render('play_song.twig');
+$app->post('/play_song', function(Request $request) use($app) {
+	$song_name = $request->get('name');
+	$st = $app['pdo']->prepare("SELECT name, key_signature, beat_value, beats_per_measure, notes FROM songs where name = {$song_name}");
+	$st->execute();
+	$song_row = $st->fetch(PDO::FETCH_ASSOC);
+	/*$song_row = [
+		'name' => 'Dance of the Flowers from the Nutcracker',
+		'key_signature' => 'Eb',
+		'beat_value' => '4',
+		'beats_per_measure' => '3',
+		'notes' => '[{"is_note": true, "name": "G", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "C", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "G#", "octave": 3, "quarterLength": "1.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "C#", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G#", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "Bb", "octave": 3, "quarterLength": "1.0"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "C", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "G#", "octave": 3, "quarterLength": "1.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "C#", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "G#", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "G#", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "E", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "G#", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "Bb", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "Bb", "octave": 3, "quarterLength": "0.5"}, {"is_note": true, "name": "C", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "C", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "G#", "octave": 3, "quarterLength": "1.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "C#", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G#", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "Bb", "octave": 3, "quarterLength": "1.0"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "C", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "2.0"}, {"is_note": true, "name": "G#", "octave": 3, "quarterLength": "1.0"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1/3"}, {"is_note": true, "name": "C#", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "C", "octave": 5, "quarterLength": "2.0"}, {"is_note": true, "name": "Bb", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "C", "octave": 5, "quarterLength": "2.0"}, {"is_note": true, "name": "Bb", "octave": 4, "quarterLength": "1.0"}, {"is_note": true, "name": "D", "octave": 5, "quarterLength": "0.5"}, {"is_note": true, "name": "Bb", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "B", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "C", "octave": 5, "quarterLength": "0.5"}, {"is_note": true, "name": "D", "octave": 5, "quarterLength": "0.5"}, {"is_note": true, "name": "Eb", "octave": 5, "quarterLength": "1.0"}]',
+	];*/
+	return $app['twig']->render('play_song.twig', array(
+		's' => $song_row,
+	));
 });
+
 $app->get('/songs/', function() use($app) {
-	$st = $app['pdo']->prepare('SELECT name FROM songs');
+	/*$st = $app['pdo']->prepare('SELECT name, id FROM songs');
 	$st->execute();
 
 	$songs = [];
 	while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
 		$app['monolog']->addDebug('Row ' . $row['name']);
 		$songs[] = $row;
-	}
-	/* // local testing
+	}*/
+
 	$songs = [
 		['name' => 'test'],
 		['name' => 'test1'],
@@ -57,7 +72,7 @@ $app->get('/songs/', function() use($app) {
 		['name' => 'test8'],
 		['name' => 'test9'],
 		['name' => 'test10'],
-	];*/
+	];
 
 	return $app['twig']->render('songs.twig', array(
 		'songs' => $songs

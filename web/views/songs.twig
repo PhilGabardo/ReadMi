@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
     <link rel="stylesheet" href="/stylesheets/filterable_table.css">
-    <script src="/js/filter_table.js"></script>
     <table id="myTable">
         <thead>
             <input type="text" id="myInput" onkeyup="filterSongs()" placeholder="Search for songs..">
@@ -15,5 +14,9 @@
 
     <ul>
     </ul>
-
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+    <script src="/js/filter_table.js"></script>
 {% endblock %}

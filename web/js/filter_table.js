@@ -1,3 +1,22 @@
+function addRowHandlers() {
+	var table = document.getElementById("myTable");
+	var rows = table.getElementsByTagName("tr");
+	for (i = 0; i < rows.length; i++) {
+		var currentRow = table.rows[i];
+		currentRow.onclick = function () {
+			var cell = this.getElementsByTagName("td")[0];
+			var name = cell.innerHTML;
+			var form = '';
+			$.each({name: name}, function( key, value ) {
+				value = value.split('"').join('\"')
+				form += '<input type="hidden" name="'+key+'" value="'+value+'">';
+			});
+			$('<form action="' + '/play_song' + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+		};
+	}
+}
+addRowHandlers();
+
 function filterSongs() {
 	// Declare variables
 	var input, filter, table, tr, td, i, txtValue;
