@@ -68,7 +68,7 @@ function getBars(notes) {
 		var noteStruct = {clef: "treble", keys: [note.name.concat("/").concat(String(note.octave))],
 			duration: timing_map[parseFloat(note.quarterLength)]};
 		var staveNote = new VF.StaveNote(noteStruct);
-		for (var dot_count = 0; dot_count < dot_count_map[note.quarterLength]; dot_count++) {
+		for (var dot_count = 0; dot_count < dot_count_map[parseFloat(note.quarterLength)]; dot_count++) {
 			staveNote.addDot(0);
 		}
 		current_bar.push(staveNote);
