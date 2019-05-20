@@ -57,7 +57,7 @@ $app->get('/test_play_song', function() use($app) {
 });
 
 $app->get('/songs/', function() use($app) {
-	$st = $app['pdo']->prepare('SELECT name, id FROM songs');
+	$st = $app['pdo']->prepare('SELECT name FROM songs ORDER BY name DESC');
 	$st->execute();
 
 	$songs = [];
