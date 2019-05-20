@@ -16,6 +16,7 @@ var timing_map = {
 	6 : "w",
 	7 : "w",
 	7.5 : "w",
+	8: "1/2"
 }
 
 var ghost_timing_map = {
@@ -36,6 +37,7 @@ var ghost_timing_map = {
 	6 : "wd",
 	7 : "wdd",
 	7.5 : "wddd",
+	8 : "1/2",
 }
 
 var dot_count_map = {
@@ -56,6 +58,7 @@ var dot_count_map = {
 	6 : 1,
 	7 : 2,
 	7.5 : 3,
+	8 : 0,
 }
 
 function getBars(notes) {
@@ -64,9 +67,12 @@ function getBars(notes) {
 	var current_bar = [];
 	for (var i = 0; i < notes.length; i++) {
 		var note = notes[i];
-		var length = parseFloat(note.quarterLength) * (beat_value / 4.0);
+		console.log(note);
+		var length = parseFloat(note.quarterLength) * (4.0 / beat_value);
+		console.log(length);
 		var noteStruct = {clef: "treble", keys: [note.name.concat("/").concat(String(note.octave))],
-			duration: timing_map[parseFloat(note.quarterLength)]};
+			duration: timing_map[length]};
+		console.log(noteStruct);
 		var staveNote = new VF.StaveNote(noteStruct);
 		for (var dot_count = 0; dot_count < dot_count_map[parseFloat(note.quarterLength)]; dot_count++) {
 			staveNote.addDot(0);
@@ -77,8 +83,11 @@ function getBars(notes) {
 			bars.push(current_bar);
 			current_bar = [];
 			var remainder = sum - beats_per_measure;
-			current_bar.push(new VF.GhostNote({clef: "treble",
-				duration: ghost_timing_map[(sum - beats_per_measure) * 4.0 / beat_value]}));
+			var length = (sum - beats_per_measure) * 4.0 / beat_value;
+			console.log(length);
+			var ghostStruct = {clef: "treble",
+				duration: ghost_timing_map[length]};
+			current_bar.push(new VF.GhostNote(ghostStruct));
 			sum = remainder;
 		} else if (sum === beats_per_measure) {
 			sum = 0;
