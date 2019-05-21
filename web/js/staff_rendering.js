@@ -46,11 +46,14 @@ function createStaff(key, bars) {
 			formatter.joinVoices([voice]).format([voice], staveWidth);
 			var offset = 0;
 			for (var i = 0; i < notes.length; i++) {
-				if (notes[i].attrs.type !== 'GhostNote') {
+				//if (notes[i].attrs.type !== 'GhostNote') {
 					formatter.tickContexts['array'][i].setX(offset);
-				}
+				//}
 				// compute offset for next note
 				var percentage = getDurationAsPercentage(notes[i].duration, notes[i].dots, beat_value, beats_per_measure);
+				if (row == 2 && col == 0) {
+					console.log(offset);
+				}
 				offset += percentage * staveWidth;
 
 			}
