@@ -137,7 +137,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 				key = key.concat(keySigInfo.type === 'sharp' ? '#' : 'b')
 			}
 			var octave = props.octave;
-			//playNote(key, octave);
+			playNote(key, octave);
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(currentNote.key, key) && currentNote.octave === octave)) {
 				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 			} else {
