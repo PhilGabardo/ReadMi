@@ -3,7 +3,7 @@ var header = document.getElementById("header")
 header.innerHTML = '<h1 id="header" align="center" itemprop="headline">' + name + '</h1>'
 var beat_value = beatValue;
 var keySig = keySignature;
-var bars = getBars(notes);
+var bars = getBars(notes, keySig);
 var audioContext = new AudioContext();
 // Configure the rendering context.
 createStaff(keySig, bars);

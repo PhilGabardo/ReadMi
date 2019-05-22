@@ -51,9 +51,6 @@ function createStaff(key, bars) {
 				//}
 				// compute offset for next note
 				var percentage = getDurationAsPercentage(notes[i].duration, notes[i].dots, beat_value, beats_per_measure);
-				if (row == 2 && col == 0) {
-					console.log(offset);
-				}
 				offset += percentage * staveWidth;
 
 			}
@@ -129,12 +126,8 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 			var props = note.getKeyProps()[0];
 			var key = props.key;
 			var accidentals = note.getAccidentals();
-			if (accidentals) {
-				key = key.concat(accidentals[0].type);
-			}
-			// TODO: handle naturals
 			if (keySigInfo.notes[key]) {
-				key = key.concat(keySigInfo.type === 'sharp' ? '#' : 'b')
+				key = key.concat(keySigInfo.type)
 			}
 			var octave = props.octave;
 			playNote(key, octave);

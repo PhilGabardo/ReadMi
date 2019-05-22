@@ -2,51 +2,51 @@ function getKeySignatureInfo(key) {
 	// https://en.wikipedia.org/wiki/Key_signature
 	var key_sigs = {
 		'C' : {
-			'type': 'sharp',
+			'type': '#',
 			'notes': []
 		},
 		'G' : {
-			'type': 'sharp',
+			'type': '#',
 			'notes': {'F': true}
 		},
 		'D' : {
-			'type': 'sharp',
+			'type': '#',
 			'notes': {'F' : true, 'C' : true}
 		},
 		'A' : {
-			'type': 'sharp',
+			'type': '#',
 			'notes': {'F' : true, 'C' : true, 'G' : true}
 		},
 		'E' : {
-			'type': 'sharp',
+			'type': '#',
 			'notes': {'F' : true, 'C' : true, 'G' : true, 'D' : true}
 		},
 		'B' : {
-			'type': 'sharp',
+			'type': '#',
 			'notes': {'F' : true, 'C' : true, 'G' : true, 'D' : true, 'A' : true}
 		},
 		'F' : {
-			'type': 'flat',
+			'type': 'b',
 			'notes': {'B' : true}
 		},
 		'Bb' : {
-			'type': 'flat',
+			'type': 'b',
 			'notes': {'B' : true, 'E' : true}
 		},
 		'Eb' : {
-			'type': 'flat',
+			'type': 'b',
 			'notes': {'B' : true, 'E' : true, 'A' : true}
 		},
 		'Ab' : {
-			'type': 'flat',
+			'type': 'b',
 			'notes': {'B' : true, 'E' : true, 'A' : true, 'D' : true}
 		},
 		'Db' : {
-			'type': 'flat',
+			'type': 'b',
 			'notes': {'B' : true, 'E' : true, 'A' : true, 'D' : true, 'G' : true}
 		},
 		'Gb' : {
-			'type': 'flat',
+			'type': 'b',
 			'notes': {'B' : true, 'E' : true, 'A' : true, 'D' : true, 'G' : true, 'C' : true}
 		}
 	};

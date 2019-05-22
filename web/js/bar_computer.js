@@ -66,26 +66,45 @@ var multi_length_map = {
 	4.75: [4, 0.5, 0.25],
 	5 : [4, 1],
 }
+var natural_notes_state = {
+	'A' : 'n',
+	'B' : 'n',
+	'C' : 'n',
+	'D' : 'n',
+	'E' : 'n',
+	'F' : 'n',
+	'G' : 'n',
+};
 
-function getBars(notes) {
+
+function getBars(notes, key) {
 	var sum = 0;
 	var bars = [];
 	var current_bar = [];
+	var keySignatureInfo = getKeySignatureInfo(key);
+	var default_notes_state = natural_notes_state;
+	Object.keys(keySignatureInfo.notes).forEach(function(note) {
+		default_notes_state[note] = keySignatureInfo.type;
+	});
+	var current_notes_state = Object.assign({}, default_notes_state);
 	for (var i = 0; i < notes.length; i++) {
 		var note = notes[i];
 		var quarterLength = parseFloat(note.quarterLength);
 		if (quarterLength === 0.0) {
 			continue;
 		}
-		var length = parseFloat(quarterLength) * (beat_value / 4.0);
 		var length_breakdown = multi_length_map[quarterLength] ? multi_length_map[quarterLength] : [quarterLength];
 		for (var j = 0; j < length_breakdown.length; j++) {
-			console.log(length_breakdown[j]);
 			var noteStruct = {clef: "treble", keys: [note.name.concat("/").concat(String(note.octave))],
 				duration: timing_map[length_breakdown[j]]};
 			var staveNote = new VF.StaveNote(noteStruct);
 			for (var dot_count = 0; dot_count < dot_count_map[length_breakdown[j]]; dot_count++) {
 				staveNote.addDot(0);
+			}
+			var accidental = note.name[1] ? note.name[1] : 'n';
+			if (current_notes_state[note.name[0]] !== accidental) {
+				staveNote.addAccidental(0, new VF.Accidental(accidental));
+				current_notes_state[note.name[0]] = accidental;
 			}
 			current_bar.push(staveNote);
 			sum += length_breakdown[j] * (beat_value / 4.0);
@@ -97,10 +116,10 @@ function getBars(notes) {
 			if (sum > beats_per_measure) {
 				bars.push(current_bar);
 				current_bar = [];
+				current_notes_state = Object.assign({}, default_notes_state);
 				var remainder = (sum - beats_per_measure) * (4.0 / beat_value);
 				var _length_breakdown = multi_length_map[remainder] ? multi_length_map[remainder] : [remainder];
 				for (var k = 0; k < _length_breakdown.length; k++) {
-					console.log(_length_breakdown[k]);
 					var ghostStruct = {clef: "treble",
 						duration: ghost_timing_map[_length_breakdown[k]]};
 					current_bar.push(new VF.GhostNote(ghostStruct));
@@ -110,6 +129,7 @@ function getBars(notes) {
 				sum = 0;
 				bars.push(current_bar);
 				current_bar = [];
+				current_notes_state = Object.assign({}, default_notes_state);
 			}
 			for (var k = 0; k < leftover_bars; k++) {
 				bars.push([]);
