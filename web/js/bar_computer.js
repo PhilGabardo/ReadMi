@@ -77,6 +77,7 @@ function getBars(notes) {
 		var length = parseFloat(quarterLength) * (beat_value / 4.0);
 		var length_breakdown = multi_length_map[quarterLength] ? multi_length_map[quarterLength] : [quarterLength];
 		for (var j = 0; j < length_breakdown.length; j++) {
+			console.log(length_breakdown[j]);
 			var noteStruct = {clef: "treble", keys: [note.name.concat("/").concat(String(note.octave))],
 				duration: timing_map[length_breakdown[j]]};
 			var staveNote = new VF.StaveNote(noteStruct);
@@ -96,6 +97,7 @@ function getBars(notes) {
 				var remainder = (sum - beats_per_measure) * (4.0 / beat_value);
 				var _length_breakdown = multi_length_map[remainder] ? multi_length_map[remainder] : [remainder];
 				for (var k = 0; k < _length_breakdown.length; k++) {
+					console.log(_length_breakdown[k]);
 					var ghostStruct = {clef: "treble",
 						duration: ghost_timing_map[_length_breakdown[k]]};
 					current_bar.push(new VF.GhostNote(ghostStruct));
