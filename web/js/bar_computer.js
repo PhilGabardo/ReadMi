@@ -74,6 +74,9 @@ function getBars(notes) {
 	for (var i = 0; i < notes.length; i++) {
 		var note = notes[i];
 		var quarterLength = parseFloat(note.quarterLength);
+		if (quarterLength === 0.0) {
+			continue;
+		}
 		var length = parseFloat(quarterLength) * (beat_value / 4.0);
 		var length_breakdown = multi_length_map[quarterLength] ? multi_length_map[quarterLength] : [quarterLength];
 		for (var j = 0; j < length_breakdown.length; j++) {
