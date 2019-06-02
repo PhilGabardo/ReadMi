@@ -3,6 +3,24 @@
 require('../vendor/autoload.php');
 
 use \Symfony\Component\HttpFoundation\Request;
+use Auth0\SDK\Auth0;
+
+$auth0 = new Auth0([
+	'domain' => 'falling-bread-1208.auth0.com',
+	'client_id' => 'u97bRPg-fP1xfCp0_lrKDMzmOTWYv2p-',
+	'client_secret' => '3eCaUo0eucb9WBleBPQQilG-4t2GH4bKqxGWWmiOBDCaopmZCJPonOPkcpvgN2xn',
+	'redirect_uri' => 'https://damp-plateau-98206.herokuapp.com/songs',
+	'persist_id_token' => true,
+	'persist_access_token' => true,
+	'persist_refresh_token' => true,
+]);
+
+$userInfo = $auth0->getUser();
+
+if (!$userInfo) {
+	// We have no user info
+	// See below for how to add a login link
+}
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -33,14 +51,18 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 // Our web handlers
 // TODO: login
-$app->post('/play_song', function(Request $request) use($app) {
-	$song_name = $request->get('name');
-	$st = $app['pdo']->prepare("SELECT name, key_signature, beat_value, beats_per_measure, notes FROM songs where name = '{$song_name}'");
-	$st->execute();
-	$song_row = $st->fetch(PDO::FETCH_ASSOC);
-	return $app['twig']->render('play_song.twig', array(
-		's' => $song_row,
-	));
+$app->post('/play_song', function(Request $request) use($app, $userInfo) {
+	if (!$userInfo) {
+		return $app['twig']->render('login.html');
+	} else {
+		$song_name = $request->get('name');
+		$st = $app['pdo']->prepare("SELECT name, key_signature, beat_value, beats_per_measure, notes FROM songs where name = '{$song_name}'");
+		$st->execute();
+		$song_row = $st->fetch(PDO::FETCH_ASSOC);
+		return $app['twig']->render('play_song.twig', array(
+			's' => $song_row,
+		));
+	}
 });
 
 $app->get('/test_play_song', function() use($app) {
@@ -56,19 +78,23 @@ $app->get('/test_play_song', function() use($app) {
 	));
 });
 
-$app->get('/songs/', function() use($app) {
-	$st = $app['pdo']->prepare('SELECT name FROM songs ORDER BY name ASC');
-	$st->execute();
+$app->get('/songs/', function() use($app, $userInfo) {
+	if (!$userInfo) {
+		return $app['twig']->render('login.html');
+	} else {
+		$st = $app['pdo']->prepare('SELECT name FROM songs ORDER BY name ASC');
+		$st->execute();
 
-	$songs = [];
-	while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-		$app['monolog']->addDebug('Row ' . $row['name']);
-		$songs[] = $row;
+		$songs = [];
+		while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+			$app['monolog']->addDebug('Row ' . $row['name']);
+			$songs[] = $row;
+		}
+
+		return $app['twig']->render('songs.twig', array(
+			'songs' => $songs
+		));
 	}
-
-	return $app['twig']->render('songs.twig', array(
-		'songs' => $songs
-	));
 });
 
 $app->get('/test_songs/', function() use($app) {
