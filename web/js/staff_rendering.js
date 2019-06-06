@@ -1,14 +1,16 @@
 VF = Vex.Flow;
+var windowWidth = window.innerWidth;
+var scalingFactor = windowWidth / 1280;
 var div = document.getElementById("boo")
 var renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
 var context = renderer.getContext();// Configure the rendering context.
-renderer.resize(1300, 3000);
-context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+renderer.resize(windowWidth * 0.9, window.innerHeight);
+context.setFont("Arial", 3, "").setBackgroundFillStyle("#eed");
 var voices = [];
 var keySigStaffWidth;
 var keySigInfo;
-var staveWidth = 300;
-var staveHeight = 150;
+var staveHeight = 150 * scalingFactor;
+var leftPadding = 20 * scalingFactor;
 
 function createStaff(key, bars) {
 
@@ -16,21 +18,21 @@ function createStaff(key, bars) {
 	keySigInfo = getKeySignatureInfo(key);
 	var keySigNotesCount = Object.keys(keySigInfo.notes).length;
 	keySigStaffWidth = 80 + keySigNotesCount * 10;
+	staveWidth = (windowWidth * 0.8 - keySigStaffWidth) / 3.0;
 	for (var row = 0; row < (bars.length / 3); row++) {
-		var keySigStaff = new Vex.Flow.Stave(20, staveHeight * row, keySigStaffWidth);
+		var keySigStaff = new Vex.Flow.Stave(leftPadding, staveHeight * row, keySigStaffWidth);
+		keySigStaff.options.spacing_between_lines_px = 10 * scalingFactor;
 		keySigStaff.addClef('treble')
 		if (row === 0) {
 			keySigStaff.addTimeSignature(String(beats_per_measure).concat("/").concat(String(beat_value)));
 		}
-		if (key) {
-			var keySig = new VF.KeySignature(key);
-			keySig.padding = 20;
-			keySig.addToStave(keySigStaff);
-		}
+		var keySig = new VF.KeySignature(key);
+		keySig.addToStave(keySigStaff);
 		keySigStaff.setContext(context).draw();
 		for (var col = 0; col < 3; col++) {
-			var horiz_offset =  keySigStaffWidth + 20 + staveWidth * col;
+			var horiz_offset =  leftPadding + keySigStaffWidth + staveWidth * col;
 			var staff = new Vex.Flow.Stave(horiz_offset, staveHeight * row, staveWidth);
+			staff.options.spacing_between_lines_px = 10 * scalingFactor;
 			staff.setContext(context).draw();
 			var notes = bars[row * 3 + col];
 			if (notes === undefined) {
@@ -46,13 +48,9 @@ function createStaff(key, bars) {
 			formatter.joinVoices([voice]).format([voice], staveWidth);
 			var offset = 0;
 			for (var i = 0; i < notes.length; i++) {
-				//if (notes[i].attrs.type !== 'GhostNote') {
-					formatter.tickContexts['array'][i].setX(offset);
-				//}
-				// compute offset for next note
+				formatter.tickContexts['array'][i].x = offset - 20; // 20 padding is always added for some reason
 				var percentage = getDurationAsPercentage(notes[i].duration, notes[i].dots, beat_value, beats_per_measure);
 				offset += percentage * staveWidth;
-
 			}
 
 			voice.draw(context, staff);
@@ -142,7 +140,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 		var pos = getPosition(stavesPassed, percentageThroughStave);
 		scrollToNiceSpot(stavesPassed, percentageThroughStave)
 		context.beginPath();
-		context.rect(pos.width, pos.height, 10, 120);
+		context.rect(pos.width, pos.height, 10 * scalingFactor, 120 * scalingFactor);
 		context.closePath()
 		if (Date.now() - startTime < 50000) {            //  if the counter < 10, call the loop function
 			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value);             //  ..  again which will trigger another
@@ -152,7 +150,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 
 function getPosition(stavesPassed, percentageThroughStave) {
 	var height = Math.floor(stavesPassed / 3) * staveHeight;
-	var width = 40 + (stavesPassed % 3) * staveWidth + (percentageThroughStave * staveWidth);
+	var width = leftPadding + (stavesPassed % 3) * staveWidth + (percentageThroughStave * staveWidth);
 	width += keySigStaffWidth;
 	return {
 		height: height,
