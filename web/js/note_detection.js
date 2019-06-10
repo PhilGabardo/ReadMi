@@ -36,7 +36,7 @@ function estimateNote(frequency) {
 	// Get the name of the note
 	return {
 		key: noteNames[frequencyIndex % noteNames.length],
-		octave: 9 - Math.floor(frequencyIndex / noteNames.length)
+		octave: Math.floor(9 - (frequencyIndex / noteNames.length))
 	};
 }
 
@@ -55,30 +55,15 @@ function getFrequencyForNote(note_name, note_octave) {
 function estimateFrequency(wave) {
 
 	function autoCorrelationDifference(wave) {
-		var compressedWave = new Array(wave.length / 2)
-		var compressedResultBuffer = new Array(compressedWave.length / 2)
 		var resultBuffer = new Array(wave.length / 2)
-
-
-		for (var i = 0; i < wave.length - 1; i += 2) {
-			compressedWave[i / 2] = (wave[i] + wave[i + 1]) / 2;
-		}
-
-		for (var j = 0; j < compressedResultBuffer.length; j++) {
-			for (var i = 0; i < compressedResultBuffer.length; i++) {
+		for (var j = 0; j < resultBuffer.length; j++) {
+			for (var i = 0; i < resultBuffer.length; i++) {
 				// d sub t (tau) = (x(i) - x(i - tau))^2, from i = 1 to result buffer size
-				if (!(j in compressedResultBuffer)) {
-					compressedResultBuffer[j] = 0;
+				if (!(j in resultBuffer)) {
+					resultBuffer[j] = 0;
 				}
-				compressedResultBuffer[j] += Math.pow((compressedWave[i] - compressedWave[i + j]), 2);
+				resultBuffer[j] += Math.pow((wave[i] - wave[i + j]), 2);
 			}
-		}
-
-		for (var i = 0; i < resultBuffer.length - 1; i += 2) {
-			var iNorm = i / 2;
-			var diff = (compressedResultBuffer[iNorm + 1] - compressedResultBuffer[iNorm]) / 2;
-			resultBuffer[i] = compressedResultBuffer[iNorm];
-			resultBuffer[i + 1] = compressedResultBuffer[iNorm] + diff;
 		}
 		return resultBuffer;
 	}
