@@ -7,48 +7,29 @@ var bars = getBars(notes, keySig);
 var audioContext = new AudioContext();
 // Configure the rendering context.
 createStaff(keySig, bars);
-var currentNote = [];
 var beats_per_minute = prompt("Please enter a beats per minute", 60);
+var sixteenthNoteSamples = [];
+var sixteenthNoteSampleBufferSize =  4096;
 
 var readStart = function(stream) {
 	var source = audioContext.createMediaStreamSource(stream);
 	var processor = audioContext.createScriptProcessor(4096, 1, 1);
-	var count = 0;
-	var sixteenthNoteSampleBufferSize =  4096;
-	var sixteenthNoteSamples = [];
 	var leftoverSamples = [];
 
 	source.connect(processor);
 	processor.connect(audioContext.destination);
 	processor.onaudioprocess = function(e) {
-		count += 4096;
-		count = count % 44100;
+		for (var i = 0; i < leftoverSamples.length; i++) {
+			sixteenthNoteSamples.push(leftoverSamples[i])
+		}
+		sixteenthNoteSamples = leftoverSamples;
 		// Do something with the data, i.e Convert this to WAV
 		var channelData = e.inputBuffer.getChannelData(0);
 		for (var i = 0; i < channelData.length; i++) {
 			sixteenthNoteSamples.push(channelData[i])
 		}
-		if (sixteenthNoteSamples.length < sixteenthNoteSampleBufferSize) {
-			currentNote = [];
-			return;
-		}
 		leftoverSamples = sixteenthNoteSamples.slice(sixteenthNoteSampleBufferSize)
 		sixteenthNoteSamples = sixteenthNoteSamples.slice(0, sixteenthNoteSampleBufferSize)
-		var max = 0;
-		for (var i = 0; i < sixteenthNoteSamples.length; i++) {
-			max = Math.max(max, Math.abs(sixteenthNoteSamples[i]))
-		}
-		if (max > 0.1) {
-			freq = estimateFrequency(sixteenthNoteSamples);
-			if (freq != -1) {
-				currentNote = estimateNote(freq);
-			} else {
-				currentNote = [];
-			}
-		} else {
-			currentNote = [];
-		}
-		sixteenthNoteSamples = leftoverSamples;
 	};
 	window.scrollTo(0, 0);
 	playSound(audioContext, beats_per_minute, 1, beats_per_measure * bars.length);

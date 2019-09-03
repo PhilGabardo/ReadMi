@@ -52,6 +52,26 @@ function getFrequencyForNote(note_name, note_octave) {
 }
 
 
+function getNoteFromSamples(sixteenthNoteSamples) {
+	if (sixteenthNoteSamples.length < sixteenthNoteSampleBufferSize) {
+		return [];
+	}
+	var max = 0;
+	for (var i = 0; i < sixteenthNoteSamples.length; i++) {
+		max = Math.max(max, Math.abs(sixteenthNoteSamples[i]))
+	}
+	if (max > 0.1) {
+		var freq = estimateFrequency(sixteenthNoteSamples);
+		if (freq != -1) {
+			return estimateNote(freq);
+		} else {
+			return [];
+		}
+	} else {
+		return [];
+	}
+}
+
 function estimateFrequency(wave) {
 
 	function autoCorrelationDifference(wave) {

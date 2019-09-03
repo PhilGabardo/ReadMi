@@ -1,6 +1,6 @@
 function playNote(noteName, octave, callback) {
 	// TODO: variable duration based on note length
-	var duration = 0.3;
+	var duration = 0.2;
 	var frequency = getFrequencyForNote(noteName, octave);
 
 	// create Oscillator node

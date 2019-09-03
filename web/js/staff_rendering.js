@@ -7,7 +7,6 @@ var context = renderer.getContext();// Configure the rendering context.
 renderer.resize(windowWidth * 0.9, 3000);
 context.setFont("Arial", 3, "").setBackgroundFillStyle("#eed");
 var voices = [];
-var notesReturned = [];
 var keySigStaffWidth;
 var keySigInfo;
 var staveHeight = 150 * scalingFactor;
@@ -60,9 +59,15 @@ function createStaff(key, bars) {
 			voices.push(voice);
 		}
 	}
+	for (var i = 0; i < voices.length; i++) {
+		var notes  = voices[i].getTickables();
+		for (var j = 0; j < notes.length; j++) {
+			notes[j].draw();
+		}
+	}
 }
 
-function getNote(stavesPassed, percentageThroughStave, startOffset, endOffset, notesPlayed) {
+function getNote(stavesPassed, percentageThroughStave, notesPlayed) {
 	var voice = voices[stavesPassed];
 	var notes  = voice.getTickables();
 	var timePassed = 0;
@@ -121,8 +126,7 @@ function playAlong(startTime, notesPlayed) {
 		var beatsPassed = (timeInMs * bps) / (1000);
 		var stavesPassed = Math.floor(beatsPassed / beats_per_measure);
 		var percentageThroughStave = (beatsPassed % beats_per_measure) / beats_per_measure;
-		var offset = ((beats_per_minute / beats_per_measure) / 20) * 0.02;
-		var noteData = getNote(stavesPassed, percentageThroughStave, 0.0, offset, notesPlayed)
+		var noteData = getNote(stavesPassed, percentageThroughStave, notesPlayed)
 		var note = noteData ? noteData.note : null;
 		if (note && note.attrs.type !== 'GhostNote') {
 			var props = note.getKeyProps()[0];
@@ -150,7 +154,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 		var beatsPassed = (timeInMs * bps) / (1000);
 		var stavesPassed = Math.floor(beatsPassed / beats_per_measure);
 		var percentageThroughStave = (beatsPassed % beats_per_measure) / beats_per_measure;
-		var offset = ((beats_per_minute / beats_per_measure) / 20) * 0.15;
+		var offset = ((beats_per_minute / beats_per_measure) / 20) * 0.1;
 		var offsettedPercentageThroughStave = percentageThroughStave - offset;
 		var offsettedStavesPassed = stavesPassed;
 		if (offsettedPercentageThroughStave < 0) {
@@ -161,7 +165,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 				offsettedPercentageThroughStave += 1;
 			}
 		}
-		var noteData = getNote(offsettedStavesPassed, offsettedPercentageThroughStave, offset, offset * 1.2, notesPlayed) // 40
+		var noteData = getNote(offsettedStavesPassed, offsettedPercentageThroughStave, notesPlayed) // 40
 		var note = noteData ? noteData.note : null;
 		context.svg.removeChild(context.svg.lastChild);
 		if (note && !note.getStyle() && note.attrs.type !== 'GhostNote') {
@@ -171,6 +175,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 				key = key.concat(keySigInfo.type)
 			}
 			var octave = props.octave
+			var currentNote = getNoteFromSamples(sixteenthNoteSamples)
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(currentNote.key, key) && currentNote.octave === octave)) {
 				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 			} else {
