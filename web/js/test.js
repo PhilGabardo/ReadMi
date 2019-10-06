@@ -4,10 +4,12 @@ header.innerHTML = '<h1 id="header" align="center" itemprop="headline">' + name 
 var beat_value = beatValue;
 var keySig = keySignature;
 var bars = getBars(notes, keySig);
-var audioContext = new AudioContext();
 // Configure the rendering context.
 createStaff(keySig, bars);
 var beats_per_minute = prompt("Please enter a beats per minute", 60);
+var AudioContext = window.AudioContext          // Default
+	|| window.webkitAudioContext;  // Safari and old versions of Chrome
+var audioContext = new AudioContext();
 var sixteenthNoteSamples = [];
 var sixteenthNoteSampleBufferSize =  4096;
 

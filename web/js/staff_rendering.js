@@ -193,7 +193,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 		context.beginPath();
 		context.rect(pos.width, pos.height, 10 * scalingFactor, 120 * scalingFactor);
 		context.closePath()
-		if (Date.now() - startTime < 50000) {            //  if the counter < 10, call the loop function
+		if (stavesPassed <= bars.length) {            //  if the counter < 10, call the loop function
 			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value, notesPlayed);             //  ..  again which will trigger another
 		}                        //  ..  setTimeout()
 	}, 3)
