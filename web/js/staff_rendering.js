@@ -75,14 +75,13 @@ function getNote(stavesPassed, percentageThroughStave, notesPlayed) {
 		var note = notes[i];
 		if (!notesPlayed[stavesPassed] || !notesPlayed[stavesPassed][i]) {
 			// sample slightly after note is passed
-			if (percentageThroughStave - timePassed < 0.03 && percentageThroughStave - timePassed > 0.0) {
+			if (percentageThroughStave - timePassed > 0.0) {
 				return {note: note, index: i};
-			} else if (timePassed - percentageThroughStave > 0.03) {
-				return null;
 			}
 		}
 		timePassed += getDurationAsPercentage(note.duration, note.dots, beat_value, beats_per_measure)
 	}
+	return null;
 }
 
 function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per_measure) {
@@ -168,25 +167,27 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 		var noteData = getNote(offsettedStavesPassed, offsettedPercentageThroughStave, notesPlayed) // 40
 		var note = noteData ? noteData.note : null;
 		context.svg.removeChild(context.svg.lastChild);
-		if (note && !note.getStyle() && note.attrs.type !== 'GhostNote') {
-			var props = note.getKeyProps()[0];
-			var key = props.key;
-			if (keySigInfo.notes[key]) {
-				key = key.concat(keySigInfo.type)
-			}
-			var octave = props.octave
-			var currentNote = getNoteFromSamples(sixteenthNoteSamples)
-			if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(currentNote.key, key) && currentNote.octave === octave)) {
-				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
-			} else {
-				note.setStyle({fillStyle: "red", strokeStyle: "red"});
-			}
-			note.setContext(context)
-			note.draw();
+		if (note) {
 			if (!notesPlayed[stavesPassed]) {
 				notesPlayed[stavesPassed] = {};
 			}
 			notesPlayed[stavesPassed][noteData.index] = true
+			if (note.attrs.type !== 'GhostNote') {
+				var props = note.getKeyProps()[0];
+				var key = props.key;
+				if (keySigInfo.notes[key]) {
+					key = key.concat(keySigInfo.type)
+				}
+				var octave = props.octave
+				var currentNote = getNoteFromSamples(sixteenthNoteSamples)
+				if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(currentNote.key, key) && currentNote.octave === octave)) {
+					note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
+				} else {
+					note.setStyle({fillStyle: "red", strokeStyle: "red"});
+				}
+				note.setContext(context)
+				note.draw();
+			}
 		}
 		var pos = getPosition(stavesPassed, percentageThroughStave);
 		scrollToNiceSpot(stavesPassed, percentageThroughStave)

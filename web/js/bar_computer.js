@@ -125,7 +125,8 @@ function getBars(notes, key) {
 					current_bar.push(new VF.GhostNote(ghostStruct));
 				}
 				sum -= beats_per_measure;
-			} else if (sum === beats_per_measure) {
+			}
+			if (sum === beats_per_measure) {
 				sum = 0;
 				bars.push(current_bar);
 				current_bar = [];
