@@ -65,6 +65,7 @@ var multi_length_map = {
 	2.75 : [2, 0.5, 0.25],
 	4.75: [4, 0.5, 0.25],
 	5 : [4, 1],
+	8: [4, 4]
 }
 var natural_notes_state = {
 	'A' : 'n',
