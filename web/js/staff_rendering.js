@@ -7,6 +7,8 @@ var context = renderer.getContext();// Configure the rendering context.
 renderer.resize(windowWidth * 0.9, 3000);
 context.setFont("Arial", 3, "").setBackgroundFillStyle("#eed");
 var voices = [];
+var notePercentages = {};
+var playAlongNotePercentages = {};
 var keySigStaffWidth;
 var keySigInfo;
 var staveHeight = 150 * scalingFactor;
@@ -47,9 +49,17 @@ function createStaff(key, bars) {
 			var formatter = new VF.Formatter();
 			formatter.joinVoices([voice]).format([voice], staveWidth);
 			var offset = 0;
+			var accumuluated_percented = 0;
+			notePercentages[row * 3 + col] = [{note: notes[0], percentage: 0}];
+			playAlongNotePercentages[row * 3 + col] = [{note: notes[0], percentage: 0}];
 			for (var i = 0; i < notes.length; i++) {
 				formatter.tickContexts['array'][i].x = offset - 20; // 20 padding is always added for some reason
 				var percentage = getDurationAsPercentage(notes[i].duration, notes[i].dots, beat_value, beats_per_measure);
+				accumuluated_percented += percentage;
+				if (i !== notes.length - 1) {
+					notePercentages[row * 3 + col].push({note: notes[i + 1], percentage: accumuluated_percented});
+					playAlongNotePercentages[row * 3 + col].push({note: notes[i + 1], percentage: accumuluated_percented});
+				}
 				offset += percentage * staveWidth;
 			}
 
@@ -65,23 +75,6 @@ function createStaff(key, bars) {
 			notes[j].draw();
 		}
 	}
-}
-
-function getNote(stavesPassed, percentageThroughStave, notesPlayed) {
-	var voice = voices[stavesPassed];
-	var notes  = voice.getTickables();
-	var timePassed = 0;
-	for (var i = 0; i < notes.length; i++) {
-		var note = notes[i];
-		if (!notesPlayed[stavesPassed] || !notesPlayed[stavesPassed][i]) {
-			// sample slightly after note is passed
-			if (percentageThroughStave - timePassed > 0.0) {
-				return {note: note, index: i};
-			}
-		}
-		timePassed += getDurationAsPercentage(note.duration, note.dots, beat_value, beats_per_measure)
-	}
-	return null;
 }
 
 function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per_measure) {
@@ -118,35 +111,37 @@ function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per
 	return percentage;
 }
 
-function playAlong(startTime, notesPlayed) {
-	setTimeout(function () {
+function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value) {          //  create a loop function
+	setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		var timeInMs = Date.now() - startTime;
 		var bps = beats_per_minute / 60;
 		var beatsPassed = (timeInMs * bps) / (1000);
 		var stavesPassed = Math.floor(beatsPassed / beats_per_measure);
 		var percentageThroughStave = (beatsPassed % beats_per_measure) / beats_per_measure;
-		var noteData = getNote(stavesPassed, percentageThroughStave, notesPlayed)
-		var note = noteData ? noteData.note : null;
-		if (note && note.attrs.type !== 'GhostNote') {
-			var props = note.getKeyProps()[0];
-			var key = props.key;
-			if (keySigInfo.notes[key]) {
-				key = key.concat(keySigInfo.type)
-			}
-			var octave = props.octave;
-			playNote(key, octave);
-			if (!notesPlayed[stavesPassed]) {
-				notesPlayed[stavesPassed] = {};
-			}
-			notesPlayed[stavesPassed][noteData.index] = true
+		if (playAlongNotePercentages[stavesPassed][0] && playAlongNotePercentages[stavesPassed][0].percentage < percentageThroughStave) {
+			var note = playAlongNotePercentages[stavesPassed][0].note;
+			playAlongNotePercentages[stavesPassed].shift();
+		} else {
+			var note = null;
 		}
-		if (Date.now() - startTime < 50000) {            //  if the counter < 10, call the loop function
-			playAlong(startTime, notesPlayed);           //  ..  again which will trigger another
+		if (note) {
+			if (note.attrs.type !== 'GhostNote') {
+				var props = note.getKeyProps()[0];
+				var key = props.key;
+				if (keySigInfo.notes[key]) {
+					key = key.concat(keySigInfo.type)
+				}
+				var octave = props.octave;
+				playNote(key, octave);
+			}
+		}
+		if (stavesPassed <= bars.length) {            //  if the counter < 10, call the loop function
+			playAlong(startTime, beats_per_minute, beats_per_measure, beat_value);             //  ..  again which will trigger another
 		}                        //  ..  setTimeout()
-	}, 5)
+	}, 3)
 }
 
-function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_value, notesPlayed) {          //  create a loop function
+function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_value) {          //  create a loop function
 	setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		var timeInMs = Date.now() - startTime;
 		var bps = beats_per_minute / 60;
@@ -161,24 +156,24 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 				offsettedStavesPassed = 0;
 			} else {
 				offsettedStavesPassed -= 1;
-				offsettedPercentageThroughStave += 1;
+				offsettedPercentageThroughStave = offsettedPercentageThroughStave + 1;
 			}
 		}
-		var noteData = getNote(offsettedStavesPassed, offsettedPercentageThroughStave, notesPlayed) // 40
-		var note = noteData ? noteData.note : null;
+		if (notePercentages[offsettedStavesPassed][0] && notePercentages[offsettedStavesPassed][0].percentage < offsettedPercentageThroughStave) {
+			var note = notePercentages[offsettedStavesPassed][0].note;
+			notePercentages[offsettedStavesPassed].shift();
+		} else {
+			var note = null;
+		}
 		context.svg.removeChild(context.svg.lastChild);
 		if (note) {
-			if (!notesPlayed[stavesPassed]) {
-				notesPlayed[stavesPassed] = {};
-			}
-			notesPlayed[stavesPassed][noteData.index] = true
 			if (note.attrs.type !== 'GhostNote') {
 				var props = note.getKeyProps()[0];
 				var key = props.key;
 				if (keySigInfo.notes[key]) {
 					key = key.concat(keySigInfo.type)
 				}
-				var octave = props.octave
+				var octave = props.octave;
 				var currentNote = getNoteFromSamples(sixteenthNoteSamples)
 				if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(currentNote.key, key) && currentNote.octave === octave)) {
 					note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
@@ -195,7 +190,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 		context.rect(pos.width, pos.height, 10 * scalingFactor, 120 * scalingFactor);
 		context.closePath()
 		if (stavesPassed <= bars.length) {            //  if the counter < 10, call the loop function
-			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value, notesPlayed);             //  ..  again which will trigger another
+			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value);             //  ..  again which will trigger another
 		}                        //  ..  setTimeout()
 	}, 3)
 }
