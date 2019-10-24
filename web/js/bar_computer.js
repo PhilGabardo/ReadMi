@@ -58,15 +58,6 @@ var dot_count_map = {
 	7.5 : 3,
 }
 
-var multi_length_map = {
-	1.25 : [1, 0.25],
-	2.25 : [2, 0.25],
-	2.5 : [2, 0.5],
-	2.75 : [2, 0.5, 0.25],
-	4.75: [4, 0.5, 0.25],
-	5 : [4, 1],
-	8: [4, 4]
-}
 var natural_notes_state = {
 	'A' : 'n',
 	'B' : 'n',
@@ -94,7 +85,7 @@ function getBars(notes, key) {
 		if (quarterLength === 0.0) {
 			continue;
 		}
-		var length_breakdown = multi_length_map[quarterLength] ? multi_length_map[quarterLength] : [quarterLength];
+		var length_breakdown = getLengthBreakDown(quarterLength);
 		for (var j = 0; j < length_breakdown.length; j++) {
 			var noteStruct = {clef: "treble", keys: [note.name.concat("/").concat(String(note.octave))],
 				duration: timing_map[length_breakdown[j]]};
@@ -119,7 +110,7 @@ function getBars(notes, key) {
 				current_bar = [];
 				current_notes_state = Object.assign({}, default_notes_state);
 				var remainder = (sum - beats_per_measure) * (4.0 / beat_value);
-				var _length_breakdown = multi_length_map[remainder] ? multi_length_map[remainder] : [remainder];
+				var _length_breakdown = getLengthBreakDown(remainder);
 				for (var k = 0; k < _length_breakdown.length; k++) {
 					var ghostStruct = {clef: "treble",
 						duration: ghost_timing_map[_length_breakdown[k]]};
@@ -145,4 +136,21 @@ function getBars(notes, key) {
 		bars.push([])
 	}
 	return bars;
+}
+
+function getLengthBreakDown(quarterLength) {
+	var understoodLengths = Object.keys(timing_map);
+	understoodLengths.sort(function(a, b){return b-a});
+	var breakdown = [];
+	var remaining = quarterLength;
+	while (remaining > 0) {
+		for (var i = 0; i < understoodLengths.length; i++) {
+			if (remaining >= understoodLengths[i]) {
+				breakdown.push(understoodLengths[i]);
+				remaining -= understoodLengths[i];
+				break;
+			}
+		}
+	}
+	return breakdown;
 }
