@@ -57,7 +57,7 @@ $app->get('/test_play_song', function() use($app) {
 	));
 });
 
-$app->get('/songs/', function() use($app) {
+$app->get('/', function() use($app) {
 	$st = $app['pdo']->prepare('SELECT name FROM songs ORDER BY name ASC');
 	$st->execute();
 
@@ -91,9 +91,4 @@ $app->get('/test_songs/', function() use($app) {
 		'songs' => $songs
 	));
 });
-
-$app->get('/', function() use($app) {
-	return $app['twig']->render('landing.twig');
-});
-
 $app->run();
