@@ -1,5 +1,7 @@
 var beats_per_measure = beatsPerMeasure;
 var header = document.getElementById("header")
+var correctNotes = 0;
+var totalNotes = 0;
 header.innerHTML = '<h1 id="header" align="center" itemprop="headline">' + name + '</h1>'
 var beat_value = beatValue;
 var keySig = keySignature;

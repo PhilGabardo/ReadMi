@@ -177,9 +177,11 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 				var currentNote = getNoteFromSamples(sixteenthNoteSamples)
 				if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(currentNote.key, key) && currentNote.octave === octave)) {
 					note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
+					correctNotes++;
 				} else {
 					note.setStyle({fillStyle: "red", strokeStyle: "red"});
 				}
+				totalNotes++;
 				note.setContext(context)
 				note.draw();
 			}
@@ -189,9 +191,32 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 		context.beginPath();
 		context.rect(pos.width, pos.height, 10 * scalingFactor, 120 * scalingFactor);
 		context.closePath()
-		if (stavesPassed <= bars.length) {            //  if the counter < 10, call the loop function
+		if (stavesPassed < bars.length) {            //  if the counter < 10, call the loop function
 			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value);             //  ..  again which will trigger another
-		}                        //  ..  setTimeout()
+		} else {
+			// TODO: make this fancier
+			var r = confirm("You played " + correctNotes + " out of " + totalNotes + " correctly! Would you like to play again?");
+			if (r == true) {
+				$.ajax({
+					type: "POST",
+					url: "/replay_song",
+					data: {
+						song: {
+							name: name,
+							beat_value: beatValue,
+							beats_per_measure: beatsPerMeasure,
+							key_signature: keySignature,
+							notes: notes,
+						}
+					},
+					success: function() {
+						location.reload();
+					}
+				});
+			} else {
+				window.location.href = "/";
+			}
+		}
 	}, 3)
 }
 
