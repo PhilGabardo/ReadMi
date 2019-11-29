@@ -133,7 +133,7 @@ function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value) 
 				}
 				var octave = props.octave;
 				var offsetNote = getOffsetNote(key, octave, 0 - stepOffset);
-				playNote(offsetNote.name, offsetNote.octave);
+				//playNote(offsetNote.name, offsetNote.octave);
 			}
 		}
 		if (stavesPassed <= bars.length) {            //  if the counter < 10, call the loop function
