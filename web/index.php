@@ -53,10 +53,11 @@ $app->post('/replay_song', function(Request $request) use($app) {
 $app->get('/test_play_song', function() use($app) {
 	$song_row = [
 		'name' => 'Afterburner',
-		'key_signature' => 'Bb',
+		'key_signature' => 'C',
 		'beat_value' => '4',
 		'beats_per_measure' => '4',
-		'notes' => '[{"is_note": true, "name": "C", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "E", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "0.75"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "1.25"}, {"is_note": true, "name": "G#", "octave": 4, "quarterLength": "0.75"}, {"is_note": true, "name": "G#", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "Bb", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "0.75"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "2.25"}, {"is_note": true, "name": "C", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "E", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "0.75"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "1.25"}, {"is_note": true, "name": "G#", "octave": 4, "quarterLength": "0.75"}, {"is_note": true, "name": "G#", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "Bb", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "3.0"}, {"is_note": true, "name": "E", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "Bb", "octave": 4, "quarterLength": "0.75"}, {"is_note": true, "name": "Bb", "octave": 4, "quarterLength": "1.25"}]',
+		'notes' => '[{"is_note": true, "name": "A", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "Bb", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "B", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "C", "octave": 4, "quarterLength": "1"}, 
+		{"is_note": true, "name": "Db", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "E", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "F", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "Gb", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "G", "octave": 4, "quarterLength": "1"}, {"is_note": true, "name": "Ab", "octave": 4, "quarterLength": "1"}]',
 	];
 	return $app['twig']->render('play_song.twig', array(
 		's' => $song_row,
