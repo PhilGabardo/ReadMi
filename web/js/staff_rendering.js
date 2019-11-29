@@ -133,7 +133,9 @@ function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value) 
 				}
 				var octave = props.octave;
 				var offsetNote = getOffsetNote(key, octave, 0 - stepOffset);
-				//playNote(offsetNote.name, offsetNote.octave);
+				if ($('#playalong-enabled').is(":checked")) {
+					playNote(offsetNote.name, offsetNote.octave);
+				}
 			}
 		}
 		if (stavesPassed <= bars.length) {            //  if the counter < 10, call the loop function
@@ -189,7 +191,9 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 			}
 		}
 		var pos = getPosition(stavesPassed, percentageThroughStave);
-		scrollToNiceSpot(stavesPassed, percentageThroughStave)
+		if ($('#autoscroll-enabled').is(":checked")) {
+			scrollToNiceSpot(stavesPassed, percentageThroughStave)
+		}
 		context.beginPath();
 		context.rect(pos.width, pos.height, 10 * scalingFactor, 120 * scalingFactor);
 		context.closePath()

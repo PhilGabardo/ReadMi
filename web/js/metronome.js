@@ -1,5 +1,7 @@
 function playSound(context, bpm, i, total_beats) {
-	_playSound(context)
+	if ($('#metronome-enabled').is(":checked")) {
+		_playSound(context)
+	}
 	setTimeout(function () {                     //  ..  setTimeout()
 		if (i === beats_per_measure) {
 			playAlong(Date.now(), beats_per_minute, beats_per_measure, beat_value, {});

@@ -19,12 +19,23 @@
 }
 
 /* The navigation menu links */
-.sidenav a {
-    padding: 6px 8px 6px 16px;
+.sidenav input {
+    padding: 12px 12px 12px 12px;
     text-decoration: none;
     font-size: 25px;
     color: #818181;
+}
+
+.sidenav label {
+    padding: 6px 12px 6px 12px;
+    color:white;
+    font-family: Consolas, Baskerville, 'Segoe UI', sans-serif;
     display: block;
+}
+
+.sidenav h1 {
+    padding: 6px 8px 6px 16px;
+    color:white;
 }
 
 /* When you mouse over the navigation links, change their color */
