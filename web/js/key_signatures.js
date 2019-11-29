@@ -52,3 +52,21 @@ function getKeySignatureInfo(key) {
 	};
 	return key_sigs[key];
 }
+
+function getOffsetNote(key, octave, offset) {
+	var notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
+	var startIndex = 0;
+	for (var i = 0; i < notes.length; i++) {
+		if (compareKeys(notes[i], key)) {
+			startIndex = i;
+			break;
+		}
+	}
+	var offsetKey = notes[(notes.length + startIndex + offset) % notes.length];
+	var offsetOctave = octave + Math.floor((startIndex + offset) / notes.length);
+	return {
+		"name": offsetKey,
+		"octave": offsetOctave,
+	};
+}
+

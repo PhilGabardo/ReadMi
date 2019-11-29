@@ -5,7 +5,8 @@ var totalNotes = 0;
 header.innerHTML = '<h1 id="header" align="center" itemprop="headline">' + name + '</h1>'
 var beat_value = beatValue;
 var keySig = keySignature;
-var bars = getBars(notes, keySig);
+var stepOffset = 4;
+var bars = getBars(notes, keySig, stepOffset);
 // Configure the rendering context.
 createStaff(keySig, bars);
 var beats_per_minute = prompt("Please enter a beats per minute", 60);

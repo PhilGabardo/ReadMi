@@ -132,7 +132,8 @@ function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value) 
 					key = key.concat(keySigInfo.type)
 				}
 				var octave = props.octave;
-				playNote(key, octave);
+				var offsetNote = getOffsetNote(key, octave, 0 - stepOffset);
+				playNote(offsetNote.name, offsetNote.octave);
 			}
 		}
 		if (stavesPassed <= bars.length) {            //  if the counter < 10, call the loop function
@@ -175,7 +176,8 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 				}
 				var octave = props.octave;
 				var currentNote = getNoteFromSamples(sixteenthNoteSamples)
-				if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(currentNote.key, key) && currentNote.octave === octave)) {
+				var offsetNote = getOffsetNote(currentNote.key, currentNote.octave, stepOffset);
+				if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(offsetNote.name, key) && offsetNote.octave === octave)) {
 					note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 					correctNotes++;
 				} else {

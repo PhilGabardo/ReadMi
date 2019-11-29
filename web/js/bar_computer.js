@@ -69,11 +69,11 @@ var natural_notes_state = {
 };
 
 
-function getBars(notes, key) {
+function getBars(notes, key, stepOffset) {
 	var sum = 0;
 	var bars = [];
 	var current_bar = [];
-	var keySignatureInfo = getKeySignatureInfo(key);
+	var keySignatureInfo = getKeySignatureInfo(getOffsetNote(key, 3, stepOffset)['name']);
 	var default_notes_state = natural_notes_state;
 	Object.keys(keySignatureInfo.notes).forEach(function(note) {
 		default_notes_state[note] = keySignatureInfo.type;
@@ -81,22 +81,23 @@ function getBars(notes, key) {
 	var current_notes_state = Object.assign({}, default_notes_state);
 	for (var i = 0; i < notes.length; i++) {
 		var note = notes[i];
+		var offsetNote = getOffsetNote(note.name, note.octave, stepOffset);
 		var quarterLength = parseFloat(note.quarterLength);
 		if (quarterLength === 0.0) {
 			continue;
 		}
 		var length_breakdown = getLengthBreakDown(quarterLength);
 		for (var j = 0; j < length_breakdown.length; j++) {
-			var noteStruct = {clef: "treble", keys: [note.name.concat("/").concat(String(note.octave))],
+			var noteStruct = {clef: "treble", keys: [offsetNote.name.concat("/").concat(String(offsetNote.octave))],
 				duration: timing_map[length_breakdown[j]]};
 			var staveNote = new VF.StaveNote(noteStruct);
 			for (var dot_count = 0; dot_count < dot_count_map[length_breakdown[j]]; dot_count++) {
 				staveNote.addDot(0);
 			}
-			var accidental = note.name[1] ? note.name[1] : 'n';
-			if (current_notes_state[note.name[0]] !== accidental) {
+			var accidental = offsetNote.name[1] ? offsetNote.name[1] : 'n';
+			if (current_notes_state[offsetNote.name[0]] !== accidental) {
 				staveNote.addAccidental(0, new VF.Accidental(accidental));
-				current_notes_state[note.name[0]] = accidental;
+				current_notes_state[offsetNote.name[0]] = accidental;
 			}
 			current_bar.push(staveNote);
 			sum += length_breakdown[j] * (beat_value / 4.0);

@@ -35,8 +35,8 @@ function estimateNote(frequency) {
 
 	// Get the name of the note
 	return {
-		key: noteNames[frequencyIndex % noteNames.length],
-		octave: Math.floor(9 - (frequencyIndex / noteNames.length))
+		key: noteNames[(frequencyIndex + stepOffset) % noteNames.length],
+		octave: Math.floor(9 - ((frequencyIndex + stepOffset) / noteNames.length))
 	};
 }
 
@@ -48,7 +48,7 @@ function getFrequencyForNote(note_name, note_octave) {
 			break;
 		}
 	}
-	return noteFrequencies[noteFrequencies.length - 1 - (note_octave * noteNames.length) - (noteNames.length - noteNameIndex - 1)]
+	return noteFrequencies[noteFrequencies.length - 1 - (note_octave * noteNames.length) - (noteNames.length - noteNameIndex - 1) - stepOffset]
 }
 
 
