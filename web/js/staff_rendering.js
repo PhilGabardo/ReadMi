@@ -138,7 +138,7 @@ function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value) 
 				}
 			}
 		}
-		if (stavesPassed <= bars.length) {            //  if the counter < 10, call the loop function
+		if (stavesPassed <= vf_bars.length) {            //  if the counter < 10, call the loop function
 			playAlong(startTime, beats_per_minute, beats_per_measure, beat_value);             //  ..  again which will trigger another
 		}                        //  ..  setTimeout()
 	}, 3)
@@ -197,11 +197,11 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 		context.beginPath();
 		context.rect(pos.width, pos.height, 10 * scalingFactor, 120 * scalingFactor);
 		context.closePath()
-		if (stavesPassed < bars.length) {            //  if the counter < 10, call the loop function
+		if (stavesPassed < vf_bars.length) {            //  if the counter < 10, call the loop function
 			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value);             //  ..  again which will trigger another
 		} else {
 			// TODO: make this fancier
-			var r = confirm("You played " + correctNotes + " out of " + totalNotes + " correctly! Would you like to play again?");
+			var r = confirm("You played " + correctNotes + " out of " + totalNotes + " notes correctly! Would you like to play again?");
 			if (r == true) {
 				$.ajax({
 					type: "POST",
@@ -213,7 +213,8 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 							beats_per_measure: beatsPerMeasure,
 							key_signature: keySignature,
 							notes: notes,
-						}
+						},
+						bars: bars,
 					},
 					success: function() {
 						location.reload();

@@ -1,156 +1,24 @@
-var timing_map = {
-	0.25 : "16",
-	0.375 : "16",
-	0.4275 : "16",
-	0.5 : "8",
-	0.75 : "8",
-	0.875 : "8",
-	1 : "q",
-	1.5 : "q",
-	1.75 : "q",
-	2 : "h",
-	3 : "h",
-	3.5 : "h",
-	3.75 : "h",
-	4 : "w",
-	6 : "w",
-	7 : "w",
-	7.5 : "w",
-}
-
-var ghost_timing_map = {
-	0.25 : "16",
-	0.375 : "16d",
-	0.4275 : "16dd",
-	0.5 : "8",
-	0.75 : "8d",
-	0.875 : "8dd",
-	1 : "q",
-	1.5 : "qd",
-	1.75 : "qdd",
-	2 : "h",
-	3 : "hd",
-	3.5 : "hdd",
-	3.75 : "hddd",
-	4 : "w",
-	6 : "wd",
-	7 : "wdd",
-	7.5 : "wddd",
-}
-
-var dot_count_map = {
-	0.25 : 0,
-	0.375 : 1,
-	0.4275 : 2,
-	0.5 : 0,
-	0.75 : 1,
-	0.875 : 2,
-	1 : 0,
-	1.5 : 1,
-	1.75 : 2,
-	2 : 0,
-	3 : 1,
-	3.5 : 2,
-	3.75 : 3,
-	4 : 0,
-	6 : 1,
-	7 : 2,
-	7.5 : 3,
-}
-
-var natural_notes_state = {
-	'A' : 'n',
-	'B' : 'n',
-	'C' : 'n',
-	'D' : 'n',
-	'E' : 'n',
-	'F' : 'n',
-	'G' : 'n',
-};
-
-
-function getBars(notes, key) {
-	var sum = 0;
-	var bars = [];
-	var current_bar = [];
-	var keySignatureInfo = getKeySignatureInfo(key);
-	var default_notes_state = natural_notes_state;
-	Object.keys(keySignatureInfo.notes).forEach(function(note) {
-		default_notes_state[note] = keySignatureInfo.type;
-	});
-	var current_notes_state = Object.assign({}, default_notes_state);
-	for (var i = 0; i < notes.length; i++) {
-		var note = notes[i];
-		var quarterLength = parseFloat(note.quarterLength);
-		if (quarterLength === 0.0) {
-			continue;
-		}
-		var length_breakdown = getLengthBreakDown(quarterLength);
-		for (var j = 0; j < length_breakdown.length; j++) {
-			var noteStruct = {clef: "treble", keys: [note.name.concat("/").concat(String(note.octave))],
-				duration: timing_map[length_breakdown[j]]};
-			var staveNote = new VF.StaveNote(noteStruct);
-			for (var dot_count = 0; dot_count < dot_count_map[length_breakdown[j]]; dot_count++) {
-				staveNote.addDot(0);
-			}
-			var accidental = note.name[1] ? note.name[1] : 'n';
-			if (current_notes_state[note.name[0]] !== accidental) {
-				staveNote.addAccidental(0, new VF.Accidental(accidental));
-				current_notes_state[note.name[0]] = accidental;
-			}
-			current_bar.push(staveNote);
-			sum += length_breakdown[j] * (beat_value / 4.0);
-			var leftover_bars = 0;
-			while (sum > 2 * beats_per_measure) {
-				leftover_bars++;
-				sum -= beats_per_measure;
-			}
-			if (sum > beats_per_measure) {
-				bars.push(current_bar);
-				current_bar = [];
-				current_notes_state = Object.assign({}, default_notes_state);
-				var remainder = (sum - beats_per_measure) * (4.0 / beat_value);
-				var _length_breakdown = getLengthBreakDown(remainder);
-				for (var k = 0; k < _length_breakdown.length; k++) {
-					var ghostStruct = {clef: "treble",
-						duration: ghost_timing_map[_length_breakdown[k]]};
-					current_bar.push(new VF.GhostNote(ghostStruct));
+function getVFBars(bars) {
+	var vf_bars = [];
+	for (var i = 0; i < bars.length; i++) {
+		var vf_bar = [];
+		var bar = bars[i];
+		for (var j = 0; j < bar.length; j++) {
+			var note = bar[j];
+			if (note.ghost) {
+				vf_bar.push(new VF.GhostNote(note));
+			} else {
+				var staveNote = new VF.StaveNote(note);
+				for (var k = 0; k < note.dot_count; k++) {
+					staveNote.addDot(0);
 				}
-				sum -= beats_per_measure;
-			}
-			if (sum === beats_per_measure) {
-				sum = 0;
-				bars.push(current_bar);
-				current_bar = [];
-				current_notes_state = Object.assign({}, default_notes_state);
-			}
-			for (var k = 0; k < leftover_bars; k++) {
-				bars.push([]);
+				if (note.accidental) {
+					staveNote.addAccidental(0, new VF.Accidental(note.accidental));
+				}
+				vf_bar.push(staveNote);
 			}
 		}
+		vf_bars.push(vf_bar);
 	}
-	if (current_bar.length > 0) {
-		bars.push(current_bar)
-	}
-	while (bars.length % 3 !== 0) {
-		bars.push([])
-	}
-	return bars;
-}
-
-function getLengthBreakDown(quarterLength) {
-	var understoodLengths = Object.keys(timing_map);
-	understoodLengths.sort(function(a, b){return b-a});
-	var breakdown = [];
-	var remaining = quarterLength;
-	while (remaining > 0) {
-		for (var i = 0; i < understoodLengths.length; i++) {
-			if (remaining >= understoodLengths[i]) {
-				breakdown.push(understoodLengths[i]);
-				remaining -= understoodLengths[i];
-				break;
-			}
-		}
-	}
-	return breakdown;
+	return vf_bars;
 }
