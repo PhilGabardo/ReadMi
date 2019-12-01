@@ -6,7 +6,8 @@
     "symfony/twig-bridge": "^3",
     "csanquer/pdo-service-provider": "~1.1dev",
     "kktsvetkov/krumo": "^0.4.0",
-    "auth0/auth0-php": "~5.0"
+    "auth0/auth0-php": "~5.0",
+    "symfony/webpack-encore-bundle": "^1.7"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*",

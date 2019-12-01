@@ -29,13 +29,14 @@
 .sidenav label {
     padding: 6px 12px 6px 12px;
     color:white;
-    font-family: Consolas, Baskerville, 'Segoe UI', sans-serif;
+    font-family: 'Raleway',sans-serif;
     display: block;
 }
 
 .sidenav h1 {
     padding: 6px 8px 6px 16px;
     color:white;
+    font-family: raleway;
 }
 
 /* When you mouse over the navigation links, change their color */

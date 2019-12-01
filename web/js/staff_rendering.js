@@ -111,7 +111,7 @@ function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per
 	return percentage;
 }
 
-function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value) {          //  create a loop function
+function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value, step_offset) {          //  create a loop function
 	setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		var timeInMs = Date.now() - startTime;
 		var bps = beats_per_minute / 60;
@@ -128,23 +128,20 @@ function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value) 
 			if (note.attrs.type !== 'GhostNote') {
 				var props = note.getKeyProps()[0];
 				var key = props.key;
-				if (keySigInfo.notes[key]) {
-					key = key.concat(keySigInfo.type)
-				}
 				var octave = props.octave;
-				var offsetNote = getOffsetNote(key, octave, 0 - stepOffset);
+				var offsetNote = getOffsetNote(key, octave, 0 - step_offset);
 				if ($('#playalong-enabled').is(":checked")) {
 					playNote(offsetNote.name, offsetNote.octave);
 				}
 			}
 		}
 		if (stavesPassed <= vf_bars.length) {            //  if the counter < 10, call the loop function
-			playAlong(startTime, beats_per_minute, beats_per_measure, beat_value);             //  ..  again which will trigger another
+			playAlong(startTime, beats_per_minute, beats_per_measure, beat_value, step_offset);             //  ..  again which will trigger another
 		}                        //  ..  setTimeout()
 	}, 3)
 }
 
-function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_value) {          //  create a loop function
+function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_value, step_offset) {          //  create a loop function
 	setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		var timeInMs = Date.now() - startTime;
 		var bps = beats_per_minute / 60;
@@ -173,12 +170,9 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 			if (note.attrs.type !== 'GhostNote') {
 				var props = note.getKeyProps()[0];
 				var key = props.key;
-				if (keySigInfo.notes[key]) {
-					key = key.concat(keySigInfo.type)
-				}
 				var octave = props.octave;
-				var currentNote = getNoteFromSamples(sixteenthNoteSamples)
-				var offsetNote = getOffsetNote(currentNote.key, currentNote.octave, stepOffset);
+				var currentNote = getNoteFromSamples(sixteenthNoteSamples);
+				var offsetNote = getOffsetNote(currentNote.key, currentNote.octave, step_offset);
 				if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(offsetNote.name, key) && offsetNote.octave === octave)) {
 					note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 					correctNotes++;
@@ -198,7 +192,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 		context.rect(pos.width, pos.height, 10 * scalingFactor, 120 * scalingFactor);
 		context.closePath()
 		if (stavesPassed < vf_bars.length) {            //  if the counter < 10, call the loop function
-			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value);             //  ..  again which will trigger another
+			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value, step_offset);             //  ..  again which will trigger another
 		} else {
 			// TODO: make this fancier
 			var r = confirm("You played " + correctNotes + " out of " + totalNotes + " notes correctly! Would you like to play again?");

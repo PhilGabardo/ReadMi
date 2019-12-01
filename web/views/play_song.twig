@@ -2,6 +2,22 @@
 
 {% block content %}
 <link rel="stylesheet" href="/stylesheets/sidebar.css">
+<link rel="stylesheet" href="/stylesheets/dialogbox.css">
+<div id="dialogbox">
+	<div id="dialogboxhead">Song Options</div>
+	<div id="dialogboxbody">
+		<input id="bpm" name="weight" type="range" min="10" max="150" step="1" />
+		<label id="bpm_label"></label>
+
+		<select id="step_offset">
+			<option value="9">Alto Saxophone</option>
+			<option value="12">Guitar</option>
+		</select>
+	</div>
+	<div id="dialogboxfoot">
+		<button onclick="prompt.ok()">Start!</button> <button onclick="prompt.cancel()">Cancel</button>
+	</div>
+</div>
 <div class="sidenav">
 	<h1> Options </h1>
 	<label><input id="metronome-enabled" type="checkbox"/ checked> Metronome</label>

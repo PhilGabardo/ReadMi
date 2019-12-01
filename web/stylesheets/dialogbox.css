@@ -1,0 +1,48 @@
+#dialogbox{
+    display:none;
+    background:#000000;
+    width: 40%;
+    z-index:10;
+    border-radius:7px;
+    position: fixed;
+    left: 30%;
+    top: 30%;
+}
+
+#dialogbox div{
+    background:#ffffff;
+    margin:8px;
+}
+#dialogbox #dialogboxhead{
+    background: #666;
+    font-size:19px;
+    padding:10px;
+    color:#CCC;
+    height: 10%;
+}
+#dialogbox #dialogboxbody{
+    background:#333;
+    padding:20px;
+    color:#FFF;
+    height: 35%;
+}
+#dialogbox #dialogboxfoot{
+    background: #666;
+    padding:10px;
+    height: 10%;
+}
+
+#bpm {
+    float: left;
+    width: 50%;
+}
+
+#bpm_label {
+    display: block;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#step_offset {
+    text-align: center;
+}
