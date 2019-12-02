@@ -1,0 +1,79 @@
+{
+  "entrypoints": {
+    "bar_computer": {
+      "js": [
+        "/build/bar_computer.js"
+      ]
+    },
+    "filter_table": {
+      "js": [
+        "/build/filter_table.js"
+      ]
+    },
+    "key_comparison": {
+      "js": [
+        "/build/key_comparison.js"
+      ]
+    },
+    "key_signature": {
+      "js": [
+        "/build/key_signature.js"
+      ]
+    },
+    "metronome": {
+      "js": [
+        "/build/metronome.js"
+      ]
+    },
+    "note_detection": {
+      "js": [
+        "/build/note_detection.js"
+      ]
+    },
+    "note_player": {
+      "js": [
+        "/build/note_player.js"
+      ]
+    },
+    "staff_rendering": {
+      "js": [
+        "/build/staff_rendering.js"
+      ]
+    },
+    "score_renderer": {
+      "js": [
+        "/build/score_renderer.js"
+      ]
+    },
+    "audio_stream_controller": {
+      "js": [
+        "/build/audio_stream_controller.js"
+      ]
+    },
+    "test": {
+      "js": [
+        "/build/test.js"
+      ]
+    },
+    "dialogbox": {
+      "css": [
+        "/build/dialogbox.css"
+      ]
+    },
+    "filterable_table": {
+      "css": [
+        "/build/filterable_table.css"
+      ]
+    },
+    "main": {
+      "css": [
+        "/build/main.css"
+      ]
+    },
+    "sidebar": {
+      "css": [
+        "/build/sidebar.css"
+      ]
+    }
+  }
+}
