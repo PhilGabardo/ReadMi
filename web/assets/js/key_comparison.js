@@ -27,3 +27,7 @@ function compareKeys(note1, note2) {
 	}
 	return note1.toLowerCase() == note2.toLowerCase() || keyaliases[note1.toLowerCase()] == note2.toLowerCase();
 }
+
+export default {
+	compareKeys: compareKeys
+}

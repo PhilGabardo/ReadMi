@@ -61,7 +61,7 @@ $app->get('/test_play_song', function() use($app) {
 		'key_signature' => 'Bb',
 		'beat_value' => '4',
 		'beats_per_measure' => '4',
-		'notes' => '[{"is_note": true, "name": "E", "octave": 5, "quarterLength": "1.0"}, {"is_note": true, "name": "Eb", "octave": 5, "quarterLength": "1"}, {"is_note": true, "name": "G", "octave": 5, "quarterLength": "1"}]',
+		'notes' => '[{"is_note": true, "name": "E", "octave": 5, "quarterLength": "1.0"}, {"is_note": true, "name": "F", "octave": 5, "quarterLength": "1"}, {"is_note": true, "name": "E", "octave": 5, "quarterLength": "1"}]',
 	];
 	$bars = \BarComputer::getBars(json_decode($song_row['notes'], true), $song_row['key_signature'],
 		(float)$song_row['beat_value'], (float) $song_row['beats_per_measure']);

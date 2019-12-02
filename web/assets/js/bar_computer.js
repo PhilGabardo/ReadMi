@@ -1,4 +1,6 @@
+import VexFlow from 'vexflow';
 function getVFBars(bars) {
+	var VF = VexFlow.Flow;
 	var vf_bars = [];
 	for (var i = 0; i < bars.length; i++) {
 		var vf_bar = [];
@@ -22,3 +24,8 @@ function getVFBars(bars) {
 	}
 	return vf_bars;
 }
+
+export default {
+	getVFBars: getVFBars
+}
+

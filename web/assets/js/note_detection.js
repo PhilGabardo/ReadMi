@@ -1,3 +1,4 @@
+import key_comparison from './key_comparison'
 var noteFrequencies =
 	// B        A#        A      G#       G         F#       F        E         D#      D        C#       C
 	[7902.13, 7458.62, 7040.00, 6644.88, 6271.93, 5919.91, 5587.65, 5274.04, 4978.03, 4698.64, 4434.92, 4186.01,  // 8
@@ -43,7 +44,7 @@ function estimateNote(frequency) {
 function getFrequencyForNote(note_name, note_octave) {
 	var noteNameIndex;
 	for (var i = 0; i < noteNames.length; i++) {
-		if (compareKeys(note_name, noteNames[i])) {
+		if (key_comparison.compareKeys(note_name, noteNames[i])) {
 			noteNameIndex = i;
 			break;
 		}
@@ -52,7 +53,7 @@ function getFrequencyForNote(note_name, note_octave) {
 }
 
 
-function getNoteFromSamples(sixteenthNoteSamples) {
+function getNoteFromSamples(sixteenthNoteSamples, sixteenthNoteSampleBufferSize) {
 	if (sixteenthNoteSamples.length < sixteenthNoteSampleBufferSize) {
 		return [];
 	}
@@ -170,4 +171,9 @@ function estimateFrequency(wave) {
 	}
 	tau = parabolicInterpretation(tau, resultBuffer)
 	return 44100 / tau
+}
+
+export default {
+	getFrequencyForNote: getFrequencyForNote,
+	getNoteFromSamples: getNoteFromSamples,
 }

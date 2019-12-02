@@ -1,29 +1,45 @@
-VF = Vex.Flow;
-var windowWidth = window.innerWidth;
-var scalingFactor = windowWidth / 1280;
-var div = document.getElementById("boo")
+import key_comparison from './key_comparison'
+import key_signatures from './key_signatures'
+import note_detection from './note_detection'
+import VexFlow from 'vexflow';
+
+var scalingFactor = window.innerWidth / 1280;
+var div = document.getElementById("boo");
+var VF = VexFlow.Flow;
 var renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
 var context = renderer.getContext();// Configure the rendering context.
-renderer.resize(windowWidth * 0.9, 3000);
+renderer.resize(window.innerWidth * 0.9, 3000);
 context.setFont("Arial", 3, "").setBackgroundFillStyle("#eed");
 var voices = [];
 var notePercentages = {};
 var playAlongNotePercentages = {};
 var keySigStaffWidth;
 var keySigInfo;
-var staveHeight = 150 * scalingFactor;
-var leftPadding = 20 * scalingFactor;
+var staveHeight = 150 * getScalingFactor();
+var staveWidth;
+var leftPadding = 20 * getScalingFactor();
+var correctNotes = 0;
+var totalNotes = 0;
 
-function createStaff(key, bars) {
+function getScalingFactor() {
+	return window.innerWidth / 1280;
+}
+
+function getStaveHeight() {
+	return 150 * getScalingFactor();
+}
+
+
+function createStaff(key, bars, beats_per_measure, beat_value) {
 
 	// key signature staff
-	keySigInfo = getKeySignatureInfo(key);
+	keySigInfo = key_signatures.getKeySignatureInfo(key);
 	var keySigNotesCount = Object.keys(keySigInfo.notes).length;
 	keySigStaffWidth = 80 + keySigNotesCount * 10;
-	staveWidth = (windowWidth * 0.8 - keySigStaffWidth) / 3.0;
+	var staveWidth = (window.innerWidth * 0.8 - keySigStaffWidth) / 3.0;
 	for (var row = 0; row < (bars.length / 3); row++) {
-		var keySigStaff = new Vex.Flow.Stave(leftPadding, staveHeight * row, keySigStaffWidth);
-		keySigStaff.options.spacing_between_lines_px = 10 * scalingFactor;
+		var keySigStaff = new VF.Stave(leftPadding, staveHeight * row, keySigStaffWidth);
+		keySigStaff.options.spacing_between_lines_px = 10 * getScalingFactor();
 		keySigStaff.addClef('treble')
 		if (row === 0) {
 			keySigStaff.addTimeSignature(String(beats_per_measure).concat("/").concat(String(beat_value)));
@@ -33,8 +49,8 @@ function createStaff(key, bars) {
 		keySigStaff.setContext(context).draw();
 		for (var col = 0; col < 3; col++) {
 			var horiz_offset =  leftPadding + keySigStaffWidth + staveWidth * col;
-			var staff = new Vex.Flow.Stave(horiz_offset, staveHeight * row, staveWidth);
-			staff.options.spacing_between_lines_px = 10 * scalingFactor;
+			var staff = new VF.Stave(horiz_offset, staveHeight * row, staveWidth);
+			staff.options.spacing_between_lines_px = 10 * getScalingFactor();
 			staff.setContext(context).draw();
 			var notes = bars[row * 3 + col];
 			if (notes === undefined) {
@@ -111,7 +127,7 @@ function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per
 	return percentage;
 }
 
-function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value, step_offset) {          //  create a loop function
+function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value, step_offset, bar_count) {          //  create a loop function
 	setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		var timeInMs = Date.now() - startTime;
 		var bps = beats_per_minute / 60;
@@ -129,19 +145,19 @@ function playAlong (startTime, beats_per_minute, beats_per_measure, beat_value, 
 				var props = note.getKeyProps()[0];
 				var key = props.key;
 				var octave = props.octave;
-				var offsetNote = getOffsetNote(key, octave, 0 - step_offset);
+				var offsetNote = key_signatures.getOffsetNote(key, octave, 0 - step_offset);
 				if ($('#playalong-enabled').is(":checked")) {
 					playNote(offsetNote.name, offsetNote.octave);
 				}
 			}
 		}
-		if (stavesPassed <= vf_bars.length) {            //  if the counter < 10, call the loop function
-			playAlong(startTime, beats_per_minute, beats_per_measure, beat_value, step_offset);             //  ..  again which will trigger another
+		if (stavesPassed <= bar_count) {            //  if the counter < 10, call the loop function
+			playAlong(startTime, beats_per_minute, beats_per_measure, beat_value, step_offset, bar_count);             //  ..  again which will trigger another
 		}                        //  ..  setTimeout()
 	}, 3)
 }
 
-function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_value, step_offset) {          //  create a loop function
+function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_value, step_offset, bar_count) {          //  create a loop function
 	setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		var timeInMs = Date.now() - startTime;
 		var bps = beats_per_minute / 60;
@@ -171,9 +187,9 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 				var props = note.getKeyProps()[0];
 				var key = props.key;
 				var octave = props.octave;
-				var currentNote = getNoteFromSamples(sixteenthNoteSamples);
-				var offsetNote = getOffsetNote(currentNote.key, currentNote.octave, step_offset);
-				if ((note.isRest() && currentNote.length === 0) || (currentNote && compareKeys(offsetNote.name, key) && offsetNote.octave === octave)) {
+				var currentNote = note_detection.getNoteFromSamples(sixteenthNoteSamples);
+				var offsetNote = key_signatures.getOffsetNote(currentNote.key, currentNote.octave, step_offset);
+				if ((note.isRest() && currentNote.length === 0) || (currentNote && key_comparison.compareKeys(offsetNote.name, key) && offsetNote.octave === octave)) {
 					note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 					correctNotes++;
 				} else {
@@ -189,10 +205,10 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 			scrollToNiceSpot(stavesPassed, percentageThroughStave)
 		}
 		context.beginPath();
-		context.rect(pos.width, pos.height, 10 * scalingFactor, 120 * scalingFactor);
+		context.rect(pos.width, pos.height, 10 * getScalingFactor(), 120 * getScalingFactor());
 		context.closePath()
-		if (stavesPassed < vf_bars.length) {            //  if the counter < 10, call the loop function
-			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value, step_offset);             //  ..  again which will trigger another
+		if (stavesPassed < bar_count) {            //  if the counter < 10, call the loop function
+			drawTimingBar(startTime, beats_per_minute, beats_per_measure, beat_value, step_offset, bar_count);             //  ..  again which will trigger another
 		} else {
 			// TODO: make this fancier
 			var r = confirm("You played " + correctNotes + " out of " + totalNotes + " notes correctly! Would you like to play again?");
@@ -218,7 +234,7 @@ function drawTimingBar (startTime, beats_per_minute, beats_per_measure, beat_val
 				window.location.href = "/";
 			}
 		}
-	}, 3)
+	}, 3);
 }
 
 function getPosition(stavesPassed, percentageThroughStave) {
@@ -239,4 +255,10 @@ function scrollToNiceSpot(stavesPassed, percentageThroughStave) {
 	var height = Math.floor(stavesPassed / 3) * staveHeight;
 	var penalty = staveHeight - (((stavesPassed % 3) + percentageThroughStave) / 3) * staveHeight
 	window.scrollTo(0, height - penalty)
+}
+
+export default {
+	createStaff: createStaff,
+	playAlong: playAlong,
+	drawTimingBar: drawTimingBar
 }
