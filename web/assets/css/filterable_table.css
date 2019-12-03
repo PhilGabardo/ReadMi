@@ -1,4 +1,4 @@
-#songsFilter {
+.filter {
     width: 100%;
     background-position: 10px 12px; /* Position the search icon */
     background-repeat: no-repeat; /* Do not repeat the icon image */
@@ -6,6 +6,7 @@
     padding: 12px 20px 12px 40px; /* Add some padding */
     border: 1px solid #ddd; /* Add a grey border */
     margin-bottom: 12px; /* Add some space below the input */
+    display: inline;
 }
 
 input[type=text],
@@ -16,21 +17,41 @@ input[type=password] {
 #myTable {
     border-collapse: collapse; /* Collapse borders */
     width: 100%; /* Full-width */
-    border: 1px solid #ddd; /* Add a grey border */
+    height: 100%;
     font-size: 18px; /* Increase font-size */
+    table-layout: fixed;
 }
 
-#myTable th, #myTable td {
+#myTable tbody {
+    border: 1px solid #ddd; /* Add a grey border */
+}
+
+#myTable td {
     text-align: left; /* Left-align text */
     padding: 12px; /* Add padding */
+    width: 100%;
+    display:block;
 }
 
-#myTable tr {
+#myTable tbody tr {
     /* Add a bottom border to all table rows */
     border-bottom: 1px solid #ddd;
+    width: 100%;
+    display:block;
 }
 
-#myTable tr.header, #myTable tr:hover {
+#myTable tr.header, #myTable tbody tr:hover {
     /* Add a grey background color to the table header and on hover */
     background-color: #f1f1f1;
+}
+
+#myTable tbody{
+    display:block;
+    overflow:auto;
+    height: 100vh;
+    width:100%;
+}
+#myTable thead tr, #myTable thead th {
+    display:block;
+    width: 100%;
 }

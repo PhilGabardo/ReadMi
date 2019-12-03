@@ -28,6 +28,8 @@ Encore
 	.addStyleEntry('filterable_table', './web/assets/css/filterable_table.css')
 	.addStyleEntry('main', './web/assets/css/main.css')
 	.addStyleEntry('sidebar', './web/assets/css/sidebar.css')
+	.addStyleEntry('text', './web/assets/css/text.css')
+	.addStyleEntry('songs', './web/assets/css/songs.css')
 
 	// allow sass/scss files to be processed
 	.enableSassLoader()

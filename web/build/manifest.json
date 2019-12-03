@@ -12,6 +12,8 @@
   "build/note_player.js": "/build/note_player.js",
   "build/score_renderer.js": "/build/score_renderer.js",
   "build/sidebar.css": "/build/sidebar.css",
+  "build/songs.css": "/build/songs.css",
   "build/staff_rendering.js": "/build/staff_rendering.js",
-  "build/test.js": "/build/test.js"
+  "build/test.js": "/build/test.js",
+  "build/text.css": "/build/text.css"
 }

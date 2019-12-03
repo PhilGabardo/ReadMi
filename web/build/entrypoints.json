@@ -74,6 +74,16 @@
       "css": [
         "/build/sidebar.css"
       ]
+    },
+    "text": {
+      "css": [
+        "/build/text.css"
+      ]
+    },
+    "songs": {
+      "css": [
+        "/build/songs.css"
+      ]
     }
   }
 }

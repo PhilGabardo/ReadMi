@@ -99,6 +99,17 @@ $app->get('/test_songs/', function() use($app) {
 		['name' => 'test8'],
 		['name' => 'test9'],
 		['name' => 'test10'],
+		['name' => 'test'],
+		['name' => 'test1'],
+		['name' => 'test2'],
+		['name' => 'test3'],
+		['name' => 'test4'],
+		['name' => 'test5'],
+		['name' => 'test6'],
+		['name' => 'test7'],
+		['name' => 'test8'],
+		['name' => 'test9'],
+		['name' => 'test10'],
 	];
 
 	return $app['twig']->render('songs.twig', array(

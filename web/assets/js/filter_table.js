@@ -1,7 +1,10 @@
+import $ from 'jquery';
+import selectize from 'selectize'
+
 function addRowHandlers() {
 	var table = document.getElementById("myTable");
 	var rows = table.getElementsByTagName("tr");
-	for (i = 0; i < rows.length; i++) {
+	for (var i = 0; i < rows.length; i++) {
 		var currentRow = table.rows[i];
 		currentRow.onclick = function () {
 			var cell = this.getElementsByTagName("td")[0];
@@ -17,27 +20,6 @@ function addRowHandlers() {
 }
 addRowHandlers();
 
-function filterSongs() {
-	// Declare variables
-	var input, filter, table, tr, td, i, txtValue;
-	input = document.getElementById("myInput");
-	filter = input.value.toUpperCase();
-	table = document.getElementById("myTable");
-	tr = table.getElementsByTagName("tr");
-
-	// Loop through all table rows, and hide those who don't match the search query
-	for (i = 0; i < tr.length; i++) {
-		td = tr[i].getElementsByTagName("td")[0];
-		if (td) {
-			txtValue = td.textContent || td.innerText;
-			if (txtValue.toUpperCase().indexOf(filter) > -1) {
-				tr[i].style.display = "";
-			} else {
-				tr[i].style.display = "none";
-			}
-		}
-	}
-}
 
 var songsFilter = document.getElementById('songsFilter');
 songsFilter.onkeyup = function() {

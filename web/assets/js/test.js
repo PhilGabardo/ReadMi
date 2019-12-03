@@ -23,12 +23,6 @@ function CustomPrompt(){
 			bpm_label.innerHTML = this.value + " BPM";
 		}
 	}
-	this.cancel = function(){
-		window.location.href = "/";
-	}
-	this.ok = function(){
-
-	}
 }
 var prompt = new CustomPrompt();
 prompt.render();
@@ -42,3 +36,7 @@ start_song.onclick = function() {
 	var audioContext = new AudioContext();
 	metronome.playSound(audioContext, score_renderer, parseInt(bpm_slider.value), parseInt(step_offset_select.value), beats_per_measure, beats_per_measure * vf_bars.length, 1);
 };
+var end_song = document.getElementById('cancel_song');
+end_song.onclick = function() {
+	window.location.href = "/";
+}
