@@ -56,7 +56,7 @@ function filterTable(songName, songKeys, songTimes) {
 					break;
 				}
 			}
-			shouldFilter = shouldFilter && keyMatch;
+			shouldFilter = shouldFilter && !keyMatch;
 		}
 		td = tr[i].getElementsByClassName("songTime")[0];
 		if (td && songTimes) {
@@ -69,7 +69,7 @@ function filterTable(songName, songKeys, songTimes) {
 					break;
 				}
 			}
-			shouldFilter = shouldFilter && timeMatch;
+			shouldFilter = shouldFilter && !timeMatch;
 		}
 		tr[i].style.display = shouldFilter ? "none" : "";
 	}
