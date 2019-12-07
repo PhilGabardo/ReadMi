@@ -46,31 +46,30 @@ function filterTable(songName, songKeys, songTimes) {
 		}
 		td = tr[i].getElementsByClassName("songKey")[0];
 		if (td && songKeys) {
+			var keyMatch = false;
 			for (var j = 0; j < songKeys.length; j++) {
 				var songKey = songKeys[j];
 				txtValue = td.textContent || td.innerText;
 				if (txtValue.toUpperCase().indexOf(songKey.toUpperCase()) > -1) {
 					//tr[i].style.display = "";
-				} else {
-					shouldFilter = true;
+					keyMatch = true;
 					break;
-					//tr[i].style.display = "none";
 				}
 			}
+			shouldFilter = shouldFilter && keyMatch;
 		}
 		td = tr[i].getElementsByClassName("songTime")[0];
 		if (td && songTimes) {
+			var timeMatch = false;
 			for (var j = 0; j < songTimes.length; j++) {
 				var songTime = songTimes[j];
 				txtValue = td.textContent || td.innerText;
 				if (txtValue.toUpperCase().indexOf(songTime.toUpperCase()) > -1) {
-					//tr[i].style.display = "";
-				} else {
-					shouldFilter = true;
+					timeMatch = true;
 					break;
-					//tr[i].style.display = "none";
 				}
 			}
+			shouldFilter = shouldFilter && timeMatch;
 		}
 		tr[i].style.display = shouldFilter ? "none" : "";
 	}
