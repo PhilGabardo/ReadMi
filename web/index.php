@@ -80,7 +80,7 @@ $app->get('/', function() use($app) {
 	$time_signatures = [];
 	while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
 		$app['monolog']->addDebug('Row ' . $row['name']);
-		$row['time_signature'] = $row['beat_value'] . '/' . $row['beats_per_measure'];
+		$row['time_signature'] = $row['beats_per_measure'] . '/' . $row['beat_value'];
 		$key_signatures[] = $row['key_signature'];
 		$time_signatures[] = $row['time_signature'];
 		$songs[] = $row;
