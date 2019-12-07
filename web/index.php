@@ -72,48 +72,57 @@ $app->get('/test_play_song', function() use($app) {
 });
 
 $app->get('/', function() use($app) {
-	$st = $app['pdo']->prepare('SELECT name FROM songs ORDER BY name ASC');
+	$st = $app['pdo']->prepare('SELECT name, key_signature, beat_value, beats_per_measure FROM songs ORDER BY name ASC');
 	$st->execute();
 
 	$songs = [];
+	$key_signatures = [];
+	$time_signatures = [];
 	while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
 		$app['monolog']->addDebug('Row ' . $row['name']);
+		$row['time_signature'] = $row['beat_value'] . '/' . $row['beats_per_measure'];
+		$key_signatures[] = $row['key_signature'];
+		$time_signatures[] = $row['time_signature'];
 		$songs[] = $row;
 	}
 
 	return $app['twig']->render('songs.twig', array(
-		'songs' => $songs
+		'songs' => $songs,
+		'key_signatures' => array_unique($key_signatures),
+		'time_signatures' => array_unique($time_signatures),
 	));
 });
 
 $app->get('/test_songs/', function() use($app) {
 	$songs = [
-		['name' => 'test'],
-		['name' => 'test1'],
-		['name' => 'test2'],
-		['name' => 'test3'],
-		['name' => 'test4'],
-		['name' => 'test5'],
-		['name' => 'test6'],
-		['name' => 'test7'],
-		['name' => 'test8'],
-		['name' => 'test9'],
-		['name' => 'test10'],
-		['name' => 'test'],
-		['name' => 'test1'],
-		['name' => 'test2'],
-		['name' => 'test3'],
-		['name' => 'test4'],
-		['name' => 'test5'],
-		['name' => 'test6'],
-		['name' => 'test7'],
-		['name' => 'test8'],
-		['name' => 'test9'],
-		['name' => 'test10'],
+		['name' => 'test', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test1', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test2', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test3', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test4', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test5', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test6', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test7', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test8', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test9', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test10', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test1', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test2', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test3', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test4', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test5', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test6', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test7', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test8', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test9', 'key_signature' => 'A', 'time_signature' => '3/4'],
+		['name' => 'test10', 'key_signature' => 'A', 'time_signature' => '3/4'],
 	];
 
 	return $app['twig']->render('songs.twig', array(
-		'songs' => $songs
+		'songs' => $songs,
+		'key_signatures' => ['A', 'A#', 'B', 'C', 'D'],
+		'time_signatures' => ['4/4', '3/4', '2/2', '7/8']
 	));
 });
 $app->run();

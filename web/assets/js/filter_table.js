@@ -2,7 +2,7 @@ import $ from 'jquery';
 import selectize from 'selectize'
 
 function addRowHandlers() {
-	var table = document.getElementById("myTable");
+	var table = document.getElementById("songsTable");
 	var rows = table.getElementsByTagName("tr");
 	for (var i = 0; i < rows.length; i++) {
 		var currentRow = table.rows[i];
@@ -20,25 +20,81 @@ function addRowHandlers() {
 }
 addRowHandlers();
 
+var currentName = "";
+var currentKeys = [];
+var currentTimes = [];
 
-var songsFilter = document.getElementById('songsFilter');
-songsFilter.onkeyup = function() {
+
+function filterTable(songName, songKeys, songTimes) {
 	// Declare variables
-	var input, filter, table, tr, td, i, txtValue;
-	filter = this.value.toUpperCase();
-	table = document.getElementById("myTable");
-	tr = table.getElementsByTagName("tr");
+	var filter, table, tr, td, i, txtValue;
+	var table = document.getElementById("songsTable");
+	var tr = table.getElementsByTagName("tr");
 
 	// Loop through all table rows, and hide those who don't match the search query
 	for (i = 0; i < tr.length; i++) {
-		td = tr[i].getElementsByTagName("td")[0];
-		if (td) {
+		var shouldFilter = false;
+		td = tr[i].getElementsByClassName("songName")[0];
+		if (td && songName) {
 			txtValue = td.textContent || td.innerText;
-			if (txtValue.toUpperCase().indexOf(filter) > -1) {
-				tr[i].style.display = "";
+			if (txtValue.toUpperCase().indexOf(songName.toUpperCase()) > -1) {
+				//tr[i].style.display = "";
 			} else {
-				tr[i].style.display = "none";
+				shouldFilter = true;
+				//tr[i].style.display = "none";
 			}
 		}
+		td = tr[i].getElementsByClassName("songKey")[0];
+		if (td && songKeys) {
+			for (var j = 0; j < songKeys.length; j++) {
+				var songKey = songKeys[j];
+				txtValue = td.textContent || td.innerText;
+				if (txtValue.toUpperCase().indexOf(songKey.toUpperCase()) > -1) {
+					//tr[i].style.display = "";
+				} else {
+					shouldFilter = true;
+					break;
+					//tr[i].style.display = "none";
+				}
+			}
+		}
+		td = tr[i].getElementsByClassName("songTime")[0];
+		if (td && songTimes) {
+			for (var j = 0; j < songTimes.length; j++) {
+				var songTime = songTimes[j];
+				txtValue = td.textContent || td.innerText;
+				if (txtValue.toUpperCase().indexOf(songTime.toUpperCase()) > -1) {
+					//tr[i].style.display = "";
+				} else {
+					shouldFilter = true;
+					break;
+					//tr[i].style.display = "none";
+				}
+			}
+		}
+		tr[i].style.display = shouldFilter ? "none" : "";
 	}
 }
+
+$('.filter').selectize(
+	{
+		onType: function(value) {
+			currentName = value;
+			filterTable(currentName, currentKeys, currentTimes);
+		}});
+$('#keyFilterSelect').selectize(
+	{
+		maxItems: 3,
+		onChange: function(value) {
+			currentKeys = value;
+			filterTable(currentName, currentKeys, currentTimes);
+		}
+	});
+$('#timeFilterSelect').selectize(
+	{
+		maxItems: 3,
+		onChange: function(value) {
+			currentTimes = value;
+			filterTable(currentName, currentKeys, currentTimes);
+		}
+	});
