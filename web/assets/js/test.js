@@ -26,6 +26,13 @@ function CustomPrompt(){
 }
 var prompt = new CustomPrompt();
 prompt.render();
+navigator.permissions.query({name: 'microphone'})
+	.then((permissionObj) => {
+		console.log(permissionObj.state);
+	})
+	.catch((error) => {
+		alert('Got error : '+ error);
+	})
 var start_song = document.getElementById('start_song');
 start_song.onclick = function() {
 	document.getElementById('dialogbox').style.display = "none";
