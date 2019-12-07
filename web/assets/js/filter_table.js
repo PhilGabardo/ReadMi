@@ -35,17 +35,15 @@ function filterTable(songName, songKeys, songTimes) {
 	for (i = 0; i < tr.length; i++) {
 		var shouldFilter = false;
 		td = tr[i].getElementsByClassName("songName")[0];
-		if (td && songName) {
+		if (td && songName != "") {
 			txtValue = td.textContent || td.innerText;
 			if (txtValue.toUpperCase().indexOf(songName.toUpperCase()) > -1) {
-				//tr[i].style.display = "";
 			} else {
 				shouldFilter = true;
-				//tr[i].style.display = "none";
 			}
 		}
 		td = tr[i].getElementsByClassName("songKey")[0];
-		if (td && songKeys) {
+		if (td && songKeys.length > 0) {
 			var keyMatch = false;
 			for (var j = 0; j < songKeys.length; j++) {
 				var songKey = songKeys[j];
@@ -59,7 +57,7 @@ function filterTable(songName, songKeys, songTimes) {
 			shouldFilter = shouldFilter || !keyMatch;
 		}
 		td = tr[i].getElementsByClassName("songTime")[0];
-		if (td && songTimes) {
+		if (td && songTimes.length > 0) {
 			var timeMatch = false;
 			for (var j = 0; j < songTimes.length; j++) {
 				var songTime = songTimes[j];
