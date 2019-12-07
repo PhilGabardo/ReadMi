@@ -63,13 +63,16 @@
 
 .songName {
     width:50%;
+    font-family: 'Lobster';
 }
 
 .songKey {
     width:25%;
+    font-family: 'Lobster';
 }
 .songTime {
     width:25%;
+    font-family: 'Lobster';
 }
 
 /**
