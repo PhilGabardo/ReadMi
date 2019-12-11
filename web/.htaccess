@@ -4,6 +4,6 @@ RewriteRule ^ index.php [QSA,L]
 
 
 # rewrite to www.
-RewriteCond %{HTTPS} on
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{SERVER_PORT} 80
+RewriteCond %{HTTP_HOST} ^(www\.)?readmimusic\.com
+RewriteRule ^(.*)$ https://www.readmimusic.com/$1 [R,L]
