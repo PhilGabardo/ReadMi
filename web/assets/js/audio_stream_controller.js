@@ -3,13 +3,14 @@ export default class AudioStreamController {
 		this.audioContext = audioContext;
 		this.sixteenthNoteSamples = [];
 		this.sixteenthNoteSampleBufferSize =  4096;
+		this.userMediaPromise =  navigator.mediaDevices.getUserMedia({ audio: true, video: false });
 	}
 
 
 
 	startStream() {
 		var that  = this;
-		navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(
+		this.userMediaPromise.then(
 			function(stream) {
 				var source = that.audioContext.createMediaStreamSource(stream);
 				var processor = that.audioContext.createScriptProcessor(4096, 1, 1);
