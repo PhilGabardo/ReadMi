@@ -6,4 +6,4 @@ RewriteRule ^ index.php [QSA,L]
 # rewrite to www.
 RewriteCond %{SERVER_PORT} 80
 RewriteCond %{HTTP_HOST} ^(www\.)?readmimusic\.com
-RewriteRule ^(.*)$ https://www.readmimusic.com [R,L]
+RewriteRule ^(.*)$ https://www.readmimusic.com/ [R,L]
