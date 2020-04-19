@@ -61,7 +61,9 @@ $app->get('/test_play_song', function() use($app) {
 		'key_signature' => 'Bb',
 		'beat_value' => '4',
 		'beats_per_measure' => '4',
-		'notes' => '[{"is_note": true, "name": "E", "octave": 5, "quarterLength": "1.0"}, {"is_note": true, "name": "F", "octave": 5, "quarterLength": "1"}, {"is_note": true, "name": "E", "octave": 5, "quarterLength": "1"}]',
+		'notes' => '[{"is_note": true, "name": "E", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "F", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "F#", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "Gb", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "G", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "G#", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "Ab", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "A", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "A#", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "Bb", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "B", "octave": 3, "quarterLength": "0.5"},{"is_note": true, "name": "C", "octave": 4, "quarterLength": "0.5"},{"is_note": true, "name": "C#", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "Db", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "D", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "D#", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "Eb", "octave": 4, "quarterLength": "0.5"}, {"is_note": true, "name": "E", "octave": 4, "quarterLength": "0.5"}]'
+		//'notes' => '[{"is_note": true, "name": "C", "octave": 5, "quarterLength": "0.5"},{"is_note": true, "name": "C", "octave": 5, "quarterLength": "0.5"},{"is_note": true, "name": "C", "octave": 5, "quarterLength": "0.5"},{"is_note": true, "name": "C", "octave": 5, "quarterLength": "0.5"},{"is_note": true, "name": "C", "octave": 5, "quarterLength": "0.5"}]'
+
 	];
 	$bars = \BarComputer::getBars(json_decode($song_row['notes'], true), $song_row['key_signature'],
 		(float)$song_row['beat_value'], (float) $song_row['beats_per_measure']);
@@ -72,6 +74,7 @@ $app->get('/test_play_song', function() use($app) {
 });
 
 $app->get('/', function() use($app) {
+
 	$st = $app['pdo']->prepare('SELECT name, key_signature, beat_value, beats_per_measure FROM songs ORDER BY name ASC');
 	$st->execute();
 

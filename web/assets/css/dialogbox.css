@@ -9,10 +9,6 @@
     top: 30%;
 }
 
-#dialogbox div{
-    background:#ffffff;
-    margin:8px;
-}
 #dialogbox #dialogboxhead{
     background: #666;
     font-size:19px;
@@ -43,6 +39,6 @@
     margin-bottom: 20px;
 }
 
-#step_offset {
+#instrument {
     text-align: center;
 }

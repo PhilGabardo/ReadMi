@@ -4,6 +4,8 @@ import bar_computer from './bar_computer'
 import note_player from './note_player'
 import note_detection from './note_detection'
 import key_comparison from './key_comparison'
+import NoteHinter from './note_hinter'
+import Instruments from './instruments'
 
 export default class ScoreRenderer {
 	constructor(key, bars, beats_per_measure, beat_value, name) {
@@ -17,6 +19,8 @@ export default class ScoreRenderer {
 		this.beats_per_measure = beats_per_measure;
 		this.beat_value = beat_value;
 		this.name = name;
+		this.note_hinter = new NoteHinter()
+		var hintOffsetTop = document.getElementById("boo").offsetTop - getStaveHeight() / 2;
 
 		var keySigInfo = key_signatures.getKeySignatureInfo(key);
 		var keySigNotesCount = Object.keys(keySigInfo.notes).length;
@@ -25,6 +29,7 @@ export default class ScoreRenderer {
 
 		var notePercentages = [];
 		var playAlongNotePercentages = [];
+		var noteHints = [];
 		for (var i = 0; i < this.vf_bars.length; i++) {
 			var notes = this.vf_bars[i];
 			if (notes === undefined) {
@@ -32,7 +37,9 @@ export default class ScoreRenderer {
 			}
 			notePercentages[i] = [{note: notes[0], percentage: 0}];
 			playAlongNotePercentages[i] = [{note: notes[0], percentage: 0}];
-			var offset = 0;
+			if (notes[0] && notes[0].attrs.type !== 'GhostNote') {
+				noteHints.push({note: notes[0], offset_x: this.keySigStaffWidth + this.staveWidth * (i % 3), offset_y: hintOffsetTop + Math.floor(i / 3.0) * getStaveHeight()})
+			}
 			var accumuluated_percented = 0;
 			for (var j = 0; j < notes.length; j++) {
 				var percentage = getDurationAsPercentage(notes[j].duration, notes[j].dots, beat_value, beats_per_measure);
@@ -40,19 +47,22 @@ export default class ScoreRenderer {
 				if (j !== notes.length - 1) {
 					notePercentages[i].push({note: notes[j + 1], percentage: accumuluated_percented});
 					playAlongNotePercentages[i].push({note: notes[j + 1], percentage: accumuluated_percented});
+					if (notes[j + 1] && notes[j + 1].attrs.type !== 'GhostNote') {
+						noteHints.push({note: notes[j + 1], offset_x: this.keySigStaffWidth + this.staveWidth * (i % 3) + accumuluated_percented * this.staveWidth, offset_y: hintOffsetTop + Math.floor(i / 3.0) * getStaveHeight()})
+					}
 				}
-				offset += percentage * this.staveWidth;
 			}
 		}
 		this.notePercentages = notePercentages;
 		this.playAlongNotePercentages = playAlongNotePercentages;
+		this.noteHints = noteHints;
 		this.totalNotes = 0;
 		this.correctNotes = 0;
 	}
 
 	render() {
 		var leftPadding = 20 * getScalingFactor();
-		var staveHeight = 150 * getScalingFactor();
+		var staveHeight = getStaveHeight();
 		var voices = [];
 		for (var row = 0; row < (this.vf_bars.length / 3); row++) {
 			var keySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row, this.keySigStaffWidth);
@@ -102,7 +112,12 @@ export default class ScoreRenderer {
 		}
 	}
 
-	drawTimingBar (startTime, audio_stream_controller, beats_per_minute, step_offset) {          //  create a loop function
+	hintFirst(instrument) {
+		this.note_hinter.hintNext(instrument, this.noteHints[0].note.getKeyProps()[0].key, this.noteHints[0].note.getKeyProps()[0].octave);
+	}
+
+
+	drawTimingBar (startTime, audio_stream_controller, beats_per_minute, instrument) {          //  create a loop function
 		var that = this;
 		setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 			var timeInMs = Date.now() - startTime;
@@ -126,6 +141,7 @@ export default class ScoreRenderer {
 				that.notePercentages[offsettedStavesPassed].shift();
 			} else {
 				var note = null;
+
 			}
 			that.context.svg.removeChild(that.context.svg.lastChild);
 			if (note) {
@@ -134,7 +150,7 @@ export default class ScoreRenderer {
 					var key = props.key;
 					var octave = props.octave;
 					var currentNote = note_detection.getNoteFromSamples(audio_stream_controller.getSamples(), audio_stream_controller.getBufferSize());
-					var offsetNote = key_signatures.getOffsetNote(currentNote.key, currentNote.octave, step_offset);
+					var offsetNote = key_signatures.getOffsetNote(currentNote.key, currentNote.octave, Instruments.getInstrumentKeyOffset(instrument));
 					if ((note.isRest() && currentNote.length === 0) || (currentNote && key_comparison.compareKeys(offsetNote.name, key) && offsetNote.octave === octave)) {
 						note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 						that.correctNotes++;
@@ -144,17 +160,24 @@ export default class ScoreRenderer {
 					that.totalNotes++;
 					note.setContext(that.context)
 					note.draw();
+					that.noteHints.shift();
+					if (that.noteHints[0]) {
+						var next_note_props = that.noteHints[0].note.getKeyProps()[0];
+						that.note_hinter.hintNext(instrument, next_note_props.key, next_note_props.octave)
+					} else {
+						that.note_hinter.stop();
+					}
 				}
 			}
-			var pos = getPosition(stavesPassed, percentageThroughStave, 20 * getScalingFactor(), 150 * getScalingFactor(), that.staveWidth, that.keySigStaffWidth);
+			var pos = getPosition(stavesPassed, percentageThroughStave, 20 * getScalingFactor(), getStaveHeight(), that.staveWidth, that.keySigStaffWidth);
 			if ($('#autoscroll-enabled').is(":checked")) {
-				scrollToNiceSpot(stavesPassed, percentageThroughStave, 150 * getScalingFactor())
+				scrollToNiceSpot(stavesPassed, percentageThroughStave, getStaveHeight())
 			}
 			that.context.beginPath();
 			that.context.rect(pos.width, pos.height, 10 * getScalingFactor(), 120 * getScalingFactor());
 			that.context.closePath()
 			if (stavesPassed < that.bars.length) {            //  if the counter < 10, call the loop function
-				that.drawTimingBar(startTime, audio_stream_controller, beats_per_minute, step_offset);             //  ..  again which will trigger another
+				that.drawTimingBar(startTime, audio_stream_controller, beats_per_minute, instrument);             //  ..  again which will trigger another
 			} else {
 				// TODO: make this fancier
 				var r = confirm("You played " + that.correctNotes + " out of " + that.totalNotes + " notes correctly! Would you like to play again?");
@@ -182,7 +205,7 @@ export default class ScoreRenderer {
 		}, 3);
 	}
 
-	playAlong (startTime, audioContext, beats_per_minute, step_offset) {          //  create a loop function
+	playAlong (startTime, audioContext, beats_per_minute, instrument) {          //  create a loop function
 		var that = this;
 		setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 			var timeInMs = Date.now() - startTime;
@@ -201,14 +224,14 @@ export default class ScoreRenderer {
 					var props = note.getKeyProps()[0];
 					var key = props.key;
 					var octave = props.octave;
-					var offsetNote = key_signatures.getOffsetNote(key, octave, 0 - step_offset);
+					var offsetNote = key_signatures.getOffsetNote(key, octave, 0 - Instruments.getInstrumentKeyOffset(instrument));
 					if ($('#playalong-enabled').is(":checked")) {
 						note_player.playNote(audioContext, offsetNote.name, offsetNote.octave);
 					}
 				}
 			}
 			if (stavesPassed <= that.bars.length) {            //  if the counter < 10, call the loop function
-				that.playAlong(startTime, audioContext, beats_per_minute, step_offset);             //  ..  again which will trigger another
+				that.playAlong(startTime, audioContext, beats_per_minute, instrument);             //  ..  again which will trigger another
 			}                        //  ..  setTimeout()
 		}, 3)
 	}
@@ -250,6 +273,10 @@ function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per
 
 function getScalingFactor() {
 	return window.innerWidth / 1280;
+}
+
+function getStaveHeight() {
+	return 150 * getScalingFactor();
 }
 
 

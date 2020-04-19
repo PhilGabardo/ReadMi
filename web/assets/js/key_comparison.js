@@ -28,6 +28,32 @@ function compareKeys(note1, note2) {
 	return note1.toLowerCase() == note2.toLowerCase() || keyaliases[note1.toLowerCase()] == note2.toLowerCase();
 }
 
+function getKeyAsFlat(key) {
+	var flat_map = {
+		'ab': 'Ab',
+		'a' : 'a',
+		'a#' : 'Bb',
+		'bb' : 'Bb',
+		'b' : 'B',
+		'cb' : 'B',
+		'c' : 'C',
+		'c#': 'Db',
+		'db' : 'Db',
+		'd' : 'D',
+		'd#' : 'Eb',
+		'eb' : 'Eb',
+		'e' : 'Fb',
+		'e#' : 'F',
+		'fb' : 'E',
+		'f' : 'F',
+		'f#' : 'Gb',
+		'gb' : 'Gb',
+		'g' : 'G',
+		'g#' : 'Ab',
+	}
+	return flat_map[key.toLowerCase()]
+}
+
 export default {
 	compareKeys: compareKeys
 }

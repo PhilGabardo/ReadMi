@@ -3,25 +3,30 @@
 {% block content %}
 <link rel="stylesheet" href="/build/sidebar.css">
 <link rel="stylesheet" href="/build/dialogbox.css">
+<link rel="stylesheet" href="/build/note_hint.css">
+<link rel="stylesheet" href="/build/selectize_override.css">
 <div id="dialogbox">
 	<div id="dialogboxhead">Song Options</div>
 	<div id="dialogboxbody">
 		<input id="bpm" name="weight" type="range" min="10" max="150" step="1" />
 		<label id="bpm_label"></label>
 
-		<select id="step_offset">
-			<option value="12">Guitar</option>
-			<option value="-12">Piccolo</option>
-			<option value="2">Clarinet</option>
-			<option value="14">Bass Clarinet</option>
-			<option value="2">Soprano Saxophone</option>
-			<option value="9">Alto Saxophone</option>
-			<option value="14">Tenor Saxophone</option>
-			<option value="21">Baritone Saxophone</option>
-			<option value="7">French Horn</option>
-			<option value="2">Trumpet</option>
-			<option value="-12">Xylophone</option>
-			<option value="-24">Glockenspiel</option>
+		<select id="instrument">
+			<option value="guitar">Guitar</option> // guitar fingering
+			<option value="soprano_saxophone">Soprano Saxophone</option> // sax fingering
+			<option value="alto_saxophone">Alto Saxophone</option> // sax fingering
+			<option value="tenor_saxophone">Tenor Saxophone</option> // sax fingering
+			<option value="baritone_saxophone">Baritone Saxophone</option> // sax fingering
+			{#
+			// TODO: add images for playing these..
+			<option value="piccolo">Piccolo</option> //flute and picolo fingering
+			<option value="clarinet">Clarinet</option> /// clarinet fingering
+			<option value="bass_clarinet">Bass Clarinet</option> // clarinet fingering
+			<option value="french_horn">French Horn</option> // french horn fingering
+			<option value="trumpet">Trumpet</option> // trumpet fingering
+			<option value="xylophone">Xylophone</option> // Xylophone fingering
+			<option value="glockenspiel">Glockenspiel</option> // Glockenspiel fingering
+			#}
 		</select>
 	</div>
 	<div id="dialogboxfoot">
@@ -33,6 +38,10 @@
 	<label><input id="metronome-enabled" type="checkbox"/ checked> Metronome</label>
 	<label><input id="autoscroll-enabled" type="checkbox"/ checked> Autoscroll</label>
 	<label><input id="playalong-enabled" type="checkbox"/> Play Along</label>
+	<div class="note_hint">
+		<h3 id="note_hint_label">Next Note: <div id="note_hint_text"></div></h3>
+		<img id="note_hint_note" class="note_hint_note">
+	</div>
 </div>
 <div id="header"></div>
 <div id="boo"></div>

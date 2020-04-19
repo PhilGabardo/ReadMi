@@ -35,11 +35,6 @@
         "/build/note_player.js"
       ]
     },
-    "staff_rendering": {
-      "js": [
-        "/build/staff_rendering.js"
-      ]
-    },
     "score_renderer": {
       "js": [
         "/build/score_renderer.js"
@@ -55,6 +50,16 @@
         "/build/test.js"
       ]
     },
+    "note_hinter": {
+      "js": [
+        "/build/note_hinter.js"
+      ]
+    },
+    "instruments": {
+      "js": [
+        "/build/instruments.js"
+      ]
+    },
     "dialogbox": {
       "css": [
         "/build/dialogbox.css"
@@ -63,6 +68,11 @@
     "filterable_table": {
       "css": [
         "/build/filterable_table.css"
+      ]
+    },
+    "note_hint": {
+      "css": [
+        "/build/note_hint.css"
       ]
     },
     "main": {
@@ -83,6 +93,11 @@
     "songs": {
       "css": [
         "/build/songs.css"
+      ]
+    },
+    "selectize_override": {
+      "css": [
+        "/build/selectize_override.css"
       ]
     }
   }
