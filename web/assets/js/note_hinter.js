@@ -14,7 +14,8 @@ export default class NoteHinter {
 		}
 		this.label.innerHTML = hintKey + octave;
 		this.img.style.display = 'block';
-		this.img.src = '../../assets/images/' + Instruments.getInstrumentFingering(instrument) + '/' + octave + '/' + key.replace('#', 'sharp') + '.png';
+		this.img.src = '../../assets/images/' + Instruments.getInstrumentFingering(instrument) + '/' + octave + '/' +
+			key.replace('#', 'sharp').replace('B', 'b') + '.png';
 	}
 
 	stop() {
