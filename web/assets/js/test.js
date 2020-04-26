@@ -31,8 +31,11 @@ var prompt = new CustomPrompt();
 prompt.render();
 var start_song = document.getElementById('start_song');
 start_song.onclick = function() {
-	var AudioContext = window.AudioContext          // Default
-		|| window.webkitAudioContext;  // Safari and old versions of Chrome
+	var AudioContext = (window.AudioContext ||
+	window.webkitAudioContext ||
+	window.mozAudioContext ||
+	window.oAudioContext ||
+	window.msAudioContext); // Safari and old versions of Chrome
 	var audioContext = new AudioContext();
 	var audioStreamController = new AudioStreamController(audioContext);
 	audioStreamController.startStream();
