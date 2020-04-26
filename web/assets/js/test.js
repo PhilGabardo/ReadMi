@@ -27,15 +27,15 @@ function CustomPrompt(){
 	}
 }
 $('#instrument').selectize({'max_items': 1});
-var AudioContext = window.AudioContext          // Default
-	|| window.webkitAudioContext;  // Safari and old versions of Chrome
-var audioContext = new AudioContext();
-var audioStreamController = new AudioStreamController(audioContext);
-audioStreamController.startStream();
 var prompt = new CustomPrompt();
 prompt.render();
 var start_song = document.getElementById('start_song');
 start_song.onclick = function() {
+	var AudioContext = window.AudioContext          // Default
+		|| window.webkitAudioContext;  // Safari and old versions of Chrome
+	var audioContext = new AudioContext();
+	var audioStreamController = new AudioStreamController(audioContext);
+	audioStreamController.startStream();
 	document.getElementById('dialogbox').style.display = "none";
 	var bpm_slider = document.getElementById('bpm');
 	var instrument = document.getElementById('instrument').value;

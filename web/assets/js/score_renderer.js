@@ -149,9 +149,11 @@ export default class ScoreRenderer {
 					var props = note.getKeyProps()[0];
 					var key = props.key;
 					var octave = props.octave;
+					var expected_note = key_signatures.getOffsetNote(key, octave,  0 - Instruments.getInstrumentKeyOffset(instrument));
 					var currentNote = note_detection.getNoteFromSamples(audio_stream_controller.getSamples(), audio_stream_controller.getBufferSize());
-					var offsetNote = key_signatures.getOffsetNote(currentNote.key, currentNote.octave, Instruments.getInstrumentKeyOffset(instrument));
-					if ((note.isRest() && currentNote.length === 0) || (currentNote && key_comparison.compareKeys(offsetNote.name, key) && offsetNote.octave === octave)) {
+					var expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
+					var actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
+					if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
 						note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 						that.correctNotes++;
 					} else {
