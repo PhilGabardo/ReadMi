@@ -1,0 +1,13 @@
+#header {
+    text-align: center;
+    font-size: xx-large;
+}
+
+#_header {
+    margin-bottom: 0;
+}
+
+#description {
+    font-size: smaller;
+    font-family: 'Lobster';
+}

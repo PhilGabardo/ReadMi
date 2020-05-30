@@ -14,7 +14,7 @@ function addRowHandlers() {
 				value = value.split('"').join('\"')
 				form += '<input type="hidden" name="'+key+'" value="'+value+'">';
 			});
-			$('<form action="' + '/play_song' + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+			$('<form action="' + '/' + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
 		};
 	}
 }

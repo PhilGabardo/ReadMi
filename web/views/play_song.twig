@@ -1,10 +1,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<link rel="stylesheet" href="/build/sidebar.css">
 <link rel="stylesheet" href="/build/dialogbox.css">
-<link rel="stylesheet" href="/build/note_hint.css">
-<link rel="stylesheet" href="/build/selectize_override.css">
+<link rel="stylesheet" href="/build/songs.css">
 <div id="dialogbox">
 	<div id="dialogboxhead">Song Options</div>
 	<div id="dialogboxbody">
@@ -17,8 +15,6 @@
 			<option value="alto_saxophone">Alto Saxophone</option> // sax fingering
 			<option value="tenor_saxophone">Tenor Saxophone</option> // sax fingering
 			<option value="baritone_saxophone">Baritone Saxophone</option> // sax fingering
-			{#
-			// TODO: add images for playing these..
 			<option value="piccolo">Piccolo</option> //flute and picolo fingering
 			<option value="clarinet">Clarinet</option> /// clarinet fingering
 			<option value="bass_clarinet">Bass Clarinet</option> // clarinet fingering
@@ -26,34 +22,32 @@
 			<option value="trumpet">Trumpet</option> // trumpet fingering
 			<option value="xylophone">Xylophone</option> // Xylophone fingering
 			<option value="glockenspiel">Glockenspiel</option> // Glockenspiel fingering
-			#}
 		</select>
 	</div>
 	<div id="dialogboxfoot">
 		<button id="start_song">Start!</button> <button id="cancel_song">Cancel</button>
 	</div>
 </div>
-<div class="sidenav">
-	<h1> Options </h1>
-	<label><input id="metronome-enabled" type="checkbox"/ checked> Metronome</label>
-	<label><input id="autoscroll-enabled" type="checkbox"/ checked> Autoscroll</label>
-	<label><input id="playalong-enabled" type="checkbox"/> Play Along</label>
-	<div class="note_hint">
-		<h3 id="note_hint_label">Next Note: <div id="note_hint_text"></div></h3>
-		<img id="note_hint_note" class="note_hint_note">
-	</div>
-</div>
 <div id="header"></div>
 <div id="boo"></div>
+<table id="menu">
+	<tr>
+		<td id="checkbox-cell">
+			<ul id="checkbox">
+				<li class="menu-item"><input id="metronome-controller" type="checkbox" checked>Metronome</li>
+				<li class="menu-item"><input id="scroller-controller" type="checkbox" checked>Auto-Scroll</li>
+				<li class="menu-item"><input id="song-player-controller" type="checkbox">Play Notes</li>
+			</ul>
+		</td>
+		<td id="pause-cell">
+			<div class="pause-controller">
+				<input type="checkbox" value="None" id="pause-controller" name="check" />
+				<label id="pause-controller-label" for="pause-controller" tabindex=1></label>
+			</div>
+		</td>
+	</tr>
+</table>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script type="text/javascript" src="/build/note_player.js"></script>
-<script type="text/javascript" src="/build/metronome.js"></script>
-<script type="text/javascript" src="/build/bar_computer.js"></script>
-<script type="text/javascript" src="/build/key_comparison.js"></script>
-<script type="text/javascript" src="/build/key_signature.js"></script>
-<script type="text/javascript" src="/build/note_detection.js"></script>
-<script type="text/javascript" src="/build/score_renderer.js"></script>
-<script type="text/javascript" src="/build/audio_stream_controller.js"></script>
 <script type="text/javascript">
 		var name = '{{s.name}}';
 		var beatValue = {{s.beat_value}};

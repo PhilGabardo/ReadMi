@@ -4,25 +4,14 @@
 
 #headerTable {
     width:100%;
+    background: black;
 }
-
-#songsFilter {
-    width:50%;
-}
-#keyFilter {
-    width:25%;
-}
-#timeFilter {
-    width:25%;
-}
-
 
 #songsTable thead, #songsTable tbody { display: table-row-group; }
 
 #songsTable tbody {
     height: 100px;       /* Just for the demo          */
     overflow-y: auto;    /* Trigger vertical scroll    */
-    overflow-x: hidden;  /* Hide the horizontal scroll */
     border: 1px solid #ddd;
 }
 

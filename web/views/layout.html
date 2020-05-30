@@ -4,12 +4,52 @@
   <script data-ad-client="ca-pub-1880409762754796" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title></title>
 </head>
-<div class="main_content">
+<div class="all_content">
 <body>
 <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/build/landing_style.css">
+<link rel="stylesheet" href="/build/layout.css">
+<link rel="stylesheet" href="/build/selectize_override.css">
+<link rel="stylesheet" href="/build/filterable_table.css">
 <link rel="stylesheet" href="/build/text.css">
-{% block content %}{% endblock %}
+<div class="main_content">
+  {% block content %}{% endblock %}
+</div>
+<div class="sidenav">
+  <table id="headerTable">
+    <tr>
+      <input class="filter" type="text" placeholder="Search for a song..">
+    </tr>
+    <tr>
+      <select id="keyFilterSelect" placeholder="Key Signature">
+        <option value="">Key Signature...</option>
+        {% for k in key_signatures %}
+        <option>{{ k }}</option>
+        {% endfor %}
+      </select>
+    </tr>
+    <tr>
+      <select id="timeFilterSelect" placeholder="Time Signature">
+        <option value="">Time Signature...</option>
+        {% for t in time_signatures %}
+        <option>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </tr>
+  </table>
+  <table id="songsTable">
+    <tbody>
+    {% for s in songs %}
+    <tr>
+      <td class="songName">{{ s.name }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript" src="/build/landing.js"></script>
+<script type="text/javascript" src="/build/filter_table.js"></script>
 </body>
 </div>
 </html>

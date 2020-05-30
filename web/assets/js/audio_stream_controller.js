@@ -6,8 +6,6 @@ export default class AudioStreamController {
 		this.userMediaPromise =  navigator.mediaDevices.getUserMedia({ audio: true, video: false });
 	}
 
-
-
 	startStream() {
 		var that  = this;
 		this.userMediaPromise.then(

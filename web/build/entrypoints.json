@@ -20,19 +20,14 @@
         "/build/key_signature.js"
       ]
     },
-    "metronome": {
+    "session_controller": {
       "js": [
-        "/build/metronome.js"
+        "/build/session_controller.js"
       ]
     },
     "note_detection": {
       "js": [
         "/build/note_detection.js"
-      ]
-    },
-    "note_player": {
-      "js": [
-        "/build/note_player.js"
       ]
     },
     "score_renderer": {
@@ -60,6 +55,41 @@
         "/build/instruments.js"
       ]
     },
+    "timing": {
+      "js": [
+        "/build/timing.js"
+      ]
+    },
+    "metronome": {
+      "js": [
+        "/build/metronome.js"
+      ]
+    },
+    "song_player": {
+      "js": [
+        "/build/song_player.js"
+      ]
+    },
+    "note_timing": {
+      "js": [
+        "/build/note_timing.js"
+      ]
+    },
+    "note_feedback": {
+      "js": [
+        "/build/note_feedback.js"
+      ]
+    },
+    "score_scroller": {
+      "js": [
+        "/build/score_scroller.js"
+      ]
+    },
+    "landing": {
+      "js": [
+        "/build/landing.js"
+      ]
+    },
     "dialogbox": {
       "css": [
         "/build/dialogbox.css"
@@ -70,19 +100,9 @@
         "/build/filterable_table.css"
       ]
     },
-    "note_hint": {
+    "layout": {
       "css": [
-        "/build/note_hint.css"
-      ]
-    },
-    "main": {
-      "css": [
-        "/build/main.css"
-      ]
-    },
-    "sidebar": {
-      "css": [
-        "/build/sidebar.css"
+        "/build/layout.css"
       ]
     },
     "text": {
@@ -98,6 +118,11 @@
     "selectize_override": {
       "css": [
         "/build/selectize_override.css"
+      ]
+    },
+    "landing_style": {
+      "css": [
+        "/build/landing_style.css"
       ]
     }
   }
