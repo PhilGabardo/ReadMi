@@ -27,7 +27,6 @@ export default class AudioStreamController {
 
 	getByteTimeDomainData() {
 		this.analyser.getByteTimeDomainData(this.buffer);
-		console.log(this.buffer);
 		return this.buffer;
 	}
 
