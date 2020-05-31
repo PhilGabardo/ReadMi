@@ -7,11 +7,10 @@ function getInstrumentKeyOffset(instrument) {
 		'soprano_saxophone': 2,
 		'alto_saxophone': 9,
 		'tenor_saxophone': 14,
-		'baritone_saxophone': 21,
+		//'baritone_saxophone': 21,
 		'french_horn': 7,
 		'trumpet': 2,
 		'xylophone': -12,
-		'glockenspiel': -24,
 	}
 	return key_offsets[instrument];
 }

@@ -30,7 +30,7 @@ export default class NoteFeedback {
 		let beatsPassed = (timeInMs * bps) / (1000);
 		let stavesPassed = Math.floor(beatsPassed / note_feedback.beats_per_measure);
 		let percentageThroughStave = (beatsPassed % note_feedback.beats_per_measure) / note_feedback.beats_per_measure;
-		let offset = ((note_feedback.beats_per_minute / note_feedback.beats_per_measure) / 20) * 0.1;
+		let offset = ((note_feedback.beats_per_minute / note_feedback.beats_per_measure) / 20) * 0.08;
 		let offsettedPercentageThroughStave = percentageThroughStave - offset;
 		let offsettedStavesPassed = stavesPassed;
 		if (offsettedPercentageThroughStave < 0) {
@@ -51,7 +51,7 @@ export default class NoteFeedback {
 			let key = props.key;
 			let octave = props.octave;
 			let expected_note = key_signatures.getOffsetNote(key, octave,  0 - Instruments.getInstrumentKeyOffset(note_feedback.instrument));
-			let currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getSamples(), note_feedback.audio_stream_controller.getBufferSize());
+			let currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getByteTimeDomainData(), note_feedback.audio_stream_controller.getSampleRate());
 			let expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
 			let actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
@@ -59,6 +59,9 @@ export default class NoteFeedback {
 				note_feedback.correctNotes++;
 			} else {
 				note.setStyle({fillStyle: "red", strokeStyle: "red"});
+				console.log("expected="+expected_freq);
+				console.log("actual="+actual_freq);
+				console.log(currentNote);
 			}
 			note_feedback.totalNotes++;
 			note.setContext(note_feedback.rendering_context);

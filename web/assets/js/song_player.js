@@ -11,6 +11,7 @@ export default class SongPlayer {
 		this.scheduledNotes = this.appendTimingOffset(notes, beats_per_measure, beats_per_minute).flat();
 		this.instrument = instrument;
 		this.setController()
+		this.initAudio();
 	}
 
 	initAudio() {
@@ -27,7 +28,6 @@ export default class SongPlayer {
 	}
 
 	start() {
-		this.initAudio();
 
 		let now = this.audioCtx.currentTime;
 

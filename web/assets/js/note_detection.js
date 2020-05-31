@@ -52,126 +52,46 @@ function getFrequencyForNote(note_name, note_octave) {
 	return noteFrequencies[noteFrequencies.length - 1 - (note_octave * noteNames.length) - (noteNames.length - noteNameIndex - 1)]
 }
 
+function getNoteFromSamples(buffer, sampleRate) {
+	// We use Autocorrelation to find the fundamental frequency.
 
-function getNoteFromSamples(sixteenthNoteSamples, sixteenthNoteSampleBufferSize) {
-	if (sixteenthNoteSamples.length < sixteenthNoteSampleBufferSize) {
+	// In order to correlate the signal with itself (hence the name of the algorithm), we will check two points 'k' frames away.
+	// The autocorrelation index will be the average of these products. At the same time, we normalize the values.
+	// Source: http://www.phy.mty.edu/~suits/autocorrelation.html
+	// Assuming the sample rate is 48000Hz, a 'k' equal to 1000 would correspond to a 48Hz signal (48000/1000 = 48),
+	// while a 'k' equal to 8 would correspond to a 6000Hz one, which is enough to cover most (if not all)
+	// the notes we have in the notes.json file.
+	var n = 1024, bestR = 0, bestK = -1;
+	for(var k = 8; k <= 1000; k++){
+		var sum = 0;
+
+		for(var i = 0; i < n; i++){
+			sum += ((buffer[i] - 128) / 128) * ((buffer[i + k] - 128) / 128);
+		}
+
+		var r = sum / (n + k);
+
+		if(r > bestR){
+			bestR = r;
+			bestK = k;
+		}
+
+		if(r > 0.9) {
+			// Let's assume that this is good enough and stop right here
+			break;
+		}
+	}
+
+	if(bestR > 0.0025) {
+		// The period (in frames) of the fundamental frequency is 'bestK'. Getting the frequency from there is trivial.
+		var fundamentalFreq = sampleRate / bestK;
+		return estimateNote(fundamentalFreq);
+	}
+	else {
+		// We haven't found a good correlation
 		return [];
 	}
-	let max = 0;
-	for (let i = 0; i < sixteenthNoteSamples.length; i++) {
-		max = Math.max(max, Math.abs(sixteenthNoteSamples[i]))
-	}
-	if (max > 0.1) {
-		let freq = estimateFrequency(sixteenthNoteSamples);
-		if (freq != -1) {
-			return estimateNote(freq);
-		} else {
-			return [];
-		}
-	} else {
-		return [];
-	}
-}
-
-function estimateFrequency(wave) {
-
-	function autoCorrelationDifference(wave) {
-		let resultBuffer = new Array(wave.length / 2)
-		for (let j = 0; j < resultBuffer.length; j++) {
-			for (let i = 0; i < resultBuffer.length; i++) {
-				// d sub t (tau) = (x(i) - x(i - tau))^2, from i = 1 to result buffer size
-				if (!(j in resultBuffer)) {
-					resultBuffer[j] = 0;
-				}
-				resultBuffer[j] += Math.pow((wave[i] - wave[i + j]), 2);
-			}
-		}
-		return resultBuffer;
-	}
-
-	function cumulativeMeanNormalizedDifference(resultBuffer) {
-		let length = resultBuffer.length;
-		let runningSum = 0;
-
-		// Set the first value in the result buffer to the value of one
-		resultBuffer[0] = 1;
-
-		for (let i = 1; i < length; i++) {
-			// The sum of this value plus all the previous values in the buffer array
-			runningSum = runningSum + resultBuffer[i];
-
-			// The current value is updated to be the current value multiplied by the index divided by the running sum value
-			resultBuffer[i] =  resultBuffer[i] * i / runningSum;
-		}
-		return resultBuffer;
-	}
-
-	function absoluteThreshold(resultBuffer) {
-		let tau;
-		let length = resultBuffer.length;
-
-		// The first two values in the result buffer should be 1, so start at the third value
-		for (tau = 2; tau < length; tau++) {
-			// If we are less than the threshold, continue on until we find the lowest value
-			// indicating the lowest dip in the wave since we first crossed the threshold.
-			if (resultBuffer[tau] < 0.1) {
-				while (tau + 1 < length && resultBuffer[tau + 1] < resultBuffer[tau]) {
-					tau++;
-				}
-
-				// We have the approximate tau value, so break the loop
-				break;
-			}
-		}
-
-		// Some implementations of this algorithm set the tau value to -1 to indicate no correct tau
-		// value was found. This implementation will just return the last tau.
-		tau = (tau >= length - 1 ? -1 : tau);
-		return tau;
-	}
-
-	function parabolicInterpretation(currentTau, resultBuffer) {
-		// Finds the points to fit the parabola between
-		let x0 = currentTau < 1 ? currentTau : currentTau - 1;
-		let x2 = currentTau + 1 < resultBuffer.length ? currentTau + 1 : currentTau;
-
-		// Finds the better tau estimate
-		let betterTau;
-
-		if (x0 == currentTau) {
-			if (resultBuffer[currentTau] <= resultBuffer[x2]) {
-				betterTau = currentTau;
-			} else {
-				betterTau = x2;
-			}
-		} else if (x2 == currentTau) {
-			if (resultBuffer[currentTau] <= resultBuffer[x0]) {
-				betterTau = currentTau;
-			} else {
-				betterTau = x0;
-			}
-		} else {
-			// Fit the parabola between the first point, current tau, and the last point to find a
-			// better tau estimate.
-			let s0 = resultBuffer[x0];
-			let s1 = resultBuffer[currentTau];
-			let s2 = resultBuffer[x2];
-
-			betterTau = currentTau + (s2 - s0) / (2 * (2 * s1 - s2 - s0));
-		}
-
-		return betterTau;
-	}
-
-	let resultBuffer = autoCorrelationDifference(wave);
-	resultBuffer = cumulativeMeanNormalizedDifference(resultBuffer)
-	let tau = absoluteThreshold(resultBuffer)
-	if (tau == -1) {
-		return tau;
-	}
-	tau = parabolicInterpretation(tau, resultBuffer)
-	return 44100 / tau
-}
+};
 
 export default {
 	getFrequencyForNote: getFrequencyForNote,

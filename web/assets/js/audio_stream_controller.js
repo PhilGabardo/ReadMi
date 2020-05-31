@@ -4,6 +4,8 @@ export default class AudioStreamController {
 		this.sixteenthNoteSamples = [];
 		this.sixteenthNoteSampleBufferSize =  4096;
 		this.userMediaPromise =  navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+		this.analyzer = null;
+		this.buffer = null;
 	}
 
 	startStream() {
@@ -12,25 +14,24 @@ export default class AudioStreamController {
 			function(stream) {
 				let source = that.audioContext.createMediaStreamSource(stream);
 				let processor = that.audioContext.createScriptProcessor(4096, 1, 1);
-				let leftoverSamples = [];
+				that.analyser = that.audioContext.createAnalyser();
+				that.analyser.fftSize = 2048;
+				that.buffer = new Uint8Array(that.analyser.fftSize);
 
 				source.connect(processor);
+				source.connect(that.analyser);
 				processor.connect(that.audioContext.destination);
-				processor.onaudioprocess = function(e) {
-					for (let i = 0; i < leftoverSamples.length; i++) {
-						that.sixteenthNoteSamples.push(leftoverSamples[i])
-					}
-					that.sixteenthNoteSamples = leftoverSamples;
-					// Do something with the data, i.e Convert this to WAV
-					let channelData = e.inputBuffer.getChannelData(0);
-					for (let i = 0; i < channelData.length; i++) {
-						that.sixteenthNoteSamples.push(channelData[i])
-					}
-					leftoverSamples = that.sixteenthNoteSamples.slice(that.sixteenthNoteSampleBufferSize)
-					that.sixteenthNoteSamples = that.sixteenthNoteSamples.slice(0, that.sixteenthNoteSampleBufferSize)
-				};
 			}
 		)
+	}
+
+	getByteTimeDomainData() {
+		this.analyser.getByteTimeDomainData(this.buffer);
+		return this.buffer;
+	}
+
+	getSampleRate() {
+		return this.audioContext.sampleRate;
 	}
 
 	getSamples() {
