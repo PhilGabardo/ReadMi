@@ -1,5 +1,5 @@
 function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per_measure) {
-	var percentage;
+	let percentage;
 	switch (duration) {
 		case '16':
 		case '16r':
@@ -22,9 +22,9 @@ function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per
 			percentage = (beat_value) / beats_per_measure;
 			break;
 	}
-	var dot_factor = 1;
-	var multiplier = 0.5
-	for (var dot_count = 0; dot_count < number_of_dots; dot_count++) {
+	let dot_factor = 1;
+	let multiplier = 0.5
+	for (let dot_count = 0; dot_count < number_of_dots; dot_count++) {
 		dot_factor += multiplier;
 		multiplier = multiplier / 2;
 	}

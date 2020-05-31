@@ -7,23 +7,23 @@ export default class AudioStreamController {
 	}
 
 	startStream() {
-		var that  = this;
+		let that  = this;
 		this.userMediaPromise.then(
 			function(stream) {
-				var source = that.audioContext.createMediaStreamSource(stream);
-				var processor = that.audioContext.createScriptProcessor(4096, 1, 1);
-				var leftoverSamples = [];
+				let source = that.audioContext.createMediaStreamSource(stream);
+				let processor = that.audioContext.createScriptProcessor(4096, 1, 1);
+				let leftoverSamples = [];
 
 				source.connect(processor);
 				processor.connect(that.audioContext.destination);
 				processor.onaudioprocess = function(e) {
-					for (var i = 0; i < leftoverSamples.length; i++) {
+					for (let i = 0; i < leftoverSamples.length; i++) {
 						that.sixteenthNoteSamples.push(leftoverSamples[i])
 					}
 					that.sixteenthNoteSamples = leftoverSamples;
 					// Do something with the data, i.e Convert this to WAV
-					var channelData = e.inputBuffer.getChannelData(0);
-					for (var i = 0; i < channelData.length; i++) {
+					let channelData = e.inputBuffer.getChannelData(0);
+					for (let i = 0; i < channelData.length; i++) {
 						that.sixteenthNoteSamples.push(channelData[i])
 					}
 					leftoverSamples = that.sixteenthNoteSamples.slice(that.sixteenthNoteSampleBufferSize)

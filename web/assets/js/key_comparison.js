@@ -1,5 +1,5 @@
 function compareKeys(note1, note2) {
-	var keyaliases = {
+	let keyaliases = {
 		'ab': 'g#',
 		'a' : 'a',
 		'a#' : 'bb',
@@ -29,7 +29,7 @@ function compareKeys(note1, note2) {
 }
 
 function getKeyAsFlat(key) {
-	var flat_map = {
+	let flat_map = {
 		'ab': 'Ab',
 		'a' : 'a',
 		'a#' : 'Bb',

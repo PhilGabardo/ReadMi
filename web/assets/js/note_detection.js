@@ -1,5 +1,5 @@
 import key_comparison from './key_comparison'
-var noteFrequencies =
+let noteFrequencies =
 	// B        A#        A      G#       G         F#       F        E         D#      D        C#       C
 	[7902.13, 7458.62, 7040.00, 6644.88, 6271.93, 5919.91, 5587.65, 5274.04, 4978.03, 4698.64, 4434.92, 4186.01,  // 8
 	3951.07, 3729.31, 3520.00, 3322.44, 3135.96, 2959.96, 2793.83, 2637.02, 2489.02, 2349.32, 2217.46, 2093.00,   // 7
@@ -11,15 +11,15 @@ var noteFrequencies =
 	61.7354, 58.2705, 55.0000, 51.9131, 48.9994, 46.2493, 43.6535, 41.2034, 38.8909, 36.7081, 34.6478, 32.7032,   // 1
 	30.8677, 29.1352, 27.5000, 25.9565, 24.4997, 23.1247, 21.8268, 20.6017, 19.4454, 18.3540, 17.3239, 16.3516]; // 0
 
-var noteNames = ["B", "A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C"];
+let noteNames = ["B", "A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C"];
 
 function estimateNote(frequency) {
-	var length = noteFrequencies.length;
-	var frequencyIndex = 0;
-	var nextClosestIndex = 0;
+	let length = noteFrequencies.length;
+	let frequencyIndex = 0;
+	let nextClosestIndex = 0;
 
 	// Iterate through the note array to find the closest indices
-	for (var i = 0; i < length - 1; i++) {
+	for (let i = 0; i < length - 1; i++) {
 		if (i == 0 && frequency > noteFrequencies[i]) {
 			frequencyIndex = 0;
 			nextClosestIndex = 0;
@@ -42,8 +42,8 @@ function estimateNote(frequency) {
 }
 
 function getFrequencyForNote(note_name, note_octave) {
-	var noteNameIndex;
-	for (var i = 0; i < noteNames.length; i++) {
+	let noteNameIndex;
+	for (let i = 0; i < noteNames.length; i++) {
 		if (key_comparison.compareKeys(note_name, noteNames[i])) {
 			noteNameIndex = i;
 			break;
@@ -57,12 +57,12 @@ function getNoteFromSamples(sixteenthNoteSamples, sixteenthNoteSampleBufferSize)
 	if (sixteenthNoteSamples.length < sixteenthNoteSampleBufferSize) {
 		return [];
 	}
-	var max = 0;
-	for (var i = 0; i < sixteenthNoteSamples.length; i++) {
+	let max = 0;
+	for (let i = 0; i < sixteenthNoteSamples.length; i++) {
 		max = Math.max(max, Math.abs(sixteenthNoteSamples[i]))
 	}
 	if (max > 0.1) {
-		var freq = estimateFrequency(sixteenthNoteSamples);
+		let freq = estimateFrequency(sixteenthNoteSamples);
 		if (freq != -1) {
 			return estimateNote(freq);
 		} else {
@@ -76,9 +76,9 @@ function getNoteFromSamples(sixteenthNoteSamples, sixteenthNoteSampleBufferSize)
 function estimateFrequency(wave) {
 
 	function autoCorrelationDifference(wave) {
-		var resultBuffer = new Array(wave.length / 2)
-		for (var j = 0; j < resultBuffer.length; j++) {
-			for (var i = 0; i < resultBuffer.length; i++) {
+		let resultBuffer = new Array(wave.length / 2)
+		for (let j = 0; j < resultBuffer.length; j++) {
+			for (let i = 0; i < resultBuffer.length; i++) {
 				// d sub t (tau) = (x(i) - x(i - tau))^2, from i = 1 to result buffer size
 				if (!(j in resultBuffer)) {
 					resultBuffer[j] = 0;
@@ -90,13 +90,13 @@ function estimateFrequency(wave) {
 	}
 
 	function cumulativeMeanNormalizedDifference(resultBuffer) {
-		var length = resultBuffer.length;
-		var runningSum = 0;
+		let length = resultBuffer.length;
+		let runningSum = 0;
 
 		// Set the first value in the result buffer to the value of one
 		resultBuffer[0] = 1;
 
-		for (var i = 1; i < length; i++) {
+		for (let i = 1; i < length; i++) {
 			// The sum of this value plus all the previous values in the buffer array
 			runningSum = runningSum + resultBuffer[i];
 
@@ -107,8 +107,8 @@ function estimateFrequency(wave) {
 	}
 
 	function absoluteThreshold(resultBuffer) {
-		var tau;
-		var length = resultBuffer.length;
+		let tau;
+		let length = resultBuffer.length;
 
 		// The first two values in the result buffer should be 1, so start at the third value
 		for (tau = 2; tau < length; tau++) {
@@ -132,11 +132,11 @@ function estimateFrequency(wave) {
 
 	function parabolicInterpretation(currentTau, resultBuffer) {
 		// Finds the points to fit the parabola between
-		var x0 = currentTau < 1 ? currentTau : currentTau - 1;
-		var x2 = currentTau + 1 < resultBuffer.length ? currentTau + 1 : currentTau;
+		let x0 = currentTau < 1 ? currentTau : currentTau - 1;
+		let x2 = currentTau + 1 < resultBuffer.length ? currentTau + 1 : currentTau;
 
 		// Finds the better tau estimate
-		var betterTau;
+		let betterTau;
 
 		if (x0 == currentTau) {
 			if (resultBuffer[currentTau] <= resultBuffer[x2]) {
@@ -153,9 +153,9 @@ function estimateFrequency(wave) {
 		} else {
 			// Fit the parabola between the first point, current tau, and the last point to find a
 			// better tau estimate.
-			var s0 = resultBuffer[x0];
-			var s1 = resultBuffer[currentTau];
-			var s2 = resultBuffer[x2];
+			let s0 = resultBuffer[x0];
+			let s1 = resultBuffer[currentTau];
+			let s2 = resultBuffer[x2];
 
 			betterTau = currentTau + (s2 - s0) / (2 * (2 * s1 - s2 - s0));
 		}
@@ -163,9 +163,9 @@ function estimateFrequency(wave) {
 		return betterTau;
 	}
 
-	var resultBuffer = autoCorrelationDifference(wave);
+	let resultBuffer = autoCorrelationDifference(wave);
 	resultBuffer = cumulativeMeanNormalizedDifference(resultBuffer)
-	var tau = absoluteThreshold(resultBuffer)
+	let tau = absoluteThreshold(resultBuffer)
 	if (tau == -1) {
 		return tau;
 	}

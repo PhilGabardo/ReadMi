@@ -8,8 +8,8 @@ export default class NoteHinter {
 	}
 
 	hintNext(instrument, key, octave) {
-		var hintKey = key[0];
-		var keyForPath = key[0];
+		let hintKey = key[0];
+		let keyForPath = key[0];
 		if (key.length > 1) {
 			hintKey += "<sup>" + key[1].replace("B", '♭') + "</sup>"
 			keyForPath += key[1].replace('#', 'sharp').replace('B', 'b');

@@ -2,7 +2,7 @@ import key_comparison from './key_comparison'
 
 function getKeySignatureInfo(key) {
 	// https://en.wikipedia.org/wiki/Key_signature
-	var key_sigs = {
+	let key_sigs = {
 		'C' : {
 			'type': '#',
 			'notes': []
@@ -56,16 +56,16 @@ function getKeySignatureInfo(key) {
 }
 
 function getOffsetNote(key, octave, offset) {
-	var notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
-	var startIndex = 0;
-	for (var i = 0; i < notes.length; i++) {
+	let notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
+	let startIndex = 0;
+	for (let i = 0; i < notes.length; i++) {
 		if (key_comparison.compareKeys(notes[i], key)) {
 			startIndex = i;
 			break;
 		}
 	}
-	var offsetKey = notes[(notes.length + startIndex + offset) % notes.length];
-	var offsetOctave = octave + Math.floor((startIndex + offset) / notes.length);
+	let offsetKey = notes[(notes.length + startIndex + offset) % notes.length];
+	let offsetOctave = octave + Math.floor((startIndex + offset) / notes.length);
 	return {
 		"name": offsetKey,
 		"octave": offsetOctave,

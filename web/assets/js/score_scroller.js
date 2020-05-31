@@ -20,11 +20,11 @@ export default class ScoreScoller {
 		if (!scroller.enabled) {
 			return;
 		}
-		var timeInMs = Timing.getTimeSinceStart();
-		var bps = scroller.beats_per_minute / 60;
-		var beatsPassed = (timeInMs * bps) / (1000);
-		var stavesPassed = Math.floor(beatsPassed / scroller.beats_per_measure);
-		var percentageThroughStave = (beatsPassed % scroller.beats_per_measure) / scroller.beats_per_measure;
+		let timeInMs = Timing.getTimeSinceStart();
+		let bps = scroller.beats_per_minute / 60;
+		let beatsPassed = (timeInMs * bps) / (1000);
+		let stavesPassed = Math.floor(beatsPassed / scroller.beats_per_measure);
+		let percentageThroughStave = (beatsPassed % scroller.beats_per_measure) / scroller.beats_per_measure;
 		scrollToNiceSpot(stavesPassed, percentageThroughStave)
 	}
 
@@ -48,9 +48,9 @@ function scrollToNiceSpot(stavesPassed, percentageThroughStave) {
 		window.scrollTo(0, 0);
 		return
 	}
-	var stave_height = getStaveHeight();
-	var height = Math.floor(stavesPassed / 3) * stave_height;
-	var penalty = stave_height - (((stavesPassed % 3) + percentageThroughStave) / 3) * stave_height
+	let stave_height = getStaveHeight();
+	let height = Math.floor(stavesPassed / 3) * stave_height;
+	let penalty = stave_height - (((stavesPassed % 3) + percentageThroughStave) / 3) * stave_height
 	window.scrollTo(0, height - penalty)
 }
 

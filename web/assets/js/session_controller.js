@@ -28,7 +28,7 @@ export default class SessionController {
 
 	start() {
 		this.menu.style.visibility = 'visible';
-		for (var i = 0; i < this.beats_per_measure; i++) {
+		for (let i = 0; i < this.beats_per_measure; i++) {
 			setTimeout(this.metronome.click, (60 * 1000 * i / this.bpm), this.metronome);
 		}
 		setTimeout(this._start, this.getStaveTimeInMs(), this);

@@ -25,14 +25,14 @@ export default class NoteFeedback {
 	}
 
 	draw(note_feedback) {
-		var timeInMs = Timing.getTimeSinceStart();
-		var bps = note_feedback.beats_per_minute / 60;
-		var beatsPassed = (timeInMs * bps) / (1000);
-		var stavesPassed = Math.floor(beatsPassed / note_feedback.beats_per_measure);
-		var percentageThroughStave = (beatsPassed % note_feedback.beats_per_measure) / note_feedback.beats_per_measure;
-		var offset = ((note_feedback.beats_per_minute / note_feedback.beats_per_measure) / 20) * 0.1;
-		var offsettedPercentageThroughStave = percentageThroughStave - offset;
-		var offsettedStavesPassed = stavesPassed;
+		let timeInMs = Timing.getTimeSinceStart();
+		let bps = note_feedback.beats_per_minute / 60;
+		let beatsPassed = (timeInMs * bps) / (1000);
+		let stavesPassed = Math.floor(beatsPassed / note_feedback.beats_per_measure);
+		let percentageThroughStave = (beatsPassed % note_feedback.beats_per_measure) / note_feedback.beats_per_measure;
+		let offset = ((note_feedback.beats_per_minute / note_feedback.beats_per_measure) / 20) * 0.1;
+		let offsettedPercentageThroughStave = percentageThroughStave - offset;
+		let offsettedStavesPassed = stavesPassed;
 		if (offsettedPercentageThroughStave < 0) {
 			if (stavesPassed === 0) {
 				offsettedStavesPassed = 0;
@@ -41,19 +41,19 @@ export default class NoteFeedback {
 				offsettedPercentageThroughStave = offsettedPercentageThroughStave + 1;
 			}
 		}
-		var note = null;
+		let note = null;
 		if (note_feedback.vf_bars[offsettedStavesPassed][0] && note_feedback.vf_bars[offsettedStavesPassed][0].percentage < offsettedPercentageThroughStave) {
 			note = note_feedback.vf_bars[offsettedStavesPassed][0].note;
 			note_feedback.vf_bars[offsettedStavesPassed].shift();
 		}
 		if (note && note.attrs.type !== 'GhostNote') {
-			var props = note.getKeyProps()[0];
-			var key = props.key;
-			var octave = props.octave;
-			var expected_note = key_signatures.getOffsetNote(key, octave,  0 - Instruments.getInstrumentKeyOffset(note_feedback.instrument));
-			var currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getSamples(), note_feedback.audio_stream_controller.getBufferSize());
-			var expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
-			var actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
+			let props = note.getKeyProps()[0];
+			let key = props.key;
+			let octave = props.octave;
+			let expected_note = key_signatures.getOffsetNote(key, octave,  0 - Instruments.getInstrumentKeyOffset(note_feedback.instrument));
+			let currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getSamples(), note_feedback.audio_stream_controller.getBufferSize());
+			let expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
+			let actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
 				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 				note_feedback.correctNotes++;

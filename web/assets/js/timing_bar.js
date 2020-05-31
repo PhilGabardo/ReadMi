@@ -19,12 +19,12 @@ export default class TimingBar {
 	}
 
 	draw(timing_bar) {
-		var timeInMs = Timing.getTimeSinceStart();
-		var bps = timing_bar.beats_per_minute / 60;
-		var beatsPassed = (timeInMs * bps) / (1000);
-		var stavesPassed = Math.floor(beatsPassed / timing_bar.beats_per_measure);
-		var percentageThroughStave = (beatsPassed % timing_bar.beats_per_measure) / timing_bar.beats_per_measure;
-		var pos = getPosition(stavesPassed, percentageThroughStave, 20 * getScalingFactor(), getStaveHeight(), timing_bar.staveWidth, timing_bar.key_sig_staff_width);
+		let timeInMs = Timing.getTimeSinceStart();
+		let bps = timing_bar.beats_per_minute / 60;
+		let beatsPassed = (timeInMs * bps) / (1000);
+		let stavesPassed = Math.floor(beatsPassed / timing_bar.beats_per_measure);
+		let percentageThroughStave = (beatsPassed % timing_bar.beats_per_measure) / timing_bar.beats_per_measure;
+		let pos = getPosition(stavesPassed, percentageThroughStave, 20 * getScalingFactor(), getStaveHeight(), timing_bar.staveWidth, timing_bar.key_sig_staff_width);
 		timing_bar.clearLastChild();
 		timing_bar.rendering_context.beginPath();
 		timing_bar.rendering_context.rect(pos.width, pos.height, 10 * getScalingFactor(), 120 * getScalingFactor());
@@ -36,7 +36,7 @@ export default class TimingBar {
 	}
 
 	clearLastChild() {
-		var lastChild = this.rendering_context.svg.querySelectorAll("rect");
+		let lastChild = this.rendering_context.svg.querySelectorAll("rect");
 		if (lastChild.length > 0) {
 			this.rendering_context.svg.removeChild(lastChild[lastChild.length - 1]);
 		}
@@ -44,8 +44,8 @@ export default class TimingBar {
 }
 
 function getPosition(stavesPassed, percentageThroughStave, leftPadding, staveHeight, staveWidth, keySigStaffWidth) {
-	var height = Math.floor(stavesPassed / 3) * staveHeight;
-	var width = leftPadding + (stavesPassed % 3) * staveWidth + (percentageThroughStave * staveWidth);
+	let height = Math.floor(stavesPassed / 3) * staveHeight;
+	let width = leftPadding + (stavesPassed % 3) * staveWidth + (percentageThroughStave * staveWidth);
 	width += keySigStaffWidth;
 	return {
 		height: height,

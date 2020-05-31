@@ -1,5 +1,5 @@
 function getInstrumentKeyOffset(instrument) {
-	var key_offsets = {
+	let key_offsets = {
 		'guitar': 12,
 		'piccolo': -12,
 		'clarinet': 2,
@@ -17,7 +17,7 @@ function getInstrumentKeyOffset(instrument) {
 }
 
 function getInstrumentFingering(instrument) {
-	var fingering_map = {
+	let fingering_map = {
 		'guitar': 'guitar',
 		'piccolo': 'picolo',
 		'clarinet': 'clarinet',

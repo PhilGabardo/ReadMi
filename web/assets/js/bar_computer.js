@@ -1,17 +1,17 @@
 import VexFlow from 'vexflow';
 function getVFBars(bars) {
-	var VF = VexFlow.Flow;
-	var vf_bars = [];
-	for (var i = 0; i < bars.length; i++) {
-		var vf_bar = [];
-		var bar = bars[i];
-		for (var j = 0; j < bar.length; j++) {
-			var note = bar[j];
+	let VF = VexFlow.Flow;
+	let vf_bars = [];
+	for (let i = 0; i < bars.length; i++) {
+		let vf_bar = [];
+		let bar = bars[i];
+		for (let j = 0; j < bar.length; j++) {
+			let note = bar[j];
 			if (note.ghost) {
 				vf_bar.push(new VF.GhostNote(note));
 			} else {
-				var staveNote = new VF.StaveNote(note);
-				for (var k = 0; k < note.dot_count; k++) {
+				let staveNote = new VF.StaveNote(note);
+				for (let k = 0; k < note.dot_count; k++) {
 					staveNote.addDot(0);
 				}
 				if (note.accidental) {
