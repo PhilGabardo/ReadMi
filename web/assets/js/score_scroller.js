@@ -5,6 +5,7 @@ export default class ScoreScoller {
 		this.beats_per_measure = beats_per_measure;
 		this.beats_per_minute = beats_per_minute;
 		this.enabled = true
+		this.stave_height = 150 * document.getElementById("boo").offsetWidth / 1280;
 		this.setController();
 	}
 
@@ -25,7 +26,7 @@ export default class ScoreScoller {
 		let beatsPassed = (timeInMs * bps) / (1000);
 		let stavesPassed = Math.floor(beatsPassed / scroller.beats_per_measure);
 		let percentageThroughStave = (beatsPassed % scroller.beats_per_measure) / scroller.beats_per_measure;
-		scrollToNiceSpot(stavesPassed, percentageThroughStave)
+		scrollToNiceSpot(stavesPassed, percentageThroughStave, scroller.stave_height)
 	}
 
 	resume() {
@@ -43,24 +44,16 @@ export default class ScoreScoller {
 	}
 }
 
-function scrollToNiceSpot(stavesPassed, percentageThroughStave) {
+function scrollToNiceSpot(stavesPassed, percentageThroughStave, staveHeight) {
 	if (stavesPassed < 3) {
 		window.scrollTo(0, 0);
 		return
 	}
-	let stave_height = getStaveHeight();
+	let stave_height = staveHeight;
 	let height = Math.floor(stavesPassed / 3) * stave_height;
 	let penalty = stave_height - (((stavesPassed % 3) + percentageThroughStave) / 3) * stave_height
 	window.scrollTo(0, height - penalty)
 }
 
-
-function getScalingFactor() {
-	return window.innerWidth / 1280;
-}
-
-function getStaveHeight() {
-	return 150 * getScalingFactor();
-}
 
 

@@ -20,7 +20,7 @@ export default class ScoreRenderer {
 		this.beat_value = beat_value;
 		this.name = name;
 		this.note_hinter = new NoteHinter();
-		let hintOffsetTop = document.getElementById("boo").offsetTop - getStaveHeight() / 2;
+		this.scaling_factor = document.getElementById("boo").offsetWidth / 1280;
 
 		let keySigInfo = key_signatures.getKeySignatureInfo(key);
 		let keySigNotesCount = Object.keys(keySigInfo.notes).length;
@@ -31,23 +31,23 @@ export default class ScoreRenderer {
 	}
 
 	render() {
-		let leftPadding = 20 * getScalingFactor();
-		let staveHeight = getStaveHeight();
+		let leftPadding = 20 * this.scaling_factor;
+		let staveHeight = 150 * this.scaling_factor;
 		let voices = [];
 		for (let row = 0; row < (this.scheduled_notes.length / 3); row++) {
 			let keySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row, this.keySigStaffWidth);
-			keySigStaff.options.spacing_between_lines_px = 10 * getScalingFactor();
+			keySigStaff.options.spacing_between_lines_px = 10 * this.scaling_factor;
 			keySigStaff.addClef('treble');
 			if (row === 0) {
 				keySigStaff.addTimeSignature(String(this.beats_per_measure).concat("/").concat(String(this.beat_value)));
 			}
-			let keySig = new VexFlow.Flow.KeySignature(this.key);
+			let keySig = new VexFlow.Flow.KeySignature(this.key.replace(' major', '').replace(' minor', 'm'));
 			keySig.addToStave(keySigStaff);
 			keySigStaff.setContext(this.context).draw();
 			for (let col = 0; col < 3; col++) {
 				let horiz_offset =  leftPadding + this.keySigStaffWidth + this.staveWidth * col;
 				let staff = new VexFlow.Flow.Stave(horiz_offset, staveHeight * row, this.staveWidth);
-				staff.options.spacing_between_lines_px = 10 * getScalingFactor();
+				staff.options.spacing_between_lines_px = 10 * this.scaling_factor;
 				staff.setContext(this.context).draw();
 				let scheduled_notes = this.scheduled_notes[row * 3 + col];
 				// Create a voice in 4/4 and add above notes
@@ -116,34 +116,4 @@ function getDurationAsPercentage(duration, number_of_dots, beat_value, beats_per
 	}
 	percentage *= dot_factor;
 	return percentage;
-}
-
-function getScalingFactor() {
-	return window.innerWidth / 1280;
-}
-
-function getStaveHeight() {
-	return 150 * getScalingFactor();
-}
-
-
-
-function getPosition(stavesPassed, percentageThroughStave, leftPadding, staveHeight, staveWidth, keySigStaffWidth) {
-	let height = Math.floor(stavesPassed / 3) * staveHeight;
-	let width = leftPadding + (stavesPassed % 3) * staveWidth + (percentageThroughStave * staveWidth);
-	width += keySigStaffWidth;
-	return {
-		height: height,
-		width: width,
-	}
-}
-
-function scrollToNiceSpot(stavesPassed, percentageThroughStave, staveHeight) {
-	if (stavesPassed < 3) {
-		window.scrollTo(0, 0);
-		return
-	}
-	let height = Math.floor(stavesPassed / 3) * staveHeight;
-	let penalty = staveHeight - (((stavesPassed % 3) + percentageThroughStave) / 3) * staveHeight
-	window.scrollTo(0, height - penalty)
 }

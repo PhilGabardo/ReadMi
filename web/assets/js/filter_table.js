@@ -7,14 +7,17 @@ function addRowHandlers() {
 	for (let i = 0; i < rows.length; i++) {
 		let currentRow = table.rows[i];
 		currentRow.onclick = function () {
-			let cell = this.getElementsByTagName("td")[0];
-			let name = cell.innerHTML;
-			let form = '';
-			$.each({name: name}, function( key, value ) {
-				value = value.split('"').join('\"')
-				form += '<input type="hidden" name="'+key+'" value="'+value+'">';
-			});
-			$('<form action="' + '/' + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+			if (currentRow.classList.contains('songDisabled')) {
+				$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="premium_info"></form>').appendTo($(document.body)).submit();
+			} else {
+				let title_td = this.getElementsByClassName("songTitle")[0];
+				let titleTxtValue = title_td.textContent || title_td.innerText;
+				let artist_td = this.getElementsByClassName("songArtist")[0];
+				let artistTxtValue = artist_td.textContent || artist_td.innerText;
+				let name_param = '<input type="hidden" name="name" value="'+titleTxtValue+'">';
+				let artist_param = '<input type="hidden" name="artist" value="'+artistTxtValue+'">';
+				$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="play_song">' + name_param + artist_param + '</form>').appendTo($(document.body)).submit();
+			}
 		};
 	}
 }
@@ -34,15 +37,18 @@ function filterTable(songName, songKeys, songTimes) {
 	// Loop through all table rows, and hide those who don't match the search query
 	for (let i = 0; i < tr.length; i++) {
 		let shouldFilter = false;
-		let td = tr[i].getElementsByClassName("songName")[0];
-		if (td && songName != "") {
-			txtValue = td.textContent || td.innerText;
-			if (txtValue.toUpperCase().indexOf(songName.toUpperCase()) > -1) {
+		if (songName != "") {
+			let title_td = tr[i].getElementsByClassName("songTitle")[0];
+			let titleTxtValue = title_td.textContent || title_td.innerText;
+			let artist_td = tr[i].getElementsByClassName("songArtist")[0];
+			let artistTxtValue = artist_td.textContent || artist_td.innerText;
+			let songText = titleTxtValue + " " + artistTxtValue;
+			if (songText.toUpperCase().indexOf(songName.toUpperCase()) > -1) {
 			} else {
 				shouldFilter = true;
 			}
 		}
-		td = tr[i].getElementsByClassName("songKey")[0];
+		let td = tr[i].getElementsByClassName("songKey")[0];
 		if (td && songKeys.length > 0) {
 			let keyMatch = false;
 			for (let j = 0; j < songKeys.length; j++) {

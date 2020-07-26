@@ -8,6 +8,8 @@ export default class TimingBar {
 		this.beats_per_minute = beats_per_minute;
 		this.func = null;
 		this.key_sig_staff_width = key_sig_staff_width;
+		this.scaling_factor = document.getElementById("boo").offsetWidth / 1280;
+		this.has_drawn_rect = false;
 	}
 
 	start() {
@@ -24,11 +26,14 @@ export default class TimingBar {
 		let beatsPassed = (timeInMs * bps) / (1000);
 		let stavesPassed = Math.floor(beatsPassed / timing_bar.beats_per_measure);
 		let percentageThroughStave = (beatsPassed % timing_bar.beats_per_measure) / timing_bar.beats_per_measure;
-		let pos = getPosition(stavesPassed, percentageThroughStave, 20 * getScalingFactor(), getStaveHeight(), timing_bar.staveWidth, timing_bar.key_sig_staff_width);
-		timing_bar.clearLastChild();
+		let pos = getPosition(stavesPassed, percentageThroughStave, 20 * timing_bar.scaling_factor, 150 * timing_bar.scaling_factor, timing_bar.staveWidth, timing_bar.key_sig_staff_width);
+		if (timing_bar.has_drawn_rect) {
+			timing_bar.clearLastChild();
+		}
 		timing_bar.rendering_context.beginPath();
-		timing_bar.rendering_context.rect(pos.width, pos.height, 10 * getScalingFactor(), 120 * getScalingFactor());
+		timing_bar.rendering_context.rect(pos.width, pos.height, 10 * timing_bar.scaling_factor, 120 * timing_bar.scaling_factor);
 		timing_bar.rendering_context.closePath();
+		timing_bar.has_drawn_rect = true;
 	}
 
 	resume() {
@@ -41,6 +46,7 @@ export default class TimingBar {
 			this.rendering_context.svg.removeChild(lastChild[lastChild.length - 1]);
 		}
 	}
+
 }
 
 function getPosition(stavesPassed, percentageThroughStave, leftPadding, staveHeight, staveWidth, keySigStaffWidth) {
@@ -51,10 +57,6 @@ function getPosition(stavesPassed, percentageThroughStave, leftPadding, staveHei
 		height: height,
 		width: width,
 	}
-}
-
-function getScalingFactor() {
-	return window.innerWidth / 1280;
 }
 
 function getStaveHeight() {

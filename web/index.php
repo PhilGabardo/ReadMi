@@ -1,9 +1,30 @@
 <?php
 
+
 require('../vendor/autoload.php');
 require_once __DIR__ . '/BarComputer.php';
+require_once __DIR__ . '/KeySignatures.php';
+require_once __DIR__ . '/actions/ReadMiAction.php';
+require_once __DIR__ . '/actions/LoggedInAction.php';
+require_once __DIR__ . '/actions/LoggedOutAction.php';
+require_once __DIR__ . '/actions/DemoLandingAction.php';
+require_once __DIR__ . '/actions/LandingAction.php';
+require_once __DIR__ . '/actions/LogInAction.php';
+require_once __DIR__ . '/actions/LogOutAction.php';
+require_once __DIR__ . '/actions/PlayDemoAction.php';
+require_once __DIR__ . '/actions/PlaySongAction.php';
+require_once __DIR__ . '/actions/PremiumInfoAction.php';
+require_once __DIR__ . '/actions/StripeSessionIdAction.php';
+require_once __DIR__ . '/actions/PaymentFailureAction.php';
+require_once __DIR__ . '/actions/PaymentSuccessAction.php';
+
+use ReadMi\BarComputer;
+use Actions\PaymentSuccessAction;
 
 use \Symfony\Component\HttpFoundation\Request;
+
+use Auth0\SDK\Auth0;
+use Actions\ReadMiAction;
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -46,83 +67,70 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/views',
 ));
 
+$app->get('/jeopardy', function(Request $request) use($app) {
+	$app->register(new Csanquer\Silex\PdoServiceProvider\Provider\PDOServiceProvider('pdo'),
+		array(
+			'pdo.server' => array(
+				'driver'   => 'pgsql',
+				'user' => 'philipgabardo',
+				'password' => 'ninetythree',
+				'host' => '127.0.0.1',
+				'port' => 5432,
+				'dbname' => 'philipgabardo'
+			)
+		)
+	);
+	$category_offset = random_int(0, 45050);
+	$st = $app['pdo']->prepare("SELECT distinct(category) FROM jeopardy_questions OFFSET $category_offset LIMIT 6");
+	$st->execute();
+	$categories = array_map(function ($arr) { return $arr['category']; }, $st->fetchAll(PDO::FETCH_ASSOC));
+	$questions_by_category = [];
+	foreach ($categories as $category) {
+		$escaped_category = $app['pdo']->quote($category);
+		$st = $app['pdo']->prepare("SELECT year, question, answer FROM jeopardy_questions where category = $escaped_category");
+		$st->execute();
+		$question_candidates = $st->fetchAll(PDO::FETCH_ASSOC);
+		shuffle($question_candidates);
+		$questions_by_category[$category] = array_slice($question_candidates, 0, 6);
+	}
+	$daily_double_row = random_int(0, 4);
+	$daily_double_col = random_int(0, 5);
+	$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['question'] = 'DAILY DOUBLE! ' .$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['question'];
+	$clues = [];
+	for ($row = 0; $row < 5; $row++) {
+		$clues[$row + 1] = [];
+		foreach ($categories as $category) {
+			$clues[$row + 1][] = $questions_by_category[$category][$row];
+		}
+	}
+	return $app['twig']->render('jeopardy.html', [
+		'categories' => $categories,
+		'clues' => $clues,
+	]);
+});
+
 // Our web handlers
 // TODO: login
 $app->post('/', function(Request $request) use($app) {
-	$song_name = str_replace("'", "''", $request->get('name')); // handles songs with quotes
-	$st = $app['pdo']->prepare("SELECT name, key_signature, beat_value, beats_per_measure, notes FROM songs where name = '{$song_name}'");
-	$st->execute();
-	$song_row = $st->fetch(PDO::FETCH_ASSOC);
-	$bars = \BarComputer::getBars(json_decode($song_row['notes'], true), $song_row['key_signature'],
-		(float)$song_row['beat_value'], (float) $song_row['beats_per_measure']);
-	return $app['twig']->render('play_song.twig', [
-		's' => $song_row,
-		'bars' => json_encode($bars),
-	] + getSongData($app));
+	return ReadMiAction::getResponse($app, $request);
 });
 
 
-$app->post('/replay_song', function(Request $request) use($app) {
-	return $app['twig']->render('play_song.twig', [
-		's' => $request->get('song'),
-		'bars' => $request->get('bars')
-	] + getSongData($app));
+$app->get('/', function(Request $request) use($app) {
+	return ReadMiAction::getResponse($app, $request);
 });
 
-$app->get('/', function() use($app) {
-	return $app['twig']->render('landing.twig', getSongData($app));
+$app->post('/payment_success', function(Request $request) use($app) {
+	return PaymentSuccessAction::execute($app, $request);
 });
+
+$app->get('/payment_success', function(Request $request) use($app) {
+	return PaymentSuccessAction::execute($app, $request);
+});
+
+
 
 $app->run();
 
-function getTestSongData() {
-	return [
-		'songs' => [
-			['name' => 'test', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test1', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test2', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test3', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test4', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test5', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test6', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test7', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test8', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test9', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test10', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test1', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test2', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test3', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test4', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test5', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test6', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test7', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test8', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test9', 'key_signature' => 'A', 'time_signature' => '3/4'],
-			['name' => 'test10', 'key_signature' => 'A', 'time_signature' => '3/4'],
-		],
-		'key_signatures' => ['A', 'A#', 'B', 'C', 'D'],
-		'time_signatures' => ['4/4', '3/4', '2/2', '7/8']
-	];
-}
 
-function getSongData($app) {
-	$st = $app['pdo']->prepare('SELECT name, key_signature, beat_value, beats_per_measure FROM songs ORDER BY name ASC');
-	$st->execute();
 
-	$songs = [];
-	$key_signatures = [];
-	$time_signatures = [];
-	while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-		$app['monolog']->addDebug('Row ' . $row['name']);
-		$row['time_signature'] = $row['beats_per_measure'] . '/' . $row['beat_value'];
-		$key_signatures[] = $row['key_signature'];
-		$time_signatures[] = $row['time_signature'];
-		$songs[] = $row;
-	}
-	return [
-		'songs' => $songs,
-		'key_signatures' => array_unique($key_signatures),
-		'time_signatures' => array_unique($time_signatures),
-	];
-}

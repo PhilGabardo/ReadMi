@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<div id="header">
+	<header>
+		<h1 id="_header">ReadMi <span class="gold">Gold</span></h1>
+		<ul>
+			<li>Access to hundreds of songs</li>
+			<li>Only a one-time 14$ payment</li>
+			<li>Half of the profits are donated to the MakeYourself Foundation</li>
+		</ul>
+	</header>
+	<button id="checkout-button">
+		Checkout
+	</button>
+</div>
+	<script src="https://js.stripe.com/v3/"></script>
+	<script type="text/javascript" src="/build/payment.js"></script>
+{% endblock %}

@@ -12,25 +12,28 @@ import KeySignatures from './key_signatures'
 import NoteFeedback from './note_feedback'
 import ScoreScroller from './score_scroller'
 
-
-navigator.permissions.query({name:'microphone'}).then(function(result) {
-	if (result.state == 'granted') {
-		startSession(getAudioStreamController())
-	} else if (result.state == 'prompt') {
-		getAudioStreamController();
-	} else if (result.state == 'denied') {
-		alert("ReadMiMusic does have permission to access your microphone. Please visit https://support.google.com/chrome/answer/2693767 to " +
-			"determine how to give ReadMiMusic microphone access, and then refresh the page.");
-	}
-	result.onchange = function() {
+if (navigator.userAgent.indexOf("Chrome") != -1) {
+	navigator.permissions.query({name:'microphone'}).then(function(result) {
 		if (result.state == 'granted') {
 			startSession(getAudioStreamController())
+		} else if (result.state == 'prompt') {
+			getAudioStreamController();
 		} else if (result.state == 'denied') {
 			alert("ReadMiMusic does have permission to access your microphone. Please visit https://support.google.com/chrome/answer/2693767 to " +
 				"determine how to give ReadMiMusic microphone access, and then refresh the page.");
 		}
-	};
-});
+		result.onchange = function() {
+			if (result.state == 'granted') {
+				startSession(getAudioStreamController())
+			} else if (result.state == 'denied') {
+				alert("ReadMiMusic does have permission to access your microphone. Please visit https://support.google.com/chrome/answer/2693767 to " +
+					"determine how to give ReadMiMusic microphone access, and then refresh the page.");
+			}
+		};
+	});
+} else {
+	alert("ReadMiMusic is only currently supported on Google Chrome.");
+}
 
 function getAudioStreamController() {
 	let AudioContext = (window.AudioContext ||
@@ -51,9 +54,10 @@ function startSession(audioStreamController) {
 	let keySigInfo = KeySignatures.getKeySignatureInfo(keySignature);
 	let keySigNotesCount = Object.keys(keySigInfo.notes).length;
 	let keySigStaffWidth = 80 + keySigNotesCount * 10;
-	let renderer = new VexFlow.Flow.Renderer(document.getElementById("boo"), VexFlow.Flow.Renderer.Backends.SVG);
-	renderer.resize(window.innerWidth * 0.7, 3000);
-	let staveWidth = (window.innerWidth * 0.68 - keySigStaffWidth) / 3.0
+	let boo = document.getElementById("boo");
+	let renderer = new VexFlow.Flow.Renderer(boo, VexFlow.Flow.Renderer.Backends.SVG);
+	renderer.resize(boo.offsetWidth, (150 * boo.offsetWidth / 1280) * (vf_bars.length / 3 + 1));
+	let staveWidth = (boo.offsetWidth * 0.97 - keySigStaffWidth) / 3.0
 	let renderer_context = renderer.getContext();
 	let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure);
 	let score_renderer = new ScoreRenderer(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes());

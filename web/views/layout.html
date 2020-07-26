@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script data-ad-client="ca-pub-1880409762754796" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title></title>
 </head>
 <div class="all_content">
@@ -13,13 +12,14 @@
 <link rel="stylesheet" href="/build/selectize_override.css">
 <link rel="stylesheet" href="/build/filterable_table.css">
 <link rel="stylesheet" href="/build/text.css">
+<button id="logout" type="button">Logout</button>
 <div class="main_content">
   {% block content %}{% endblock %}
 </div>
 <div class="sidenav">
   <table id="headerTable">
     <tr>
-      <input class="filter" type="text" placeholder="Search for a song..">
+      <input class="filter" type="text" placeholder="Search for a song or artist..">
     </tr>
     <tr>
       <select id="keyFilterSelect" placeholder="Key Signature">
@@ -40,15 +40,34 @@
   </table>
   <table id="songsTable">
     <tbody>
-    {% for s in songs %}
+    {% for s in enabled_songs %}
     <tr>
-      <td class="songName">{{ s.name }}</td>
+      <td class="songName">
+        <span class="songTitle">{{ s.name }}</span><br>
+        <span class="songArtist">{{ s.artist }}</span>
+      </td>
+      <td class="songKey">{{ s.key_signature }}</td>
+      <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>
+    </tr>
+    {% endfor %}
+    {% for s in disabled_songs %}
+    <tr class="songDisabled">
+      <td class="tooltiptext">Requires Gold Membership</td>
+      <td class="songName">
+        <span class="songTitle">{{ s.name }}</span><br>
+        <span class="songArtist">{{ s.artist }}</span>
+      </td>
+      <td class="songKey">{{ s.key_signature }}</td>
+      <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>
     </tr>
     {% endfor %}
     </tbody>
   </table>
 </div>
 <script type="text/javascript" src="/build/filter_table.js"></script>
+<script type="text/javascript" src="/build/logout.js"></script>
+<script type="text/javascript" src="/build/premium_info.js"></script>
+
 </body>
 </div>
 </html>

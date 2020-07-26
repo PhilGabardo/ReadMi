@@ -50,8 +50,22 @@
     display:table;
 }
 
+.songDisabled {
+    background: radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
+    radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%)
+}
+
 .songName {
     width:50%;
+    font-family: 'Lobster';
+}
+
+.songTitle {
+    font-family: 'Lobster';
+}
+
+.songArtist {
+    font-size: smaller;
     font-family: 'Lobster';
 }
 
@@ -64,3 +78,51 @@
     font-family: 'Lobster';
 }
 
+
+/* Tooltip container */
+.songDisabled {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.songDisabled .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: -55%;
+    left: 50%;
+    margin-left: -60px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-family: 'Lobster';
+}
+
+/* Tooltip arrow */
+.songDisabled .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: -20%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.songDisabled:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

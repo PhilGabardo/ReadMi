@@ -36,11 +36,16 @@ Encore
 	.addEntry('note_feedback', './web/assets/js/note_timing.js')
 	.addEntry('score_scroller', './web/assets/js/score_scroller.js')
 	.addEntry('landing', './web/assets/js/landing.js')
+	.addEntry('logout', './web/assets/js/logout.js')
+	.addEntry('login', './web/assets/js/login.js')
+	.addEntry('demo', './web/assets/js/demo.js')
+	.addEntry('payment', './web/assets/js/payment.js')
 
 	// will output as web/build/global.css
 	.addStyleEntry('dialogbox', './web/assets/css/dialogbox.css')
 	.addStyleEntry('filterable_table', './web/assets/css/filterable_table.css')
 	.addStyleEntry('layout', './web/assets/css/layout.css')
+	.addStyleEntry('demo_layout', './web/assets/css/demo_layout.css')
 	.addStyleEntry('text', './web/assets/css/text.css')
 	.addStyleEntry('songs', './web/assets/css/songs.scss')
 	.addStyleEntry('selectize_override', './web/assets/css/selectize_override.css')

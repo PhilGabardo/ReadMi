@@ -1,12 +1,13 @@
-{% extends "layout.html" %}
+{% extends "demo_layout.html" %}
 {% block content %}
     <div id="header">
         <header>
             <h1 id="_header">ReadMi</h1>
             <div id="sheet_sample"></div>
             <h2 id="description">An interactive sight reading tool that provides real-time feedback.</h2>
-            <h2 id="welcome">Welcome,  {{ user_name }}!</h2>
+            <h3 id="description"><button id="demo">Try a demo now!</button></h3>
         </header>
     </div>
     <script type="text/javascript" src="/build/landing.js"></script>
+    <script type="text/javascript" src="/build/demo.js"></script>
 {% endblock %}

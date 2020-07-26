@@ -90,6 +90,26 @@
         "/build/landing.js"
       ]
     },
+    "logout": {
+      "js": [
+        "/build/logout.js"
+      ]
+    },
+    "login": {
+      "js": [
+        "/build/login.js"
+      ]
+    },
+    "demo": {
+      "js": [
+        "/build/demo.js"
+      ]
+    },
+    "payment": {
+      "js": [
+        "/build/payment.js"
+      ]
+    },
     "dialogbox": {
       "css": [
         "/build/dialogbox.css"
@@ -103,6 +123,11 @@
     "layout": {
       "css": [
         "/build/layout.css"
+      ]
+    },
+    "demo_layout": {
+      "css": [
+        "/build/demo_layout.css"
       ]
     },
     "text": {

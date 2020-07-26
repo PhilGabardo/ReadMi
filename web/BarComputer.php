@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . '/KeySignatures.php';
+namespace ReadMi;
+
 
 class BarComputer {
 	const TIMING_MAP = [
