@@ -14,7 +14,6 @@ export default class ScoreRenderer {
 		this.context.setFont("Arial", 3, "").setBackgroundFillStyle("#eed");
 		this.key = key;
 		this.bars = bars;
-		this.vf_bars = bar_computer.getVFBars(this.bars);
 		this.scheduled_notes = scheduled_notes;
 		this.beats_per_measure = beats_per_measure;
 		this.beat_value = beat_value;
@@ -28,6 +27,104 @@ export default class ScoreRenderer {
 		this.staveWidth = staveWidth;
 		this.totalNotes = 0;
 		this.correctNotes = 0;
+	}
+
+	renderForPiano() {
+		let leftPadding = 20 * this.scaling_factor;
+		let staveHeight = 300 * this.scaling_factor;
+		let voices = [];
+		for (let row = 0; row < (this.scheduled_notes.length / 3); row++) {
+
+			// treble
+			let trebleKeySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row, this.keySigStaffWidth);
+			trebleKeySigStaff.options.spacing_between_lines_px = 10 * this.scaling_factor;
+			trebleKeySigStaff.addClef('treble');
+			if (row === 0) {
+				trebleKeySigStaff.addTimeSignature(String(this.beats_per_measure).concat("/").concat(String(this.beat_value)));
+			}
+			let trebleKeySig = new VexFlow.Flow.KeySignature(this.key.replace(' major', '').replace(' minor', 'm'));
+			trebleKeySig.addToStave(trebleKeySigStaff);
+			trebleKeySigStaff.setContext(this.context).draw();
+
+			//base
+			let bassKeySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row + staveHeight / 2, this.keySigStaffWidth);
+			bassKeySigStaff.options.spacing_between_lines_px = 10 * this.scaling_factor;
+			bassKeySigStaff.addClef('bass');
+			let baseKeySig = new VexFlow.Flow.KeySignature(this.key.replace(' major', '').replace(' minor', 'm'));
+			baseKeySig.addToStave(bassKeySigStaff);
+			bassKeySigStaff.setContext(this.context).draw();
+
+			for (let col = 0; col < 3; col++) {
+				let horiz_offset =  leftPadding + this.keySigStaffWidth + this.staveWidth * col;
+
+				// treble
+				let trebleStaff = new VexFlow.Flow.Stave(horiz_offset, staveHeight * row, this.staveWidth);
+				trebleStaff.options.spacing_between_lines_px = 10 * this.scaling_factor;
+				trebleStaff.setContext(this.context).draw();
+
+				// bass
+				let bassStaff = new VexFlow.Flow.Stave(horiz_offset, staveHeight * row + staveHeight / 2, this.staveWidth);
+				bassStaff.options.spacing_between_lines_px = 10 * this.scaling_factor;
+				bassStaff.setContext(this.context).draw();
+
+				let scheduled_notes = this.scheduled_notes[row * 3 + col];
+				// Create a voice in 4/4 and add above notes
+				let trebleVoice = new VexFlow.Flow.Voice({num_beats: this.beats_per_measure,  beat_value: this.beat_value, resolution: VexFlow.Flow.RESOLUTION});
+				trebleVoice.setStrict(false);
+				// Create a voice in 4/4 and add above notes
+				let bassVoice = new VexFlow.Flow.Voice({num_beats: this.beats_per_measure,  beat_value: this.beat_value, resolution: VexFlow.Flow.RESOLUTION});
+				bassVoice.setStrict(false);
+
+				let trebleNotes = [];
+				let bassNotes = [];
+				for (let i in scheduled_notes) {
+					if (scheduled_notes[i].note.attrs.type === 'GhostNote') {
+						trebleNotes.push(scheduled_notes[i].note);
+						bassNotes.push(scheduled_notes[i].note);
+					} else if (scheduled_notes[i].note.clef === 'bass') {
+						console.log('test');
+						bassNotes.push(scheduled_notes[i].note);
+						trebleNotes.push(new VexFlow.Flow.GhostNote({duration: scheduled_notes[i].note.duration}))
+					} else {
+						bassNotes.push(new VexFlow.Flow.GhostNote({duration: scheduled_notes[i].note.duration}));
+						trebleNotes.push(scheduled_notes[i].note)
+					}
+				}
+				trebleVoice.addTickables(trebleNotes);
+				bassVoice.addTickables(bassNotes);
+
+				// Format and justify the notes to staveWidth pixels.
+				let trebleFormatter = new VexFlow.Flow.Formatter();
+				let baseFormatter = new VexFlow.Flow.Formatter();
+				trebleFormatter.joinVoices([trebleVoice]).format([trebleVoice], this.staveWidth);
+				baseFormatter.joinVoices([bassVoice]).format([bassVoice], this.staveWidth);
+				let offset = 0;
+				for (let i = 0; i < trebleNotes.length; i++) {
+					trebleFormatter.tickContexts['array'][i].x = offset - 20; // 20 padding is always added for some reason
+					let percentage = getDurationAsPercentage(trebleNotes[i].duration, trebleNotes[i].dots, this.beat_value, this.beats_per_measure);
+					offset += percentage * this.staveWidth;
+				}
+				offset = 0;
+				for (let i = 0; i < bassNotes.length; i++) {
+					baseFormatter.tickContexts['array'][i].x = offset - 20; // 20 padding is always added for some reason
+					let percentage = getDurationAsPercentage(bassNotes[i].duration, bassNotes[i].dots, this.beat_value, this.beats_per_measure);
+					offset += percentage * this.staveWidth;
+				}
+
+				trebleVoice.draw(this.context, trebleStaff);
+				bassVoice.draw(this.context, bassStaff);
+
+				// Render voice
+				voices.push(trebleVoice);
+				voices.push(bassVoice);
+			}
+		}
+		for (let i = 0; i < voices.length; i++) {
+			let notes  = voices[i].getTickables();
+			for (let j = 0; j < notes.length; j++) {
+				notes[j].draw();
+			}
+		}
 	}
 
 	render() {

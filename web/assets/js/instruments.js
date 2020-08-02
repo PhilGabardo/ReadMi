@@ -11,6 +11,7 @@ function getInstrumentKeyOffset(instrument) {
 		'french_horn': 7,
 		'trumpet': 2,
 		'xylophone': -12,
+		'piano': 0,
 	}
 	return key_offsets[instrument];
 }
@@ -29,6 +30,7 @@ function getInstrumentFingering(instrument) {
 		'trumpet': 'trumpet',
 		'xylophone': 'xylophone',
 		'glockenspiel': 'glockenspiel',
+		'piano': 'piano',
 	}
 	return fingering_map[instrument];
 }

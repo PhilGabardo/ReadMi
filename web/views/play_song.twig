@@ -10,6 +10,7 @@
 		<label id="bpm_label"></label>
 
 		<select id="instrument">
+			<option value="piano">Piano</option> // guitar fingering
 			<option value="guitar">Guitar</option> // guitar fingering
 			<option value="soprano_saxophone">Soprano Saxophone</option> // sax fingering
 			<option value="alto_saxophone">Alto Saxophone</option> // sax fingering
@@ -54,6 +55,7 @@
 		var beatsPerMeasure = {{ s.beats_per_measure }};
 		var keySignature = '{{s.key_signature}}';
 		var bars = {{bars|raw}};
+		var isPiano = {{ s.piano }};
 </script>
 <script type="text/javascript" src="/build/test.js"></script>
 {% endblock %}

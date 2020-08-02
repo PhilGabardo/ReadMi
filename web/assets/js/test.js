@@ -56,12 +56,17 @@ function startSession(audioStreamController) {
 	let keySigStaffWidth = 80 + keySigNotesCount * 10;
 	let boo = document.getElementById("boo");
 	let renderer = new VexFlow.Flow.Renderer(boo, VexFlow.Flow.Renderer.Backends.SVG);
-	renderer.resize(boo.offsetWidth, (150 * boo.offsetWidth / 1280) * (vf_bars.length / 3 + 1));
+	let staveHeight = isPiano ? 300 * document.getElementById("boo").offsetWidth / 1280 : 150 * document.getElementById("boo").offsetWidth / 1280;
+	renderer.resize(boo.offsetWidth, staveHeight * (vf_bars.length / 3 + 1));
 	let staveWidth = (boo.offsetWidth * 0.97 - keySigStaffWidth) / 3.0
 	let renderer_context = renderer.getContext();
 	let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure);
-	let score_renderer = new ScoreRenderer(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes());
-	score_renderer.render();
+	let score_renderer = new ScoreRenderer(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), isPiano);
+	if (isPiano) {
+		score_renderer.renderForPiano();
+	} else {
+		score_renderer.render();
+	}
 	window.scrollTo(0, 0);
 	function CustomPrompt(){
 		this.render = function(){
@@ -86,9 +91,9 @@ function startSession(audioStreamController) {
 		let instrument = document.getElementById('instrument').value;
 		let metronome = new ScheduledMetronome(bpm_slider.value, beats_per_measure * vf_bars.length)
 		let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_slider.value, beats_per_measure);
-		let timing_bar = new TimingBar(renderer_context, staveWidth, beats_per_measure, bpm_slider.value, keySigStaffWidth);
+		let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_slider.value, keySigStaffWidth);
 		let note_feedback = new NoteFeedback(renderer_context, note_scheduler.getScheduledNotes(), audioStreamController, beats_per_measure, bpm_slider.value, instrument)
-		let score_scroller = new ScoreScroller(beats_per_measure, bpm_slider.value)
+		let score_scroller = new ScoreScroller(beats_per_measure, bpm_slider.value, staveHeight)
 		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, score_scroller, beats_per_measure, bpm_slider.value, bars.length);
 		session_controller.start();
 	};

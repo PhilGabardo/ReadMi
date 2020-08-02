@@ -1,11 +1,11 @@
 import Timing from './timing'
 
 export default class ScoreScoller {
-	constructor(beats_per_measure, beats_per_minute) {
+	constructor(beats_per_measure, beats_per_minute, stave_height) {
 		this.beats_per_measure = beats_per_measure;
 		this.beats_per_minute = beats_per_minute;
 		this.enabled = true
-		this.stave_height = 150 * document.getElementById("boo").offsetWidth / 1280;
+		this.stave_height = stave_height;
 		this.setController();
 	}
 

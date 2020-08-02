@@ -19,7 +19,7 @@ stave.setContext(context).draw();
 
 let notes = [
 	// A quarter-note C.
-	new VexFlow.Flow.StaveNote({clef: "treble", keys: ["f#/4"], duration: "q" }),
+	new VexFlow.Flow.StaveNote({clef: "treble", keys: ["f/4"], duration: "q" }),
 
 	// A quarter-note D.
 	new VexFlow.Flow.StaveNote({clef: "treble", keys: ["a/4"], duration: "q" }),
@@ -43,7 +43,7 @@ let formatter = new VexFlow.Flow.Formatter().joinVoices([voice]).format([voice],
 voice.draw(context, stave);
 
 window.setTimeout(colorNote, 1000, notes[0], 1, context);
-window.setTimeout(colorNote, 2000, notes[1], 0, context);
+window.setTimeout(colorNote, 2000, notes[1], 1, context);
 window.setTimeout(colorNote, 3000, notes[2], 1, context);
 window.setTimeout(colorNote, 4000, notes[3], 1, context);
 

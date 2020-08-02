@@ -1,1 +1,24 @@
-#header{text-align:center;font-size:xx-large}#_header{margin-bottom:0}#description,#welcome{font-size:smaller;font-family:Lobster}#welcome{color:#8a2be2}
+#header {
+    text-align: center;
+    font-size: xx-large;
+}
+
+#_header {
+    margin-bottom: 0;
+    font-size: 100px;
+}
+
+#description {
+    font-size: smaller;
+    font-family: 'Lobster';
+}
+
+#welcome {
+    font-size: smaller;
+    font-family: 'Lobster';
+    color: blueviolet;
+}
+
+
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vbGFuZGluZy5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxrQkFBa0I7SUFDbEIsbUJBQW1CO0FBQ3ZCOztBQUVBO0lBQ0ksZ0JBQWdCO0lBQ2hCLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLGtCQUFrQjtJQUNsQixzQkFBc0I7QUFDMUI7O0FBRUE7SUFDSSxrQkFBa0I7SUFDbEIsc0JBQXNCO0lBQ3RCLGlCQUFpQjtBQUNyQiIsImZpbGUiOiJsYW5kaW5nX3N0eWxlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiNoZWFkZXIge1xuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICBmb250LXNpemU6IHh4LWxhcmdlO1xufVxuXG4jX2hlYWRlciB7XG4gICAgbWFyZ2luLWJvdHRvbTogMDtcbiAgICBmb250LXNpemU6IDEwMHB4O1xufVxuXG4jZGVzY3JpcHRpb24ge1xuICAgIGZvbnQtc2l6ZTogc21hbGxlcjtcbiAgICBmb250LWZhbWlseTogJ0xvYnN0ZXInO1xufVxuXG4jd2VsY29tZSB7XG4gICAgZm9udC1zaXplOiBzbWFsbGVyO1xuICAgIGZvbnQtZmFtaWx5OiAnTG9ic3Rlcic7XG4gICAgY29sb3I6IGJsdWV2aW9sZXQ7XG59XG5cbiJdLCJzb3VyY2VSb290IjoiIn0=*/

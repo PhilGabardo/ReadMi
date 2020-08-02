@@ -56,7 +56,7 @@ abstract class ReadMiAction {
 
 	abstract protected static function _execute(Application $app, Request $request) : string;
 
-	protected static function getAuth0($redirect_uri = null) {
+	public static function getAuth0($redirect_uri = null) {
 		$redirect_uri = $redirect_uri ?? (self::isDev() ? 'http://localhost:8080' : 'https://www.readmimusic.com');
 		return new Auth0([
 			'domain' => 'dev-x4bvwq5p.us.auth0.com',

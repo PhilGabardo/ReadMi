@@ -1,9 +1,10 @@
 import Timing from './timing'
 
 export default class TimingBar {
-	constructor(rendering_context, stave_width, beats_per_measure, beats_per_minute, key_sig_staff_width) {
+	constructor(rendering_context, stave_width, stave_height, beats_per_measure, beats_per_minute, key_sig_staff_width) {
 		this.rendering_context = rendering_context;
 		this.staveWidth = stave_width
+		this.staveHeight = stave_height;
 		this.beats_per_measure = beats_per_measure;
 		this.beats_per_minute = beats_per_minute;
 		this.func = null;
@@ -26,12 +27,12 @@ export default class TimingBar {
 		let beatsPassed = (timeInMs * bps) / (1000);
 		let stavesPassed = Math.floor(beatsPassed / timing_bar.beats_per_measure);
 		let percentageThroughStave = (beatsPassed % timing_bar.beats_per_measure) / timing_bar.beats_per_measure;
-		let pos = getPosition(stavesPassed, percentageThroughStave, 20 * timing_bar.scaling_factor, 150 * timing_bar.scaling_factor, timing_bar.staveWidth, timing_bar.key_sig_staff_width);
+		let pos = getPosition(stavesPassed, percentageThroughStave, 20 * timing_bar.scaling_factor, timing_bar.staveHeight, timing_bar.staveWidth, timing_bar.key_sig_staff_width);
 		if (timing_bar.has_drawn_rect) {
 			timing_bar.clearLastChild();
 		}
 		timing_bar.rendering_context.beginPath();
-		timing_bar.rendering_context.rect(pos.width, pos.height, 10 * timing_bar.scaling_factor, 120 * timing_bar.scaling_factor);
+		timing_bar.rendering_context.rect(pos.width, pos.height, 10 * timing_bar.scaling_factor, timing_bar.staveHeight);
 		timing_bar.rendering_context.closePath();
 		timing_bar.has_drawn_rect = true;
 	}

@@ -17,6 +17,7 @@ require_once __DIR__ . '/actions/PremiumInfoAction.php';
 require_once __DIR__ . '/actions/StripeSessionIdAction.php';
 require_once __DIR__ . '/actions/PaymentFailureAction.php';
 require_once __DIR__ . '/actions/PaymentSuccessAction.php';
+require_once __DIR__ . '/hooks/PaymentHooks.php';
 
 use ReadMi\BarComputer;
 use Actions\PaymentSuccessAction;
@@ -25,6 +26,7 @@ use \Symfony\Component\HttpFoundation\Request;
 
 use Auth0\SDK\Auth0;
 use Actions\ReadMiAction;
+use Hooks\PaymentHooks;
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -97,10 +99,12 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 	$daily_double_col = random_int(0, 5);
 	$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['question'] = 'DAILY DOUBLE! ' .$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['question'];
 	$clues = [];
+	$is_double = (bool)$request->get('double');
+	$multiplier = $is_double ? 400 : 200;
 	for ($row = 0; $row < 5; $row++) {
 		$clues[$row + 1] = [];
 		foreach ($categories as $category) {
-			$clues[$row + 1][] = $questions_by_category[$category][$row];
+			$clues[$row + 1][] = $questions_by_category[$category][$row] + ['amount' => (($row + 1) * $multiplier)];
 		}
 	}
 	return $app['twig']->render('jeopardy.html', [
@@ -120,8 +124,9 @@ $app->get('/', function(Request $request) use($app) {
 	return ReadMiAction::getResponse($app, $request);
 });
 
-$app->post('/payment_success', function(Request $request) use($app) {
-	return PaymentSuccessAction::execute($app, $request);
+$app->post('/payment_hook', function(Request $request) use($app) {
+	PaymentHooks::execute($app);
+	return '';
 });
 
 $app->get('/payment_success', function(Request $request) use($app) {

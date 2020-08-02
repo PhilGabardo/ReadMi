@@ -93,7 +93,7 @@ class BarComputer {
 			$length_breakdown = self::getLengthBreakdown($quarter_length);
 			for ($j = 0; $j < count($length_breakdown); $j++) {
 				$note_struct = [
-					'clef' => 'treble',
+					'clef' => (int)$note['octave'] < 4 ? 'bass' : 'treble',
 					'keys' => [$note['name'] . '/' . $note['octave']],
 					'duration' => self::TIMING_MAP[(string)$length_breakdown[$j]],
 					'dot_count' => self::DOT_COUNT_MAP[(string)$length_breakdown[$j]],
