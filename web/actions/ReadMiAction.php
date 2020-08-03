@@ -28,6 +28,10 @@ abstract class ReadMiAction {
 				return PaymentSuccessAction::execute($app, $request);
 			case 'payment_failure':
 				return PaymentFailureAction::execute($app, $request);
+			case 'instrument_select':
+				return InstrumentSelectAction::execute($app, $request);
+			case 'instrument_update':
+				return InstrumentUpdateAction::execute($app, $request);
 			default:
 				$auth0 = self::getAuth0();
 				$user_info = $auth0->getUser();

@@ -1,11 +1,12 @@
 import Timing from './timing'
 
 export default class ScoreScoller {
-	constructor(beats_per_measure, beats_per_minute, stave_height) {
+	constructor(beats_per_measure, beats_per_minute, stave_height, is_piano) {
 		this.beats_per_measure = beats_per_measure;
 		this.beats_per_minute = beats_per_minute;
 		this.enabled = true
 		this.stave_height = stave_height;
+		this.is_piano = is_piano;
 		this.setController();
 	}
 
@@ -26,7 +27,7 @@ export default class ScoreScoller {
 		let beatsPassed = (timeInMs * bps) / (1000);
 		let stavesPassed = Math.floor(beatsPassed / scroller.beats_per_measure);
 		let percentageThroughStave = (beatsPassed % scroller.beats_per_measure) / scroller.beats_per_measure;
-		scrollToNiceSpot(stavesPassed, percentageThroughStave, scroller.stave_height)
+		scrollToNiceSpot(stavesPassed, percentageThroughStave, scroller.stave_height, scroller.is_piano)
 	}
 
 	resume() {
@@ -44,15 +45,14 @@ export default class ScoreScoller {
 	}
 }
 
-function scrollToNiceSpot(stavesPassed, percentageThroughStave, staveHeight) {
-	if (stavesPassed < 3) {
-		window.scrollTo(0, 0);
-		return
-	}
+function scrollToNiceSpot(stavesPassed, percentageThroughStave, staveHeight, is_piano) {
 	let stave_height = staveHeight;
 	let height = Math.floor(stavesPassed / 3) * stave_height;
 	let penalty = stave_height - (((stavesPassed % 3) + percentageThroughStave) / 3) * stave_height
-	window.scrollTo(0, height - penalty)
+	if (stavesPassed > 1) {
+		penalty -= stave_height / 2;
+	}
+	window.scrollTo(0, height - penalty - 50)
 }
 
 

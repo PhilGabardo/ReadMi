@@ -1,22 +1,19 @@
 <?php
-
 namespace Actions;
 
+
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-
-class LandingAction extends LoggedInAction {
+class InstrumentSelectAction extends LoggedInAction {
 
 	protected static function _execute(Application $app, Request $request): string {
-		$auth0 = self::getAuth0();
-		$user_info = self::getUserInfo($app);
-		if (!$user_info) {
-			return $app['twig']->render('instrument_select.html');
-		}
-
+		$instrument = $request->get('instrument');
+		$auth0 = ReadMiAction::getAuth0();
 		$user_info = $auth0->getUser();
+		$user_id = $user_info['sub'];
+		$st = $app['pdo']->prepare("INSERT INTO users (oauth_id, instrument, is_premium) VALUES ('$user_id', '$instrument', 0)");
+		$st->execute();
 		return $app['twig']->render('landing.twig',
 			[
 				'user_name' => $user_info['name']

@@ -7,7 +7,7 @@ for (let i = 0; i < rows.length; i++) {
 		let currentCell = cells[j];
 		currentCell.onclick = function () {
 			let instrument_param = '<input type="hidden" name="instrument" value="'+currentCell.dataset.value+'">';
-			$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="play_demo">' + instrument_param + '</form>').appendTo($(document.body)).submit();
+			$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="instrument_select">' + instrument_param + '</form>').appendTo($(document.body)).submit();
 		};
 	}
 }

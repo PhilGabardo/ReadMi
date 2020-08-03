@@ -110,6 +110,16 @@
         "/build/payment.js"
       ]
     },
+    "instrument_select_action": {
+      "js": [
+        "/build/instrument_select_action.js"
+      ]
+    },
+    "instrument_change": {
+      "js": [
+        "/build/instrument_change.js"
+      ]
+    },
     "dialogbox": {
       "css": [
         "/build/dialogbox.css"
@@ -148,6 +158,11 @@
     "landing_style": {
       "css": [
         "/build/landing_style.css"
+      ]
+    },
+    "instrument_select": {
+      "css": [
+        "/build/instrument_select.css"
       ]
     }
   }

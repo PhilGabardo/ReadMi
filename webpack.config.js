@@ -40,6 +40,8 @@ Encore
 	.addEntry('login', './web/assets/js/login.js')
 	.addEntry('demo', './web/assets/js/demo.js')
 	.addEntry('payment', './web/assets/js/payment.js')
+	.addEntry('instrument_select_action', './web/assets/js/instrument_select.js')
+	.addEntry('instrument_change', './web/assets/js/instrument_change.js')
 
 	// will output as web/build/global.css
 	.addStyleEntry('dialogbox', './web/assets/css/dialogbox.css')
@@ -50,6 +52,7 @@ Encore
 	.addStyleEntry('songs', './web/assets/css/songs.scss')
 	.addStyleEntry('selectize_override', './web/assets/css/selectize_override.css')
 	.addStyleEntry('landing_style', './web/assets/css/landing.css')
+	.addStyleEntry('instrument_select', './web/assets/css/instrument_select.css')
 
 	// allow sass/scss files to be processed
 	.enableSassLoader()

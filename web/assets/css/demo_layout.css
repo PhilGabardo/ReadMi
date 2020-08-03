@@ -2,15 +2,26 @@
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 100%; /* Set the width of the sidebar */
     z-index: 1; /* Stay on top */
-    padding-top: 20px;
 }
 
+#login {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+}
+
+#_header {
+    margin-top: 30px;
+}
+
+#description {
+    margin-top: 0px;
+}
 
 .main_content {
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 100%; /* Set the width of the sidebar */
     z-index: 1; /* Stay on top */
-    padding-top: 20px;
 }
 
 #note_hint_text {
@@ -55,4 +66,3 @@ sup {
     z-index: 12;
     position: absolute;
 }
-

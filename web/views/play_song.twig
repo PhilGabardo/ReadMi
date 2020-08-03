@@ -8,22 +8,6 @@
 	<div id="dialogboxbody">
 		<input id="bpm" name="weight" type="range" min="10" max="150" step="1" />
 		<label id="bpm_label"></label>
-
-		<select id="instrument">
-			<option value="piano">Piano</option> // guitar fingering
-			<option value="guitar">Guitar</option> // guitar fingering
-			<option value="soprano_saxophone">Soprano Saxophone</option> // sax fingering
-			<option value="alto_saxophone">Alto Saxophone</option> // sax fingering
-			<option value="tenor_saxophone">Tenor Saxophone</option> // sax fingering
-			<option value="baritone_saxophone">Baritone Saxophone</option> // sax fingering
-			<option value="piccolo">Piccolo</option> //flute and picolo fingering
-			<option value="clarinet">Clarinet</option> /// clarinet fingering
-			<option value="bass_clarinet">Bass Clarinet</option> // clarinet fingering
-			<option value="french_horn">French Horn</option> // french horn fingering
-			<option value="trumpet">Trumpet</option> // trumpet fingering
-			<option value="xylophone">Xylophone</option> // Xylophone fingering
-			<option value="glockenspiel">Glockenspiel</option> // Glockenspiel fingering
-		</select>
 	</div>
 	<div id="dialogboxfoot">
 		<button id="start_song">Start!</button>
@@ -56,6 +40,7 @@
 		var keySignature = '{{s.key_signature}}';
 		var bars = {{bars|raw}};
 		var isPiano = {{ s.piano }};
+		var instrument = '{{ instrument }}';
 </script>
 <script type="text/javascript" src="/build/test.js"></script>
 {% endblock %}

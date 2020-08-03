@@ -12,7 +12,21 @@
 <link rel="stylesheet" href="/build/selectize_override.css">
 <link rel="stylesheet" href="/build/filterable_table.css">
 <link rel="stylesheet" href="/build/text.css">
-<button id="logout" type="button">Logout</button>
+<div id="toolbar">
+  <button id="logout" type="button">Logout</button>
+  Your Instrument:
+  <div id="instrument_selection">
+    <select id="instrument">
+      {% for instrument_key, instrument_value in selectable_instruments %}
+      {% if instrument_key == instrument %}
+      <option value="{{ instrument_key }}" selected>{{instrument_value}}</option>
+      {% else %}
+      <option value="{{ instrument_key }}">{{instrument_value}}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+</div>
 <div class="main_content">
   {% block content %}{% endblock %}
 </div>
@@ -67,6 +81,7 @@
 <script type="text/javascript" src="/build/filter_table.js"></script>
 <script type="text/javascript" src="/build/logout.js"></script>
 <script type="text/javascript" src="/build/premium_info.js"></script>
+<script type="text/javascript" src="/build/instrument_change.js"></script>
 
 </body>
 </div>

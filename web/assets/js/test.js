@@ -3,7 +3,6 @@ import bar_computer from './bar_computer.js';
 import SessionController from './session_controller';
 import ScoreRenderer from './score_renderer'
 import AudioStreamController from './audio_stream_controller'
-import selectize from 'selectize';
 import ScheduledMetronome from './metronome'
 import SongPlayer from './song_player'
 import NoteScheduler from './note_scheduler'
@@ -46,6 +45,7 @@ function getAudioStreamController() {
 }
 
 function startSession(audioStreamController) {
+	let isPiano = instrument == 'piano';
 	let beats_per_measure = beatsPerMeasure;
 	let header = document.getElementById("header")
 	header.innerHTML = '<h1 id="header" align="center" itemprop="headline">' + name + '</h1>'
@@ -80,7 +80,6 @@ function startSession(audioStreamController) {
 			}
 		}
 	}
-	$('#instrument').selectize({'max_items': 1});
 	let prompt = new CustomPrompt();
 	prompt.render();
 	let start_song = document.getElementById('start_song');
@@ -88,12 +87,11 @@ function startSession(audioStreamController) {
 		audioStreamController.startStream();
 		document.getElementById('dialogbox').style.display = "none";
 		let bpm_slider = document.getElementById('bpm');
-		let instrument = document.getElementById('instrument').value;
 		let metronome = new ScheduledMetronome(bpm_slider.value, beats_per_measure * vf_bars.length)
 		let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_slider.value, beats_per_measure);
 		let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_slider.value, keySigStaffWidth);
 		let note_feedback = new NoteFeedback(renderer_context, note_scheduler.getScheduledNotes(), audioStreamController, beats_per_measure, bpm_slider.value, instrument)
-		let score_scroller = new ScoreScroller(beats_per_measure, bpm_slider.value, staveHeight)
+		let score_scroller = new ScoreScroller(beats_per_measure, bpm_slider.value, staveHeight, isPiano)
 		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, score_scroller, beats_per_measure, bpm_slider.value, bars.length);
 		session_controller.start();
 	};

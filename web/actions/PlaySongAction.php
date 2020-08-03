@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: philipgabardo
- * Date: 7/25/20
- * Time: 4:24 PM
- */
 
 namespace Actions;
 
@@ -18,6 +12,7 @@ use ReadMi\BarComputer;
 class PlaySongAction extends LoggedInAction {
 
 	protected static function _execute(Application $app, Request $request): string {
+		$user_info = self::getUserInfo($app);
 		$song_name = str_replace("'", "''", $request->get('name')); // handles songs with quotes
 		$artist_name = str_replace("'", "''", $request->get('artist')); // handles songs with quotes
 		$st = $app['pdo']->prepare("SELECT name, key_signature, beat_value, beats_per_measure, notes, piano  FROM readmi_songs where name = '{$song_name}' and artist = '{$artist_name}'");
@@ -28,6 +23,7 @@ class PlaySongAction extends LoggedInAction {
 		return $app['twig']->render('play_song.twig', [
 				's' => $song_row,
 				'bars' => json_encode($bars),
-			] + self::getSongData($app, false));
+				'instrument' => $user_info['instrument'],
+			] + self::getLoggedInData($app, false));
 	}
 }
