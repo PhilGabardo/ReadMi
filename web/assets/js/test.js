@@ -11,7 +11,7 @@ import KeySignatures from './key_signatures'
 import NoteFeedback from './note_feedback'
 import ScoreScroller from './score_scroller'
 
-if (navigator.userAgent.indexOf("Chrome") != -1) {
+if (navigator.userAgent.indexOf("Chrome") != -1 || navigator.userAgent.match('CriOS')) {
 	navigator.permissions.query({name:'microphone'}).then(function(result) {
 		if (result.state == 'granted') {
 			startSession(getAudioStreamController())
