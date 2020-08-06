@@ -17,12 +17,13 @@ export default class AudioStreamController {
 				let processor = that.audioContext.createScriptProcessor(4096, 1, 1);
 				console.log(processor)
 				that.analyser = that.audioContext.createAnalyser();
-				console.log(analyser)
+				console.log(that.analyser)
 				that.analyser.fftSize = 2048;
 				that.buffer = new Uint8Array(that.analyser.fftSize);
 
 				source.connect(processor);
 				source.connect(that.analyser);
+				console.log(that.audioContext.destination);
 				processor.connect(that.audioContext.destination);
 			}
 		)
