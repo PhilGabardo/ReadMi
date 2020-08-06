@@ -13,8 +13,11 @@ export default class AudioStreamController {
 		this.userMediaPromise.then(
 			function(stream) {
 				let source = that.audioContext.createMediaStreamSource(stream);
+				console.log(source);
 				let processor = that.audioContext.createScriptProcessor(4096, 1, 1);
+				console.log(processor)
 				that.analyser = that.audioContext.createAnalyser();
+				console.log(analyser)
 				that.analyser.fftSize = 2048;
 				that.buffer = new Uint8Array(that.analyser.fftSize);
 
