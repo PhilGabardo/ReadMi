@@ -13,6 +13,7 @@ import ScoreScroller from './score_scroller'
 
 if (navigator.userAgent.indexOf("Chrome") != -1 || navigator.userAgent.match('CriOS')) {
 	navigator.permissions.query({name:'microphone'}).then(function(result) {
+		console.log(result.state);
 		if (result.state == 'granted') {
 			startSession(getAudioStreamController())
 		} else if (result.state == 'prompt') {
