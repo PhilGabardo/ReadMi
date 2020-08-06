@@ -31,6 +31,7 @@ export default class AudioStreamController {
 
 	getByteTimeDomainData() {
 		this.analyser.getByteTimeDomainData(this.buffer);
+		console.log(this.buffer);
 		return this.buffer;
 	}
 
@@ -39,6 +40,7 @@ export default class AudioStreamController {
 	}
 
 	getSamples() {
+		console.log(this.sixteenthNoteSamples);
 		return this.sixteenthNoteSamples;
 	}
 
