@@ -17,14 +17,12 @@ export default class AudioStreamController {
 				that.analyser.fftSize = 4096;
 				that.buffer = new Uint8Array(that.analyser.fftSize);
 				source.connect(that.analyser);
-				console.log("test");
 			}
 		)
 	}
 
 	getByteTimeDomainData() {
 		this.analyser.getByteTimeDomainData(this.buffer);
-		console.log(this.buffer);
 		return this.buffer;
 	}
 

@@ -54,7 +54,7 @@ export default class SongPlayer {
 
 		// Audible click sound.
 		this.tickVolume.gain.linearRampToValueAtTime(1, time + .001);
-		this.tickVolume.gain.linearRampToValueAtTime(0, time + .001 + .4);
+		this.tickVolume.gain.linearRampToValueAtTime(0, time + .001 + .2);
 	}
 
 	stop() {
