@@ -19,7 +19,7 @@ export default class NoteFeedback {
 	}
 
 	start() {
-		this.func = setInterval(this.draw, 1, this);
+		this.func = setInterval(this.draw, 10, this);
 	}
 
 	pause() {
@@ -62,7 +62,7 @@ export default class NoteFeedback {
 			let key = props.key;
 			let octave = props.octave;
 			let expected_note = key_signatures.getOffsetNote(key, octave, 0 - Instruments.getInstrumentKeyOffset(note_feedback.instrument));
-			let currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getByteTimeDomainData(), note_feedback.audio_stream_controller.getSampleRate());
+			let currentNote = note_detection.getNoteFromWave(note_feedback.audio_stream_controller.getAudioStream());
 			let expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
 			let actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
 			let is_metronome_note = currentNote.key === 'C' && currentNote.octave === 6;
