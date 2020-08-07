@@ -33,8 +33,8 @@ export default class NoteFeedback {
 		let stavesPassed = Math.floor(beatsPassed / note_feedback.beats_per_measure);
 		let percentageThroughStave = (beatsPassed % note_feedback.beats_per_measure) / note_feedback.beats_per_measure;
 		let offset = ((note_feedback.beats_per_minute / note_feedback.beats_per_measure) / 20) * 0.08;
-		let min_offset = ((note_feedback.beats_per_minute / note_feedback.beats_per_measure) / 20) * 0;
-		let max_offset = ((note_feedback.beats_per_minute / note_feedback.beats_per_measure) / 20) * 0.16;
+		let min_offset = -((note_feedback.beats_per_minute / note_feedback.beats_per_measure) / 20) * 0.16;
+		let max_offset = ((note_feedback.beats_per_minute / note_feedback.beats_per_measure) / 20) * 0.32;
 		let minOffsettedPercentageThroughStave = percentageThroughStave - max_offset;
 		let maxOffsettedPercentageThroughStave = percentageThroughStave - min_offset;
 		let offsettedPercentageThroughStave = percentageThroughStave - offset;
