@@ -14,7 +14,7 @@ export default class AudioStreamController {
 			function(stream) {
 				let source = that.audioContext.createMediaStreamSource(stream);
 				that.analyser = that.audioContext.createAnalyser();
-				that.analyser.fftSize = 2048;
+				that.analyser.fftSize = 4096;
 				that.buffer = new Uint8Array(that.analyser.fftSize);
 				source.connect(that.analyser);
 				console.log("test");
