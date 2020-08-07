@@ -68,6 +68,7 @@ export default class NoteFeedback {
 			let is_metronome_note = currentNote.key === 'C' && currentNote.octave === 6;
 			let is_last_note = currentNote.key === note_feedback.last_note_key && currentNote.octave === note_feedback.last_note_octave;
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
+				console.log(actual_freq);
 				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 				note_feedback.correctNotes++;
 			} else {
