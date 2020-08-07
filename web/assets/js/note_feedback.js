@@ -17,7 +17,7 @@ export default class NoteFeedback {
 	}
 
 	start() {
-		this.func = setInterval(this.draw, 10, this);
+		this.func = setInterval(this.draw, 1, this);
 	}
 
 	pause() {
