@@ -2,7 +2,7 @@ export default class AudioStreamController {
 	constructor(audioContext) {
 		this.audioContext = audioContext;
 		this.sixteenthNoteSamples = [];
-		this.sixteenthNoteSampleBufferSize =  4096;
+		this.sixteenthNoteSampleBufferSize =  2048;
 		this.userMediaPromise =  navigator.mediaDevices.getUserMedia({ audio: true, video: false });
 		this.analyzer = null;
 		this.buffer = null;
@@ -14,7 +14,7 @@ export default class AudioStreamController {
 			function(stream) {
 				let source = that.audioContext.createMediaStreamSource(stream);
 				that.analyser = that.audioContext.createAnalyser();
-				that.analyser.fftSize = 4096;
+				that.analyser.fftSize = 2048;
 				that.buffer = new Uint8Array(that.analyser.fftSize);
 				source.connect(that.analyser);
 			}
@@ -22,20 +22,13 @@ export default class AudioStreamController {
 	}
 
 	getByteTimeDomainData() {
+		var t0 = performance.now()
 		this.analyser.getByteTimeDomainData(this.buffer);
+		console.log(performance.now() - t0);
 		return this.buffer;
 	}
 
 	getSampleRate() {
 		return this.audioContext.sampleRate;
-	}
-
-	getSamples() {
-		console.log(this.sixteenthNoteSamples);
-		return this.sixteenthNoteSamples;
-	}
-
-	getBufferSize() {
-		return this.sixteenthNoteSampleBufferSize;
 	}
 }
