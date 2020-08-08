@@ -19,18 +19,12 @@ export default class AudioStreamController {
 				that.analyser.fftSize = 2048;
 				that.buffer = new Uint8Array(that.analyser.fftSize);
 				source.connect(that.analyser);
-				that.processor.onaudioprocess = function(e) {
-					// Do something with the data, e.g. convert it to WAV
-					console.log(e.inputBuffer.getChannelData(that.buffer));
-				};
 			}
 		)
 	}
 
 	getByteTimeDomainData() {
-		var t0 = performance.now()
 		this.analyser.getByteTimeDomainData(this.buffer);
-		console.log(performance.now() - t0);
 		return this.buffer;
 	}
 
