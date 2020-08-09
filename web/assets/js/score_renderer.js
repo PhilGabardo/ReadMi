@@ -76,13 +76,14 @@ export default class ScoreRenderer {
 				bassVoice.setStrict(false);
 
 				let trebleNotes = [];
+				let percentages = [];
 				let bassNotes = [];
 				for (let i in scheduled_notes) {
+					percentages.push(scheduled_notes[i].percentage)
 					if (scheduled_notes[i].note.attrs.type === 'GhostNote') {
 						trebleNotes.push(scheduled_notes[i].note);
 						bassNotes.push(scheduled_notes[i].note);
 					} else if (scheduled_notes[i].note.clef === 'bass') {
-						console.log('test');
 						bassNotes.push(scheduled_notes[i].note);
 						trebleNotes.push(new VexFlow.Flow.GhostNote({duration: scheduled_notes[i].note.duration}))
 					} else {
@@ -98,17 +99,9 @@ export default class ScoreRenderer {
 				let baseFormatter = new VexFlow.Flow.Formatter();
 				trebleFormatter.joinVoices([trebleVoice]).format([trebleVoice], this.staveWidth);
 				baseFormatter.joinVoices([bassVoice]).format([bassVoice], this.staveWidth);
-				let offset = 0;
-				for (let i = 0; i < trebleNotes.length; i++) {
-					trebleFormatter.tickContexts['array'][i].x = offset - 20; // 20 padding is always added for some reason
-					let percentage = getDurationAsPercentage(trebleNotes[i].duration, trebleNotes[i].dots, this.beat_value, this.beats_per_measure);
-					offset += percentage * this.staveWidth;
-				}
-				offset = 0;
-				for (let i = 0; i < bassNotes.length; i++) {
-					baseFormatter.tickContexts['array'][i].x = offset - 20; // 20 padding is always added for some reason
-					let percentage = getDurationAsPercentage(bassNotes[i].duration, bassNotes[i].dots, this.beat_value, this.beats_per_measure);
-					offset += percentage * this.staveWidth;
+				for (let i = 0; i < percentages.length; i++) {
+					trebleFormatter.tickContexts['array'][i].x = (percentages[i] * this.staveWidth) - 20; // 20 padding is always added for some reason
+					baseFormatter.tickContexts['array'][i].x = (percentages[i] * this.staveWidth) - 20;
 				}
 
 				trebleVoice.draw(this.context, trebleStaff);

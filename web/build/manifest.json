@@ -1,4 +1,5 @@
 {
+  "build/audio_context.js": "/build/audio_context.js",
   "build/audio_stream_controller.js": "/build/audio_stream_controller.js",
   "build/bar_computer.js": "/build/bar_computer.js",
   "build/demo.js": "/build/demo.js",

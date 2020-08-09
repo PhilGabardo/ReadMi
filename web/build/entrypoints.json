@@ -120,6 +120,11 @@
         "/build/instrument_change.js"
       ]
     },
+    "audio_context": {
+      "js": [
+        "/build/audio_context.js"
+      ]
+    },
     "dialogbox": {
       "css": [
         "/build/dialogbox.css"

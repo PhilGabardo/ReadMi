@@ -92,6 +92,9 @@ class BarComputer {
 			}
 			$length_breakdown = self::getLengthBreakdown($quarter_length);
 			for ($j = 0; $j < count($length_breakdown); $j++) {
+				if (!isset(self::TIMING_MAP[(string)$length_breakdown[$j]])) {
+					throw new Exception("Unknown note length: {$length_breakdown[$j]}");
+				}
 				$note_struct = [
 					'clef' => (int)$note['octave'] < 4 ? 'bass' : 'treble',
 					'keys' => [$note['name'] . '/' . $note['octave']],

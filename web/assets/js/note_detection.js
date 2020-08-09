@@ -53,6 +53,7 @@ function getFrequencyForNote(note_name, note_octave) {
 }
 
 function getNoteFromSamples(buffer, sampleRate) {
+
 	// We use Autocorrelation to find the fundamental frequency.
 
 	// In order to correlate the signal with itself (hence the name of the algorithm), we will check two points 'k' frames away.
@@ -61,11 +62,13 @@ function getNoteFromSamples(buffer, sampleRate) {
 	// Assuming the sample rate is 48000Hz, a 'k' equal to 1000 would correspond to a 48Hz signal (48000/1000 = 48),
 	// while a 'k' equal to 8 would correspond to a 6000Hz one, which is enough to cover most (if not all)
 	// the notes we have in the notes.json file.
+
+	let t0 = performance.now()
 	var n = 1024, bestR = 0, bestK = -1;
 	for(var k = 8; k <= 1000; k++){
-		var sum = 0;
 
-		for(var i = 0; i < n; i++){
+		var sum = 0;
+		for(var i = 0; i < n; i++) {
 			sum += ((buffer[i] - 128) / 128) * ((buffer[i + k] - 128) / 128);
 		}
 
@@ -77,7 +80,6 @@ function getNoteFromSamples(buffer, sampleRate) {
 		}
 
 		if(r > 0.9) {
-			// Let's assume that this is good enough and stop right here
 			break;
 		}
 	}

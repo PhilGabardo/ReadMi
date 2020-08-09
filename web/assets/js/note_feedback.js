@@ -44,7 +44,6 @@ export default class NoteFeedback {
 				offsettedStavesPassed = 0;
 			} else {
 				offsettedStavesPassed -= 1;
-				offsettedPercentageThroughStave = offsettedPercentageThroughStave + 1;
 				minOffsettedPercentageThroughStave = minOffsettedPercentageThroughStave + 1;
 				maxOffsettedPercentageThroughStave = maxOffsettedPercentageThroughStave + 1;
 			}
@@ -65,10 +64,8 @@ export default class NoteFeedback {
 			let currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getByteTimeDomainData(), note_feedback.audio_stream_controller.getSampleRate());
 			let expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
 			let actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
-			let is_metronome_note = currentNote.key === 'C' && currentNote.octave === 6;
-			let is_last_note = currentNote.key === note_feedback.last_note_key && currentNote.octave === note_feedback.last_note_octave;
+			console.log(actual_freq);
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
-				console.log(actual_freq);
 				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 				note_feedback.correctNotes++;
 			} else {
@@ -77,13 +74,7 @@ export default class NoteFeedback {
 					note_feedback.vf_bars[offsettedStavesPassed].unshift(noteObj);
 					return;
 				}
-				console.log(note_feedback.last_note_key);
-				console.log(note_feedback.last_note_octave);
 				note.setStyle({fillStyle: "red", strokeStyle: "red"});
-				console.log("expected=" + expected_freq);
-				console.log("actual=" + actual_freq);
-				console.log(expected_note);
-				console.log(currentNote);
 			}
 			note_feedback.last_note_key = expected_note.name;
 			note_feedback.last_note_octave = expected_note.octave;

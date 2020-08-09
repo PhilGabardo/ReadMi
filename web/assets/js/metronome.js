@@ -1,3 +1,5 @@
+import AudioContext from './audio_context'
+
 /*
  * Scheduling is done by prescheduling all the audio events, and
  * letting the WebAudio scheduler actually do the scheduling.
@@ -5,7 +7,7 @@
 export default class ScheduledMetronome {
 	constructor(tempo, ticks) {
 		this.tempo = tempo;
-		this.audioCtx = new AudioContext();
+		this.audioCtx = AudioContext.getAudioContext();
 		this.tick = null;
 		this.tickVolume = null;
 		this.soundHz = 1000;

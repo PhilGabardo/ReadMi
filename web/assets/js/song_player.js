@@ -1,16 +1,17 @@
 import note_detection from './note_detection'
 import Instruments from './instruments'
 import KeySignatures from './key_signatures'
+import AudioContext from './audio_context'
 
 export default class SongPlayer {
 	constructor(notes, instrument, beats_per_minute, beats_per_measure) {
-		this.audioCtx = new AudioContext();
+		this.audioCtx = AudioContext.getAudioContext()
 		this.tick = null;
 		this.tickVolume = null;
 		this.soundHz = 1000;
 		this.scheduledNotes = this.appendTimingOffset(notes, beats_per_measure, beats_per_minute).flat();
 		this.instrument = instrument;
-		this.setController()
+		//this.setController()
 		this.initAudio();
 	}
 

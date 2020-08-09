@@ -10,8 +10,33 @@ import TimingBar from './timing_bar'
 import KeySignatures from './key_signatures'
 import NoteFeedback from './note_feedback'
 import ScoreScroller from './score_scroller'
+import AudioContext from './audio_context'
 
-if (navigator.userAgent.indexOf("Chrome") != -1 || navigator.userAgent.match('CriOS')) {
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+	navigator.mediaDevices.getUserMedia({audio: {
+		autoGainControl: false,
+			channelCount: 2,
+			echoCancellation: false,
+			latency: 0,
+			noiseSuppression: false,
+			sampleRate: 48000,
+			sampleSize: 16,
+			volume: 1.0
+		}})
+		.then(function(stream) {
+			startSession(getAudioStreamController(stream))
+		})
+		// Error callback
+		.catch(function(err) {
+			alert("ReadMi does not have access to your microphone.");
+		})
+} else {
+	alert("ReadMi is not supported on this browser.");
+}
+
+
+//if (navigator.userAgent.indexOf("Chrome") != -1 || navigator.userAgent.match('CriOS')) {
+/*
 	navigator.permissions.query({name:'microphone'}).then(function(result) {
 		console.log(result.state);
 		if (result.state == 'granted') {
@@ -31,18 +56,13 @@ if (navigator.userAgent.indexOf("Chrome") != -1 || navigator.userAgent.match('Cr
 			}
 		};
 	});
-} else {
-	alert("ReadMiMusic is only currently supported on Google Chrome.");
-}
+	*/
+//} else {
+//	alert("ReadMiMusic is only currently supported on Google Chrome.");
+//}
 
-function getAudioStreamController() {
-	let AudioContext = (window.AudioContext ||
-	window.webkitAudioContext ||
-	window.mozAudioContext ||
-	window.oAudioContext ||
-	window.msAudioContext); // Safari and old versions of Chrome
-	let audioContext = new AudioContext();
-	return new AudioStreamController(audioContext);
+function getAudioStreamController(stream) {
+	return new AudioStreamController(stream);
 }
 
 function startSession(audioStreamController) {
@@ -90,6 +110,7 @@ function startSession(audioStreamController) {
 		let bpm_slider = document.getElementById('bpm');
 		let metronome = new ScheduledMetronome(bpm_slider.value, beats_per_measure * vf_bars.length)
 		let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_slider.value, beats_per_measure);
+		songPlayer.setController();
 		let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_slider.value, keySigStaffWidth);
 		let note_feedback = new NoteFeedback(renderer_context, note_scheduler.getScheduledNotes(), audioStreamController, beats_per_measure, bpm_slider.value, instrument)
 		let score_scroller = new ScoreScroller(beats_per_measure, bpm_slider.value, staveHeight, isPiano)

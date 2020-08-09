@@ -42,6 +42,7 @@ Encore
 	.addEntry('payment', './web/assets/js/payment.js')
 	.addEntry('instrument_select_action', './web/assets/js/instrument_select.js')
 	.addEntry('instrument_change', './web/assets/js/instrument_change.js')
+	.addEntry('audio_context', './web/assets/js/audio_context.js')
 
 	// will output as web/build/global.css
 	.addStyleEntry('dialogbox', './web/assets/css/dialogbox.css')
