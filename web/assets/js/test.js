@@ -10,19 +10,18 @@ import TimingBar from './timing_bar'
 import KeySignatures from './key_signatures'
 import NoteFeedback from './note_feedback'
 import ScoreScroller from './score_scroller'
-import AudioContext from './audio_context'
 
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
-		autoGainControl: false,
-			channelCount: 2,
-			echoCancellation: false,
-			latency: 0,
-			noiseSuppression: false,
-			sampleRate: 48000,
-			sampleSize: 16,
-			volume: 1.0
-		}})
+		echoCancellation: false,
+		//noiseSuppression: true,
+		autoGainControl: true,
+		sampleRate: 48000,
+		 sampleSize: 16,
+		 volume: 1.0,
+		 channelCount: 2,
+		 latency: 0,
+	}})
 		.then(function(stream) {
 			startSession(getAudioStreamController(stream))
 		})

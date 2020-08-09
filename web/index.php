@@ -19,7 +19,6 @@ require_once __DIR__ . '/actions/PaymentFailureAction.php';
 require_once __DIR__ . '/actions/PaymentSuccessAction.php';
 require_once __DIR__ . '/actions/InstrumentSelectAction.php';
 require_once __DIR__ . '/actions/InstrumentUpdateAction.php';
-require_once __DIR__ . '/actions/GetSongData.php';
 require_once __DIR__ . '/hooks/PaymentHooks.php';
 
 use ReadMi\BarComputer;

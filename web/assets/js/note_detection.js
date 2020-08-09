@@ -63,7 +63,6 @@ function getNoteFromSamples(buffer, sampleRate) {
 	// while a 'k' equal to 8 would correspond to a 6000Hz one, which is enough to cover most (if not all)
 	// the notes we have in the notes.json file.
 
-	let t0 = performance.now()
 	var n = 1024, bestR = 0, bestK = -1;
 	for(var k = 8; k <= 1000; k++){
 
