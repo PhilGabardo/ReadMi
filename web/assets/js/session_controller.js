@@ -78,6 +78,11 @@ export default class SessionController {
 		session_controller.timing_bar.clearLastChild();
 		session_controller.score_scroller.pause();
 		session_controller.playingState = false;
+
+		// TODO: show result box
+		// TODO: log result to history table
+		// TODO: ask create account? for demo
+		// TODO: ask replay?
 	}
 
 	getStaveTimeInMs() {

@@ -17,6 +17,13 @@ export default class ScheduledMetronome {
 		this.setController();
 	}
 
+	reset(tempo, ticks){
+		this.tempo = tempo;
+		this.ticks = ticks;
+		this.tickVolume.gain.cancelScheduledValues(0);
+		this.resume();
+	}
+
 	initAudio() {
 		this.tick = this.audioCtx.createOscillator();
 		this.tickVolume = this.audioCtx.createGain();

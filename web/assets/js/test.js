@@ -34,32 +34,6 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 }
 
 
-//if (navigator.userAgent.indexOf("Chrome") != -1 || navigator.userAgent.match('CriOS')) {
-/*
-	navigator.permissions.query({name:'microphone'}).then(function(result) {
-		console.log(result.state);
-		if (result.state == 'granted') {
-			startSession(getAudioStreamController())
-		} else if (result.state == 'prompt') {
-			getAudioStreamController();
-		} else if (result.state == 'denied') {
-			alert("ReadMiMusic does have permission to access your microphone. Please visit https://support.google.com/chrome/answer/2693767 to " +
-				"determine how to give ReadMiMusic microphone access, and then refresh the page.");
-		}
-		result.onchange = function() {
-			if (result.state == 'granted') {
-				startSession(getAudioStreamController())
-			} else if (result.state == 'denied') {
-				alert("ReadMiMusic does have permission to access your microphone. Please visit https://support.google.com/chrome/answer/2693767 to " +
-					"determine how to give ReadMiMusic microphone access, and then refresh the page.");
-			}
-		};
-	});
-	*/
-//} else {
-//	alert("ReadMiMusic is only currently supported on Google Chrome.");
-//}
-
 function getAudioStreamController(stream) {
 	return new AudioStreamController(stream);
 }
@@ -88,15 +62,38 @@ function startSession(audioStreamController) {
 		score_renderer.render();
 	}
 	window.scrollTo(0, 0);
+
 	function CustomPrompt(){
+
 		this.render = function(){
 			let dialogbox = document.getElementById('dialogbox');
 			dialogbox.style.display = "block";
 			let bpm_slider = document.getElementById('bpm');
 			let bpm_label = document.getElementById('bpm_label');
 			bpm_label.innerHTML = bpm_slider.value + " BPM";
-			bpm_slider.oninput = function() {
+			let metronome = new ScheduledMetronome(10, 30);
+			let future_metronome_click = null;
+			bpm_slider.onmousedown = function() {
 				bpm_label.innerHTML = this.value + " BPM";
+				metronome.reset(this.value, 30)
+				metronome.start()
+			}
+			bpm_slider.oninput = function() {
+				if (future_metronome_click) {
+					clearTimeout(future_metronome_click);
+				}
+				let bpm_value = this.value;
+				bpm_label.innerHTML = bpm_value + " BPM";
+				future_metronome_click = setTimeout(function() {
+					metronome.reset(bpm_value, 30)
+					metronome.start()
+				}, 150);
+			}
+			bpm_slider.onmouseup = function () {
+				if (future_metronome_click) {
+					clearTimeout(future_metronome_click);
+				}
+				metronome.pause()
 			}
 		}
 	}

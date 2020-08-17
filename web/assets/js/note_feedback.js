@@ -13,8 +13,6 @@ export default class NoteFeedback {
 		this.totalNotes = 0;
 		this.correctNotes = 0;
 		this.func = null;
-		this.last_note_octave = null;
-		this.last_note_key = null;
 		this.instrument = instrument;
 	}
 
@@ -64,7 +62,6 @@ export default class NoteFeedback {
 			let currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getByteTimeDomainData(), note_feedback.audio_stream_controller.getSampleRate());
 			let expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
 			let actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
-			console.log(actual_freq);
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
 				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 				note_feedback.correctNotes++;
@@ -86,6 +83,14 @@ export default class NoteFeedback {
 
 	resume() {
 		this.start();
+	}
+
+	getCorrectNotes() {
+		return this.correctNotes;
+	}
+
+	getTotalNotes() {
+		return this.totalNotes;
 	}
 }
 
