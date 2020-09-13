@@ -32,6 +32,8 @@ abstract class ReadMiAction {
 				return InstrumentSelectAction::execute($app, $request);
 			case 'instrument_update':
 				return InstrumentUpdateAction::execute($app, $request);
+			case 'feedback':
+				return FeedbackAction::execute($app, $request);
 			default:
 				$auth0 = self::getAuth0();
 				$user_info = $auth0->getUser();

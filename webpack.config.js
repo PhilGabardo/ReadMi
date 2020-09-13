@@ -43,6 +43,7 @@ Encore
 	.addEntry('instrument_select_action', './web/assets/js/instrument_select.js')
 	.addEntry('instrument_change', './web/assets/js/instrument_change.js')
 	.addEntry('audio_context', './web/assets/js/audio_context.js')
+	.addEntry('feedback', './web/assets/js/feedback.js')
 
 	// will output as web/build/global.css
 	.addStyleEntry('dialogbox', './web/assets/css/dialogbox.css')
@@ -54,6 +55,7 @@ Encore
 	.addStyleEntry('selectize_override', './web/assets/css/selectize_override.css')
 	.addStyleEntry('landing_style', './web/assets/css/landing.css')
 	.addStyleEntry('instrument_select', './web/assets/css/instrument_select.css')
+	.addStyleEntry('feedback_style', './web/assets/css/feedback.css')
 
 	// allow sass/scss files to be processed
 	.enableSassLoader()

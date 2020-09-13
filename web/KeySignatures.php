@@ -40,6 +40,18 @@ class KeySignatures {
 			'type'=> '#',
 			'notes'=> ['F' => true, 'C' => true, 'G' => true, 'D' => true, 'A' => true]
 		],
+		'F# minor' => [
+			'type'=> '#',
+			'notes'=> ['F' => true, 'G' => true, 'C' => true]
+		],
+		'F# major' => [
+			'type'=> '#',
+			'notes'=> ['F' => true, 'G' => true, 'A' => true, 'C' => true, 'D' => true, 'E' => true]
+		],
+		'C# major' => [
+			'type'=> '#',
+			'notes'=> ['F' => true, 'G' => true, 'A' => true, 'C' => true, 'D' => true, 'E' => true, 'B' => true]
+		],
 		'F major' => [
 			'type'=> 'b',
 			'notes'=> ['B' => true]

@@ -9,7 +9,9 @@
     "auth0/auth0-php": "~5.0",
     "symfony/webpack-encore-bundle": "^1.7",
     "kreait/firebase-bundle": "^2.2",
-    "stripe/stripe-php": "^7.44"
+    "stripe/stripe-php": "^7.44",
+    "sendgrid/sendgrid": "^7.8",
+    "phpmailer/phpmailer": "^6.1"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*",

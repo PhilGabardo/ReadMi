@@ -99,6 +99,7 @@ class BarComputer {
 					'clef' => (int)$note['octave'] < 4 ? 'bass' : 'treble',
 					'keys' => [$note['name'] . '/' . $note['octave']],
 					'duration' => self::TIMING_MAP[(string)$length_breakdown[$j]],
+					'raw_duration' => $length_breakdown[$j],
 					'dot_count' => self::DOT_COUNT_MAP[(string)$length_breakdown[$j]],
 				];
 				$accidental = $note['name'][1] ?? 'n';
@@ -123,6 +124,7 @@ class BarComputer {
 						$ghost_struct = [
 							'clef' => "treble",
 							'duration' => self::GHOST_TIMING_MAP[(string)$_length_breakdown[$k]],
+							'raw_duration' => $_length_breakdown[$k],
 							'ghost' => true,
 						];
 						$current_bar[] = $ghost_struct;

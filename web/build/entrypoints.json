@@ -125,6 +125,11 @@
         "/build/audio_context.js"
       ]
     },
+    "feedback": {
+      "js": [
+        "/build/feedback.js"
+      ]
+    },
     "dialogbox": {
       "css": [
         "/build/dialogbox.css"
@@ -168,6 +173,11 @@
     "instrument_select": {
       "css": [
         "/build/instrument_select.css"
+      ]
+    },
+    "feedback_style": {
+      "css": [
+        "/build/feedback_style.css"
       ]
     }
   }

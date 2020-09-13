@@ -5,6 +5,8 @@
   "build/demo.js": "/build/demo.js",
   "build/demo_layout.css": "/build/demo_layout.css",
   "build/dialogbox.css": "/build/dialogbox.css",
+  "build/feedback.js": "/build/feedback.js",
+  "build/feedback_style.css": "/build/feedback_style.css",
   "build/filter_table.js": "/build/filter_table.js",
   "build/filterable_table.css": "/build/filterable_table.css",
   "build/instrument_change.js": "/build/instrument_change.js",

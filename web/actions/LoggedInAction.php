@@ -37,7 +37,7 @@ abstract class LoggedInAction extends ReadMiAction {
 		$instrument = $user_info['instrument'];
 		$is_piano = $instrument === 'piano' ? 1 : 0;
 
-		$st = $app['pdo']->prepare("SELECT name, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE piano = {$is_piano} ORDER BY name ASC");
+		$st = $app['pdo']->prepare("SELECT name, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE piano = {$is_piano} ORDER BY difficulty ASC");
 		$st->execute();
 
 		$key_signatures = [];

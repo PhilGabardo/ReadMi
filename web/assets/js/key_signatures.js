@@ -31,6 +31,10 @@ function getKeySignatureInfo(key) {
 			'type': '#',
 			'notes': {'F' : true, 'C' : true, 'G' : true}
 		},
+		'F# minor' : {
+			'type': '#',
+			'notes': {'F' : true, 'C' : true, 'G' : true}
+		},
 		'E major' : {
 			'type': '#',
 			'notes': {'F' : true, 'C' : true, 'G' : true, 'D' : true}
@@ -38,6 +42,14 @@ function getKeySignatureInfo(key) {
 		'B major' : {
 			'type': '#',
 			'notes': {'F' : true, 'C' : true, 'G' : true, 'D' : true, 'A' : true}
+		},
+		'F# major' : {
+			'type': '#',
+			'notes': {'F' : true, 'G' : true, 'A' : true, 'C' : true, 'D' : true, 'E' : true}
+		},
+		'C# major' : {
+			'type': '#',
+			'notes': {'F' : true, 'G' : true, 'A' : true, 'C' : true, 'D' : true, 'E' : true, 'B': true}
 		},
 		'F major' : {
 			'type': 'b',

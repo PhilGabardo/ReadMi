@@ -19,7 +19,10 @@ require_once __DIR__ . '/actions/PaymentFailureAction.php';
 require_once __DIR__ . '/actions/PaymentSuccessAction.php';
 require_once __DIR__ . '/actions/InstrumentSelectAction.php';
 require_once __DIR__ . '/actions/InstrumentUpdateAction.php';
+require_once __DIR__ . '/actions/FeedbackAction.php';
 require_once __DIR__ . '/hooks/PaymentHooks.php';
+require_once __DIR__ . '/misc/DifficultyComputer.php';
+
 
 use ReadMi\BarComputer;
 use Actions\PaymentSuccessAction;
@@ -29,6 +32,7 @@ use \Symfony\Component\HttpFoundation\Request;
 use Auth0\SDK\Auth0;
 use Actions\ReadMiAction;
 use Hooks\PaymentHooks;
+use Misc\DifficultyComputer;
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -84,10 +88,13 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 			)
 		)
 	);
-	$category_offset = random_int(0, 45050);
-	$st = $app['pdo']->prepare("SELECT distinct(category) FROM jeopardy_questions OFFSET $category_offset LIMIT 6");
-	$st->execute();
-	$categories = array_map(function ($arr) { return $arr['category']; }, $st->fetchAll(PDO::FETCH_ASSOC));
+	$categories = [];
+	for ($i = 0; $i < 6; $i++) {
+		$category_offset = random_int(0, 39659);
+		$st = $app['pdo']->prepare("SELECT distinct(category) FROM jeopardy_questions OFFSET $category_offset LIMIT 1");
+		$st->execute();
+		$categories[] = $st->fetch(PDO::FETCH_ASSOC)['category'];
+	}
 	$questions_by_category = [];
 	foreach ($categories as $category) {
 		$escaped_category = $app['pdo']->quote($category);
@@ -99,6 +106,7 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 	}
 	$daily_double_row = random_int(0, 4);
 	$daily_double_col = random_int(0, 5);
+	$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['double'] = true;
 	$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['question'] = 'DAILY DOUBLE! ' .$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['question'];
 	$clues = [];
 	$is_double = (bool)$request->get('double');
@@ -106,6 +114,9 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 	for ($row = 0; $row < 5; $row++) {
 		$clues[$row + 1] = [];
 		foreach ($categories as $category) {
+			$questions_by_category[$category][$row]['double'] = $questions_by_category[$category][$row]['double'] ?? false;
+			$questions_by_category[$category][$row]['question'] = preg_replace('/^\(.*\)/', '', $questions_by_category[$category][$row]['question']);
+			$questions_by_category[$category][$row]['question'] = str_replace(' & ', ' and ', $questions_by_category[$category][$row]['question']);
 			$clues[$row + 1][] = $questions_by_category[$category][$row] + ['amount' => (($row + 1) * $multiplier)];
 		}
 	}
@@ -113,6 +124,28 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 		'categories' => $categories,
 		'clues' => $clues,
 	]);
+});
+
+$app->get('/compute_difficulties', function(Request $request) use($app) {
+	$st = $app['pdo']->prepare("SELECT id, notes, key_signature, beat_value, beats_per_measure, piano FROM readmi_songs ORDER BY name ASC");
+	$st->execute();
+	$rows = $st->fetchAll();
+	$piano_songs = [];
+	$non_piano_songs = [];
+	foreach ($rows as $row) {
+		if ((int)$row['piano']) {
+			$piano_songs[] = $row;
+		} else {
+			$non_piano_songs[] = $row;
+		}
+	}
+	$piano_difficulty_map = DifficultyComputer::getDifficultyMap($piano_songs);
+	$non_piano_difficulty_map = DifficultyComputer::getDifficultyMap($non_piano_songs);
+	$difficulty_map = $piano_difficulty_map + $non_piano_difficulty_map;
+	foreach ($difficulty_map as $id => $difficulty) {
+		$st = $app['pdo']->prepare("UPDATE readmi_songs set difficulty = $difficulty where id = $id;");
+		$st->execute();
+	}
 });
 
 // Our web handlers

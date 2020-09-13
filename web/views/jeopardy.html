@@ -1236,6 +1236,8 @@ var render_interval = null;
 var max_renderers = 1
 var work_scheduled = false;
 var is_open = false;
+var is_double = false;
+var beep_future = null;
 
 function resetRenderQueue(){
     render_queue = [];
@@ -1563,10 +1565,13 @@ function mini(){
         }
 
         function beep() {
+	        var msg = new SpeechSynthesisUtterance("BEEP! BEEP!");
+	        window.speechSynthesis.speak(msg);
+	        /*
         	if (modal.is_open && !modal.revealed) {
 		        var msg = new SpeechSynthesisUtterance("BEEP! BEEP!");
 		        window.speechSynthesis.speak(msg);
-            }
+            }*/
         }
 
         ready(function(){
@@ -1584,7 +1589,11 @@ function mini(){
                         modal.hide();
                     } else if(e.keyCode == SPACE){
                         e.preventDefault();
-                        modal.reveal();
+                        if (modal.is_double) {
+                        	modal.show();
+                        } else {
+	                        modal.reveal();
+                        }
                     }
                 }
             }, false);
@@ -1616,7 +1625,13 @@ function mini(){
             })
 
             on("click", ".grid-row-questions .grid-cell", function(e){
-                modal.show(this);
+            	if (this.getAttribute("data-double") && false) {
+            		// TODO: add daily double
+            		console.log("DOUBLE");
+		            modal.daily_double(this);
+	            } else {
+		            modal.show(this);
+                }
             });
 
             // prevent the buttons from being highlighted
@@ -1766,6 +1781,7 @@ function mini(){
         div.classList.remove("expanded");
         div.style.borderWidth = "3px";
         div.querySelectorAll(".modal-inner")[0].innerHTML = "";
+        clearTimeout(beep_future);
     }
 
     function renderMenu(){
@@ -1850,6 +1866,7 @@ function mini(){
         var q = document.querySelectorAll("#question-modal .question")[0];
         q.style.display = "block";
         modal.revealed = true;
+        clearTimeout(beep_future);
         function scrollTo(element, to, duration) {
             var start = element.scrollTop,
                 change = to - start,
@@ -1892,12 +1909,125 @@ function mini(){
         document.querySelectorAll(".active-question")[0].classList.add("inert");
     }
 
+    modal.daily_double = function(cell, no_push_state) {
+	    removeClass(".active-question", "active-question");
+	    cell.classList.add("active-question");
+
+	    var row = cell.getAttribute("data-row");
+	    var col = cell.getAttribute("data-col");
+	    var isDouble = cell.getAttribute("data-double");
+	    var category = document.querySelectorAll(".grid-row-cats .cat-cell")[col].innerText;
+	    var points = cell.querySelectorAll(".cell-inner")[0].innerText;
+	    document.querySelectorAll("#question-title")[0].innerText = category + " DAILY DOUBLE!"
+
+	    var bbox = cell.getBoundingClientRect();
+	    var div_modal = document.getElementById('question-modal')
+	    div_modal.style.display = "block";
+	    div_modal.style.opacity = 0;
+
+	    var inner = document.querySelectorAll("#question-modal .modal-inner")[0];
+	    inner.innerHTML = "DAILY DOUBLE!";
+	    var msg = new SpeechSynthesisUtterance(cell.querySelectorAll(".answer")[0].innerHTML.substring(6).replace('\&', 'and').replace(/\(.*\)/, ''));
+	    msg.onend = function() {
+		    beep_future = setTimeout(function() {
+			    beep();
+		    }, 6000); };
+	    window.speechSynthesis.speak(msg);
+
+
+	    if(!no_push_state){
+		    try {
+			    console.log("pre length", window.history.length);
+			    history.pushState({"page": "slide", "cell": cell.getAttribute("id")}, "JeopardyLabs");
+			    console.log("post length", window.history.length);
+		    } catch (e) {
+
+		    }
+	    }
+
+	    setTimeout(function(){
+
+		    var q = document.querySelectorAll('#question-modal .answer')[0];
+		    try {
+			    q.querySelectorAll("video, audio").get(0).play();
+		    } catch (e) {
+
+		    }
+
+		    try {
+			    var iframe = q.querySelectorAll("iframe")[0]
+			    var src = iframe.getAttribute("src") || "";
+			    var a = document.createElement("a");
+			    a.href = src
+			    if(a.hostname == "www.youtube.com"){
+				    a.search = (a.search || "?") + '&autoplay=1'
+				    iframe.contentWindow.location.replace(a.toString());
+				    //iframe.setAttribute('src', a.toString());
+			    }
+		    } catch (e) {
+			    // ?
+		    }
+	    }, 500);
+
+	    document.querySelectorAll('#question-modal .modal-body .modal-inner')[0].scrollTop = 0;
+
+	    //trimHTML(document.querySelectorAll('#question-modal .answer')[0]);
+	    //trimHTML(document.querySelectorAll('#question-modal .question')[0]);
+
+	    // the height of the contents of the modal should be...
+        /* [MODAL HEADER]
+         *     ^
+         *     |
+         *     |    <--- this tall
+         *     v
+         * [TEAMS BAR]
+         */
+	    var content_bbox = getBoundingClientRect(document.querySelectorAll('#question-modal .modal-body')[0])
+	    var position_of_top = content_bbox.top;
+	    var teams = document.querySelectorAll("#teams")[0]
+	    var position_of_bottom = getBoundingClientRect(teams).top || window.innerHeight;
+	    var h = position_of_bottom - position_of_top - 20 // 20 pixels for some extra room
+
+	    document.querySelectorAll('#question-modal .modal-inner')[0].style.maxHeight = h + "px";
+	    document.querySelectorAll('#question-modal .modal-body')[0].style.height = h + "px";
+
+
+	    /*
+	    var q = document.querySelectorAll("#question-modal .question")[0];
+	    q.style.display = "block";
+	    var content = document.querySelectorAll('#question-modal .modal-inner')[0];
+	    var result = shrink_in_place(content, 100, 24);
+	    q.style.display = "none";*/
+
+
+	    div_modal.style.transform = "translate(" + bbox.left + "px, " + bbox.top  + "px) scale(" + (bbox.width/window.innerWidth) + ", " + (bbox.height / window.innerHeight) + ")"
+	    div_modal.style.opacity = 1;
+
+	    removeClass(".expanded", "expanded");
+
+	    setTimeout(function(){
+		    div_modal.classList.add("expanded");
+		    div_modal.style.top = 0;
+		    div_modal.style.left = 0;
+		    div_modal.style.bottom = 0;
+		    div_modal.style.right = 0;
+		    div_modal.style.width = "100%";
+		    div_modal.style.height = "100%";
+		    div_modal.style.borderWidth = 0;
+		    div_modal.style.transform = "translate(0px, 0px) scale(1)"
+	    }, 50);
+	    modal.is_open = true; // flag for the keyboard event
+        modal.is_double = true;
+    }
+
     modal.show = function(cell, no_push_state){
+    	modal.is_double = false;
         removeClass(".active-question", "active-question");
         cell.classList.add("active-question");
 
         var row = cell.getAttribute("data-row");
         var col = cell.getAttribute("data-col");
+	    var isDouble = cell.getAttribute("data-double");
         var category = document.querySelectorAll(".grid-row-cats .cat-cell")[col].innerText;
         var points = cell.querySelectorAll(".cell-inner")[0].innerText;
         document.querySelectorAll("#question-title")[0].innerText = category + " for " + points
@@ -1909,9 +2039,9 @@ function mini(){
 
         var inner = document.querySelectorAll("#question-modal .modal-inner")[0];
         inner.innerHTML = cell.querySelectorAll(".answer")[0].outerHTML + "\n" + cell.querySelectorAll(".question")[0].outerHTML;
-	    var msg = new SpeechSynthesisUtterance(cell.querySelectorAll(".answer")[0].innerHTML.substring(6).replace('&', 'and'));
+	    var msg = new SpeechSynthesisUtterance(cell.querySelectorAll(".answer")[0].innerHTML.substring(6).replace('\&', 'and').replace(/\(.*\)/, ''));
 	    msg.onend = function() {
-	    	setTimeout(function() {
+	    	beep_future = setTimeout(function() {
 		    beep();
 	    }, 6000); };
 	    window.speechSynthesis.speak(msg);
@@ -1998,6 +2128,7 @@ function mini(){
             div_modal.style.transform = "translate(0px, 0px) scale(1)"
         }, 50);
         modal.is_open = true; // flag for the keyboard event
+	    modal.is_double = false;
     }
 
     modal.hide = function(){
@@ -2052,7 +2183,7 @@ function mini(){
                     grid-cell
 
                 "
-                     data-row="{{row_number}}" data-col="{{clue_number}}">
+                     data-row="{{row_number}}" data-col="{{clue_number}}" data-double="{{clue.double}}">
                     <div class="cell points">
                         <div class="cell-inner">{{clue.amount}}</div>
                         <div class="front answer">({{clue.year}}) {{clue.question}}</div>
@@ -2138,12 +2269,6 @@ function mini(){
                     document.getElementById("windows").style.display = "inline";
                 }
             </script>
-
-            <div align="center" id="menu-links">
-
-                    <a href="https://jeopardylabs.com/edit/html-jeopardy-44" rel="nofollow">Edit</a>
-
-            </div>
         </div>
     </div>
 
