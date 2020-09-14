@@ -4,28 +4,28 @@ namespace Actions;
 
 
 use Silex\Application;
+use Stripe\Customer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Stripe\Stripe;
 
 class StripeSessionIdAction extends LoggedInAction {
 
+	protected const DEV_PRODUCT_ID = 'price_1HRNu0Kfc5hHCIGNMj6oAx4R';
+	protected const PRODUCT_ID = 'price_1H8tJJKfc5hHCIGNEgXdJXBF';
+
 	protected static function _execute(Application $app, Request $request): string {
-		Stripe::setApiKey('sk_test_51H3pcGKfc5hHCIGN7B5BYPgWAUcoXcCeez8xGDvd86rJuCzRAQIxw8BXzZduFJvlrzi5k5PNLvc99fXw4OmehSZy008cd5NUzR');
 		$host = self::isDev() ? 'http://localhost:8080' : 'https://www.readmimusic.com';
+		$product_id = self::isDev() ? self::DEV_PRODUCT_ID : self::PRODUCT_ID;
+		$customer = self::getStripeCustomer($app);
 		$session = \Stripe\Checkout\Session::create([
+			'customer' => $customer->id,
 			'payment_method_types' => ['card'],
 			'line_items' => [[
-				'price_data' => [
-					'currency' => 'usd',
-					'product_data' => [
-						'name' => 'ReadMi Gold Membership',
-					],
-					'unit_amount' => 1400,
-				],
+				'price' => $product_id,
 				'quantity' => 1,
 			]],
-			'mode' => 'payment',
+			'mode' => 'subscription',
 			'success_url' => $host . '/payment_success?session_id={CHECKOUT_SESSION_ID}',
 			'cancel_url' => $host,
 		]);

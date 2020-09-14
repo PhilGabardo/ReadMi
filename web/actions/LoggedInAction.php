@@ -2,9 +2,14 @@
 
 namespace Actions;
 use PDO;
+use Stripe\Customer;
+use Stripe\Stripe;
 
 
 abstract class LoggedInAction extends ReadMiAction {
+
+	protected const DEV_API_KEY = 'sk_test_51H3pcGKfc5hHCIGN7B5BYPgWAUcoXcCeez8xGDvd86rJuCzRAQIxw8BXzZduFJvlrzi5k5PNLvc99fXw4OmehSZy008cd5NUzR';
+	protected const REAL_API_KEY = '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';
 
 	private const SELECTABLE_INSTRUMENTS = [
 		'piano' => 'Piano',
@@ -22,18 +27,49 @@ abstract class LoggedInAction extends ReadMiAction {
 		return true;
 	}
 
-	protected static function getUserInfo($app) : array {
+	protected static function getOauthId() : string {
 		$auth0 = ReadMiAction::getAuth0();
 		$user_info = $auth0->getUser();
-		$user_id = $user_info['sub'];
-		$st = $app['pdo']->prepare("SELECT * FROM users WHERE oauth_id = '{$user_id}'");
+		return $user_info['sub'];
+	}
+
+	protected static function isSubscribed($app) : bool {
+		$customer = self::getStripeCustomer($app);
+		$subscriptions = $customer->subscriptions;
+		if (!$subscriptions) {
+			return false;
+		}
+		$subscriptions = $subscriptions->all()->data;
+		$subscription = reset($subscriptions);
+		return $subscription ? $subscription->status === 'active' : false;
+	}
+
+	protected static function getStripeCustomer($app) {
+		$api_key = self::isDev() ? self::DEV_API_KEY : self::REAL_API_KEY;
+		Stripe::setApiKey($api_key);
+		$user_info = self::getUserInfo($app);
+		try {
+			$customer = Customer::retrieve($user_info['id']);
+		} catch (\Exception $e) {
+			$customer = Customer::create([
+				'id' => $user_info['id']
+			]);
+		} finally {
+			return $customer;
+		}
+	}
+
+	protected static function getUserInfo($app) : array {
+		$oauth_id = self::getOauthId();
+		$st = $app['pdo']->prepare("SELECT * FROM users WHERE oauth_id = '{$oauth_id}'");
 		$st->execute();
-		return $st->fetch(PDO::FETCH_ASSOC) ?: [];
+		$user_info = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+		return $user_info;
 	}
 
 	protected static function getLoggedInData($app) {
 		$user_info = self::getUserInfo($app);
-		$is_premium_user = $user_info['is_premium'];
+		$is_premium_user = self::isSubscribed($app);
 		$instrument = $user_info['instrument'];
 		$is_piano = $instrument === 'piano' ? 1 : 0;
 
