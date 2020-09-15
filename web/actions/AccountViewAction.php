@@ -13,7 +13,7 @@ class AccountViewAction extends LoggedInAction {
 
 		return $app['twig']->render('account_view.twig', [
 				'instrument' => $user_info['instrument'],
-				'subscription_info' => self::getSubscriptionInfo($app),
+				'subscription_info' => self::getSubscriptionInfo($app) ?: false,
 			] + self::getLoggedInData($app));
 	}
 }

@@ -43,6 +43,9 @@ abstract class LoggedInAction extends ReadMiAction {
 		$subscriptions = $subscriptions->all()->data;
 		/** @var Subscription $subscription */
 		$subscription = reset($subscriptions);
+		if (!$subscription) {
+			return [];
+		}
 		$pretty_period_end = date('l jS \of F Y', $subscription->current_period_end);
 		return [
 			'start' => $subscription->start_date,
@@ -82,7 +85,8 @@ abstract class LoggedInAction extends ReadMiAction {
 
 	protected static function getLoggedInData($app) {
 		$user_info = self::getUserInfo($app);
-		$is_premium_user = self::getSubscriptionInfo($app)['status'] === 'active';
+		$sub_info =  self::getSubscriptionInfo($app);
+		$is_premium_user = isset($sub_info['status']) ? self::getSubscriptionInfo($app)['status'] === 'active' : false;
 		$instrument = $user_info['instrument'];
 		$is_piano = $instrument === 'piano' ? 1 : 0;
 
