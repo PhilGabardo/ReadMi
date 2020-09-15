@@ -22,6 +22,10 @@ abstract class ReadMiAction {
 				return PlaySongAction::execute($app, $request);
 			case 'premium_info':
 				return PremiumInfoAction::execute($app, $request);
+			case 'renew_gold':
+				return RenewGoldAction::execute($app, $request);
+			case 'cancel_gold':
+				return CancelGoldAction::execute($app, $request);
 			case 'stripe_session_id':
 				return StripeSessionIdAction::execute($app, $request);
 			case 'payment_success':
@@ -32,6 +36,8 @@ abstract class ReadMiAction {
 				return InstrumentSelectAction::execute($app, $request);
 			case 'instrument_update':
 				return InstrumentUpdateAction::execute($app, $request);
+			case 'account_view':
+				return AccountViewAction::execute($app, $request);
 			case 'feedback':
 				return FeedbackAction::execute($app, $request);
 			default:

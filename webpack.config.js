@@ -36,19 +36,19 @@ Encore
 	.addEntry('note_feedback', './web/assets/js/note_timing.js')
 	.addEntry('score_scroller', './web/assets/js/score_scroller.js')
 	.addEntry('landing', './web/assets/js/landing.js')
-	.addEntry('logout', './web/assets/js/logout.js')
+	.addEntry('layout', './web/assets/js/layout.js')
 	.addEntry('login', './web/assets/js/login.js')
 	.addEntry('demo', './web/assets/js/demo.js')
 	.addEntry('payment', './web/assets/js/payment.js')
 	.addEntry('instrument_select_action', './web/assets/js/instrument_select.js')
-	.addEntry('instrument_change', './web/assets/js/instrument_change.js')
 	.addEntry('audio_context', './web/assets/js/audio_context.js')
 	.addEntry('feedback', './web/assets/js/feedback.js')
+	.addEntry('account_view', './web/assets/js/account_view.js')
 
 	// will output as web/build/global.css
 	.addStyleEntry('dialogbox', './web/assets/css/dialogbox.css')
 	.addStyleEntry('filterable_table', './web/assets/css/filterable_table.css')
-	.addStyleEntry('layout', './web/assets/css/layout.css')
+	.addStyleEntry('layout_style', './web/assets/css/layout.css')
 	.addStyleEntry('demo_layout', './web/assets/css/demo_layout.css')
 	.addStyleEntry('text', './web/assets/css/text.css')
 	.addStyleEntry('songs', './web/assets/css/songs.scss')
@@ -56,6 +56,8 @@ Encore
 	.addStyleEntry('landing_style', './web/assets/css/landing.css')
 	.addStyleEntry('instrument_select', './web/assets/css/instrument_select.css')
 	.addStyleEntry('feedback_style', './web/assets/css/feedback.css')
+	.addStyleEntry('account_view_style', './web/assets/css/account_view.css')
+
 
 	// allow sass/scss files to be processed
 	.enableSassLoader()

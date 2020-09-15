@@ -4,6 +4,7 @@ namespace Actions;
 use PDO;
 use Stripe\Customer;
 use Stripe\Stripe;
+use Stripe\Subscription;
 
 
 abstract class LoggedInAction extends ReadMiAction {
@@ -33,15 +34,27 @@ abstract class LoggedInAction extends ReadMiAction {
 		return $user_info['sub'];
 	}
 
-	protected static function isSubscribed($app) : bool {
+	protected static function getSubscriptionInfo($app) : array {
 		$customer = self::getStripeCustomer($app);
 		$subscriptions = $customer->subscriptions;
 		if (!$subscriptions) {
-			return false;
+			return [];
 		}
 		$subscriptions = $subscriptions->all()->data;
+		/** @var Subscription $subscription */
 		$subscription = reset($subscriptions);
-		return $subscription ? $subscription->status === 'active' : false;
+		$pretty_period_end = date('l jS \of F Y', $subscription->current_period_end);
+		return [
+			'start' => $subscription->start_date,
+			'status' =>	$subscription->status,
+			'cancel_at_period_end' => $subscription->cancel_at_period_end,
+			'status_pretty' => $subscription->cancel_at_period_end ? "Active (until $pretty_period_end)" : "Active",
+			'start_pretty' => date('l jS \of F Y', $subscription->start_date),
+			'period_end_pretty' => date('l jS \of F Y', $subscription->current_period_end),
+			'period_start_pretty' => date('l jS \of F Y', $subscription->current_period_start),
+			'period_start' => $subscription->current_period_start,
+			'period_end' => $subscription->current_period_end,
+		];
 	}
 
 	protected static function getStripeCustomer($app) {
@@ -69,7 +82,7 @@ abstract class LoggedInAction extends ReadMiAction {
 
 	protected static function getLoggedInData($app) {
 		$user_info = self::getUserInfo($app);
-		$is_premium_user = self::isSubscribed($app);
+		$is_premium_user = self::getSubscriptionInfo($app)['status'] === 'active';
 		$instrument = $user_info['instrument'];
 		$is_piano = $instrument === 'piano' ? 1 : 0;
 

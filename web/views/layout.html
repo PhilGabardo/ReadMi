@@ -8,24 +8,14 @@
 <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/build/landing_style.css">
-<link rel="stylesheet" href="/build/layout.css">
+<link rel="stylesheet" href="/build/layout_style.css">
 <link rel="stylesheet" href="/build/selectize_override.css">
 <link rel="stylesheet" href="/build/filterable_table.css">
 <link rel="stylesheet" href="/build/text.css">
 <div id="toolbar">
   <button id="logout" type="button">Logout</button>
-  Your Instrument:
-  <div id="instrument_selection">
-    <select id="instrument">
-      {% for instrument_key, instrument_value in selectable_instruments %}
-      {% if instrument_key == instrument %}
-      <option value="{{ instrument_key }}" selected>{{instrument_value}}</option>
-      {% else %}
-      <option value="{{ instrument_key }}">{{instrument_value}}</option>
-      {% endif %}
-      {% endfor %}
-    </select>
-  </div>
+  <button id="my_account" type="button">My Account</button>
+  <button id="home" type="button">Home</button>
 </div>
 <div class="main_content">
   {% block content %}{% endblock %}
@@ -79,8 +69,7 @@
   </table>
 </div>
 <script type="text/javascript" src="/build/filter_table.js"></script>
-<script type="text/javascript" src="/build/logout.js"></script>
-<script type="text/javascript" src="/build/instrument_change.js"></script>
+<script type="text/javascript" src="/build/layout.js"></script>
 
 </body>
 </div>

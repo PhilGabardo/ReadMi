@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+	<link rel="stylesheet" href="/build/account_view_style.css">
+	<h1 id="account_info_header"><u>Account Info</u></h1>
+	<table id="account_info">
+		<tr>
+			<td>
+				Your Instrument:
+			</td>
+			<td>
+				<div id="instrument_selection">
+					<select id="instrument">
+                        {% for instrument_key, instrument_value in selectable_instruments %}
+                            {% if instrument_key == instrument %}
+								<option value="{{ instrument_key }}" selected>{{instrument_value}}</option>
+                            {% else %}
+								<option value="{{ instrument_key }}">{{instrument_value}}</option>
+                            {% endif %}
+                        {% endfor %}
+					</select>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Membership Type:
+			</td>
+			<td>
+				<div id="membership_selection">
+					<select id="membership_type">
+                    {% if subscription_info %}
+						{% if subscription_info.cancel_at_period_end %}
+							<option value="Gold_Cancel" selected>Gold (ending&nbsp;{{ subscription_info.period_end_pretty }})</option>
+							<option value="Gold_Renew">Gold (renewed subscription)</option>
+                        {% else %}
+							<option value="Gold" selected>Gold (renewed subscription)</option>
+							<option value="Free">Free</option>
+                        {% endif %}
+                    {% else %}
+						<option value="Gold">Gold</option>
+						<option value="Free" selected>Free</option>
+                    {% endif %}
+					</select>
+				</div>
+			</td>
+		</tr>
+	</table>
+	{% if subscription_info %}
+		<h1 id="gold_info_header"><u>Gold Membership Info</u></h1>
+<table id="gold_info">
+	<tr><td>Status</td><td>{{ subscription_info.status_pretty }}</td></tr>
+	<tr><td>Created</td><td>{{ subscription_info.start_pretty }}</td></tr>
+	<tr><td>Last Billing Period Start</td><td>{{ subscription_info.period_start_pretty }}</td></tr>
+	<tr><td>Last Billing Period End</td><td>{{ subscription_info.period_end_pretty }}</td></tr>
+</table>
+    {% endif %}
+	<script type="text/javascript" src="/build/account_view.js"></script>
+{% endblock %}

@@ -20,17 +20,17 @@ require_once __DIR__ . '/actions/PaymentSuccessAction.php';
 require_once __DIR__ . '/actions/InstrumentSelectAction.php';
 require_once __DIR__ . '/actions/InstrumentUpdateAction.php';
 require_once __DIR__ . '/actions/FeedbackAction.php';
+require_once __DIR__ . '/actions/AccountViewAction.php';
+require_once __DIR__ . '/actions/CancelGoldAction.php';
+require_once __DIR__ . '/actions/RenewGoldAction.php';
 require_once __DIR__ . '/misc/DifficultyComputer.php';
 
 
-use ReadMi\BarComputer;
 use Actions\PaymentSuccessAction;
 
 use \Symfony\Component\HttpFoundation\Request;
 
-use Auth0\SDK\Auth0;
 use Actions\ReadMiAction;
-use Hooks\PaymentHooks;
 use Misc\DifficultyComputer;
 
 $app = new Silex\Application();

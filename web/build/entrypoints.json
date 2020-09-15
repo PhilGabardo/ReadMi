@@ -90,9 +90,9 @@
         "/build/landing.js"
       ]
     },
-    "logout": {
+    "layout": {
       "js": [
-        "/build/logout.js"
+        "/build/layout.js"
       ]
     },
     "login": {
@@ -115,11 +115,6 @@
         "/build/instrument_select_action.js"
       ]
     },
-    "instrument_change": {
-      "js": [
-        "/build/instrument_change.js"
-      ]
-    },
     "audio_context": {
       "js": [
         "/build/audio_context.js"
@@ -128,6 +123,11 @@
     "feedback": {
       "js": [
         "/build/feedback.js"
+      ]
+    },
+    "account_view": {
+      "js": [
+        "/build/account_view.js"
       ]
     },
     "dialogbox": {
@@ -140,9 +140,9 @@
         "/build/filterable_table.css"
       ]
     },
-    "layout": {
+    "layout_style": {
       "css": [
-        "/build/layout.css"
+        "/build/layout_style.css"
       ]
     },
     "demo_layout": {
@@ -178,6 +178,11 @@
     "feedback_style": {
       "css": [
         "/build/feedback_style.css"
+      ]
+    },
+    "account_view_style": {
+      "css": [
+        "/build/account_view_style.css"
       ]
     }
   }

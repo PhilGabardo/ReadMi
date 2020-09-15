@@ -1,0 +1,8 @@
+#account_info_header, #gold_info_header {
+    text-align: center;
+}
+
+#account_info, #gold_info {
+    margin: auto;
+    border: dotted;
+}

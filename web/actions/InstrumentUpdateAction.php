@@ -15,9 +15,6 @@ class InstrumentUpdateAction extends LoggedInAction {
 		$user_id = $user_info['sub'];
 		$st = $app['pdo']->prepare("UPDATE users set instrument = '$instrument' where oauth_id = '$user_id'");
 		$st->execute();
-		return $app['twig']->render('landing.twig',
-			[
-				'user_name' => $user_info['name']
-			] + self::getLoggedInData($app));
+		return AccountViewAction::execute($app, $request);
 	}
 }
