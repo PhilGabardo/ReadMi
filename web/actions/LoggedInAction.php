@@ -24,6 +24,10 @@ abstract class LoggedInAction extends ReadMiAction {
 		'trumpet' => 'Trumpet',
 	];
 
+	protected static function getPublishableKey() : string {
+		return self::isDev() ? self::DEV_API_KEY : self::REAL_API_KEY;
+	}
+
 	protected static function expectsLoggedIn(): bool {
 		return true;
 	}
@@ -61,7 +65,7 @@ abstract class LoggedInAction extends ReadMiAction {
 	}
 
 	protected static function getStripeCustomer($app) {
-		$api_key = self::isDev() ? self::DEV_API_KEY : self::REAL_API_KEY;
+		$api_key = self::getPublishableKey();
 		Stripe::setApiKey($api_key);
 		$user_info = self::getUserInfo($app);
 		try {

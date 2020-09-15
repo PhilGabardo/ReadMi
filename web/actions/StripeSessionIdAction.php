@@ -29,6 +29,6 @@ class StripeSessionIdAction extends LoggedInAction {
 			'success_url' => $host . '/payment_success?session_id={CHECKOUT_SESSION_ID}',
 			'cancel_url' => $host,
 		]);
-		return json_encode(['session_id' => $session->id]);
+		return json_encode(['session_id' => $session->id, 'publishable_key' => self::getPublishableKey()]);
 	}
 }

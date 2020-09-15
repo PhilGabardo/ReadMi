@@ -1,4 +1,3 @@
-var stripe = Stripe('pk_test_51H3pcGKfc5hHCIGNNDlHnUBWKBHx45o0EpKq3VSU9HuqDTavTBz8ZfiCbcomqTRKDubfyNXofWZNEnvUduR0BHxX00I4zpqRNh');
 var checkoutButton = document.getElementById('checkout-button');
 checkoutButton.addEventListener('click', function() {
 	fetch('/', {
@@ -11,6 +10,7 @@ checkoutButton.addEventListener('click', function() {
 		return response.json();
 	}).then(function(responseJson) {
 		var sessionID = responseJson.session_id;
+		var stripe = Stripe(responseJson.publishable_key);
 		stripe.redirectToCheckout({
 			// Make the id field from the Checkout Session creation API response
 			// available to this file, so you can provide it as argument here
