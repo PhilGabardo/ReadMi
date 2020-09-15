@@ -9,8 +9,11 @@ use Stripe\Subscription;
 
 abstract class LoggedInAction extends ReadMiAction {
 
-	protected const DEV_API_KEY = 'sk_test_51H3pcGKfc5hHCIGN7B5BYPgWAUcoXcCeez8xGDvd86rJuCzRAQIxw8BXzZduFJvlrzi5k5PNLvc99fXw4OmehSZy008cd5NUzR';
-	protected const REAL_API_KEY = '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';
+	protected const DEV_PUBLISHABLE_API_KEY = 'pk_test_51H3pcGKfc5hHCIGNNDlHnUBWKBHx45o0EpKq3VSU9HuqDTavTBz8ZfiCbcomqTRKDubfyNXofWZNEnvUduR0BHxX00I4zpqRNh';
+	protected const REAL_PUBLISHABLE_API_KEY = 'pk_live_51H3pcGKfc5hHCIGNF7dL39ESkSR024XBiphRwIZP6E5CI4tWNa8iS7tB4SMNaVcSd5H7ivyNjv3b20UrnuM5wnrl007dXUBaxq';
+
+	protected const DEV_SECRET_API_KEY = 'sk_test_51H3pcGKfc5hHCIGN7B5BYPgWAUcoXcCeez8xGDvd86rJuCzRAQIxw8BXzZduFJvlrzi5k5PNLvc99fXw4OmehSZy008cd5NUzR';
+	protected const REAL_SECRET_API_KEY = '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';
 
 	private const SELECTABLE_INSTRUMENTS = [
 		'piano' => 'Piano',
@@ -25,7 +28,11 @@ abstract class LoggedInAction extends ReadMiAction {
 	];
 
 	protected static function getPublishableKey() : string {
-		return self::isDev() ? self::DEV_API_KEY : self::REAL_API_KEY;
+		return self::isDev() ? self::DEV_PUBLISHABLE_API_KEY : self::REAL_PUBLISHABLE_API_KEY;
+	}
+
+	protected static function getSecretKey() : string {
+		return self::isDev() ? self::DEV_SECRET_API_KEY : self::REAL_SECRET_API_KEY;
 	}
 
 	protected static function expectsLoggedIn(): bool {
@@ -65,7 +72,7 @@ abstract class LoggedInAction extends ReadMiAction {
 	}
 
 	protected static function getStripeCustomer($app) {
-		$api_key = self::getPublishableKey();
+		$api_key = self::getSecretKey();
 		Stripe::setApiKey($api_key);
 		$user_info = self::getUserInfo($app);
 		try {
