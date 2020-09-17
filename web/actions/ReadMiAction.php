@@ -40,6 +40,8 @@ abstract class ReadMiAction {
 				return AccountViewAction::execute($app, $request);
 			case 'feedback':
 				return FeedbackAction::execute($app, $request);
+			case 'song_completion':
+				return SongCompletionAction::execute($app, $request);
 			default:
 				$auth0 = self::getAuth0();
 				$user_info = $auth0->getUser();

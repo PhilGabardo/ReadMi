@@ -4,10 +4,51 @@ namespace Misc;
 
 use ReadMi\BarComputer;
 use ReadMi\KeySignatures;
+use Silex\Application;
 
 class DifficultyComputer {
 
-	public static function getDifficultyMap(array $songs) : array {
+	public static function updateLevels(Application $app) {
+
+		$st = $app['pdo']->prepare("SELECT id, notes, key_signature, beat_value, beats_per_measure, piano FROM readmi_songs ORDER BY name ASC");
+		$st->execute();
+		$rows = $st->fetchAll();
+		$piano_songs = [];
+		$non_piano_songs = [];
+		foreach ($rows as $row) {
+			if ((int)$row['piano']) {
+				$piano_songs[] = $row;
+			} else {
+				$non_piano_songs[] = $row;
+			}
+		}
+		$piano_difficulty_map = self::getDifficultyMap($piano_songs);
+		self::updateLevelsFromDifficultyMap($app, $piano_difficulty_map);
+		$non_piano_difficulty_map = self::getDifficultyMap($non_piano_songs);
+		self::updateLevelsFromDifficultyMap($app, $non_piano_difficulty_map);
+	}
+
+	private static function updateLevelsFromDifficultyMap(Application $app, array $difficulty_map) {
+		asort($difficulty_map);
+		$level = 1;
+		$current_level_count = 0;
+		$level_map = [];
+		foreach ($difficulty_map as $id => $difficulty) {
+			$level_map[$level][] = $id;
+			$current_level_count++;
+			if ($current_level_count > 10) {
+				$level++;
+				$current_level_count = 0;
+			}
+		}
+		foreach ($level_map as $level => $ids) {
+			$id_list = implode(',', $ids);
+			$st = $app['pdo']->prepare("UPDATE readmi_songs set level = $level where id in ($id_list)");
+			$st->execute();
+		}
+	}
+
+	private static function getDifficultyMap(array $songs) : array {
 		$max_accidental_complexity = 0;
 		$max_timing_complexity = 0;
 		foreach ($songs as $song) {

@@ -1,9 +1,34 @@
 #header {
+     text-align: center;
+     font-size: xx-large;
+ }
+
+#level_info {
     text-align: center;
-    font-size: xx-large;
+}
+
+#truncate_song {
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    width: 200px;
+    text-decoration: inherit;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: green;
+}
+
+#completion_criteria {
+    border: dotted;
+    margin: auto;
+    margin-top: 10px;
 }
 
 #_header {
+    margin-top: 0;
     margin-bottom: 0;
     font-size: 100px;
 }

@@ -23,6 +23,7 @@ require_once __DIR__ . '/actions/FeedbackAction.php';
 require_once __DIR__ . '/actions/AccountViewAction.php';
 require_once __DIR__ . '/actions/CancelGoldAction.php';
 require_once __DIR__ . '/actions/RenewGoldAction.php';
+require_once __DIR__ . '/actions/SongCompletionAction.php';
 require_once __DIR__ . '/misc/DifficultyComputer.php';
 
 
@@ -125,26 +126,10 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 	]);
 });
 
-$app->get('/compute_difficulties', function(Request $request) use($app) {
-	$st = $app['pdo']->prepare("SELECT id, notes, key_signature, beat_value, beats_per_measure, piano FROM readmi_songs ORDER BY name ASC");
-	$st->execute();
-	$rows = $st->fetchAll();
-	$piano_songs = [];
-	$non_piano_songs = [];
-	foreach ($rows as $row) {
-		if ((int)$row['piano']) {
-			$piano_songs[] = $row;
-		} else {
-			$non_piano_songs[] = $row;
-		}
-	}
-	$piano_difficulty_map = DifficultyComputer::getDifficultyMap($piano_songs);
-	$non_piano_difficulty_map = DifficultyComputer::getDifficultyMap($non_piano_songs);
-	$difficulty_map = $piano_difficulty_map + $non_piano_difficulty_map;
-	foreach ($difficulty_map as $id => $difficulty) {
-		$st = $app['pdo']->prepare("UPDATE readmi_songs set difficulty = $difficulty where id = $id;");
-		$st->execute();
-	}
+
+$app->get('/compute_levels', function(Request $request) use($app) {
+	DifficultyComputer::updateLevels($app);
+	return '';
 });
 
 // Our web handlers

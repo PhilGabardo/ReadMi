@@ -9,6 +9,8 @@ use Stripe\Subscription;
 
 abstract class LoggedInAction extends ReadMiAction {
 
+	protected const SONG_COMPLETION_NUMBER_PER_LEVEL = 5;
+
 	protected const DEV_PUBLISHABLE_API_KEY = 'pk_test_51H3pcGKfc5hHCIGNNDlHnUBWKBHx45o0EpKq3VSU9HuqDTavTBz8ZfiCbcomqTRKDubfyNXofWZNEnvUduR0BHxX00I4zpqRNh';
 	protected const REAL_PUBLISHABLE_API_KEY = 'pk_live_51H3pcGKfc5hHCIGNF7dL39ESkSR024XBiphRwIZP6E5CI4tWNa8iS7tB4SMNaVcSd5H7ivyNjv3b20UrnuM5wnrl007dXUBaxq';
 
@@ -43,6 +45,11 @@ abstract class LoggedInAction extends ReadMiAction {
 		$auth0 = ReadMiAction::getAuth0();
 		$user_info = $auth0->getUser();
 		return $user_info['sub'];
+	}
+
+	protected static function getBPMRequirement(int $level, int $beat_value) : int {
+		$multiplier = 10 + min(10, $level / 10);
+		return floor($multiplier * $beat_value);
 	}
 
 	protected static function getSubscriptionInfo($app) : array {
@@ -99,25 +106,39 @@ abstract class LoggedInAction extends ReadMiAction {
 		$sub_info =  self::getSubscriptionInfo($app);
 		$is_premium_user = isset($sub_info['status']) ? self::getSubscriptionInfo($app)['status'] === 'active' : false;
 		$instrument = $user_info['instrument'];
+		$instrument_data = json_decode($user_info["{$instrument}_data"], true);
+		$level = $instrument_data['level'];
+		$next_level = $level + 1;
+		$completed_songs = array_flip($instrument_data['completed_songs']);
 		$is_piano = $instrument === 'piano' ? 1 : 0;
 
-		$st = $app['pdo']->prepare("SELECT name, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE piano = {$is_piano} ORDER BY difficulty ASC");
+		$st = $app['pdo']->prepare("SELECT id, name, level, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE piano = {$is_piano} and level <= {$next_level} ORDER BY level ASC");
 		$st->execute();
 
 		$key_signatures = [];
 		$time_signatures = [];
 		$enabled_songs = [];
 		$disabled_songs = [];
+		$completable_songs = [];
 
 		while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
 			$app['monolog']->addDebug('Row ' . $row['name']);
 			$row['time_signature'] = $row['beats_per_measure'] . '/' . $row['beat_value'];
 			$key_signatures[] = $row['key_signature'];
 			$time_signatures[] = $row['time_signature'];
-			if ($is_premium_user || !$row['is_premium']) {
+			$class = isset($completed_songs[$row['id']]) ? 'completed' : 'incomplete';
+			if ($row['level'] <= $level) {
+				$row['class'] = $class;
 				$enabled_songs[] = $row;
 			} else {
 				$disabled_songs[] = $row;
+			}
+			if ($row['level'] == $level) {
+				$completable_songs[] = [
+					'name' => $row['name'],
+					'bpm' => self::getBPMRequirement($level, $row['beat_value']),
+					'class' => $class,
+				];
 			}
 		}
 
@@ -137,6 +158,8 @@ abstract class LoggedInAction extends ReadMiAction {
 			'time_signatures' => array_unique($time_signatures),
 			'selectable_instruments' => self::SELECTABLE_INSTRUMENTS,
 			'instrument' => $instrument,
+			'level' => $level,
+			'completable_songs' => $completable_songs,
 		];
 	}
 }

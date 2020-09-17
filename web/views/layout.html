@@ -45,10 +45,11 @@
   <table id="songsTable">
     <tbody>
     {% for s in enabled_songs %}
-    <tr>
+    <tr data-value="{{s.id}}" class="{{s.class}}">
       <td class="songName">
         <span class="songTitle">{{ s.name }}</span><br>
-        <span class="songArtist">{{ s.artist }}</span>
+        <span class="songArtist">{{ s.artist }}</span><br>
+        <span class="songLevel">Level&nbsp;{{ s.level }}</span>
       </td>
       <td class="songKey">{{ s.key_signature }}</td>
       <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>
@@ -56,10 +57,11 @@
     {% endfor %}
     {% for s in disabled_songs %}
     <tr class="songDisabled">
-      <td class="tooltiptext">Requires Gold Membership</td>
+      <td class="tooltiptext">Unlock by leveling up!</td>
       <td class="songName">
         <span class="songTitle">{{ s.name }}</span><br>
-        <span class="songArtist">{{ s.artist }}</span>
+        <span class="songArtist">{{ s.artist }}</span><br>
+        <span class="songLevel">Level&nbsp;{{ s.level }}</span>
       </td>
       <td class="songKey">{{ s.key_signature }}</td>
       <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>

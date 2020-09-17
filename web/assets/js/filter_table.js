@@ -9,46 +9,15 @@ function addRowHandlers() {
 	let rows = table.getElementsByTagName("tr");
 	for (let i = 0; i < rows.length; i++) {
 		let currentRow = table.rows[i];
-		let title_td = currentRow.getElementsByClassName("songTitle")[0];
-		let titleTxtValue = title_td.textContent || title_td.innerText;
-		let artist_td = currentRow.getElementsByClassName("songArtist")[0];
-		let artistTxtValue = artist_td.textContent || artist_td.innerText;
+		let id = currentRow.dataset.value;
 		currentRow.onclick = function () {
 			if (currentRow.classList.contains('songDisabled')) {
 				$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="premium_info"></form>').appendTo($(document.body)).submit();
 			} else {
-				let name_param = '<input type="hidden" name="name" value="'+titleTxtValue+'">';
-				let artist_param = '<input type="hidden" name="artist" value="'+artistTxtValue+'">';
-				$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="play_song">' + name_param + artist_param + '</form>').appendTo($(document.body)).submit();
+				let id_param = '<input type="hidden" name="id" value="'+id+'">';
+				$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="play_song">' + id_param + '</form>').appendTo($(document.body)).submit();
 			}
 		};
-		/*let timer = null;
-		var song_player = null;
-		currentRow.onmouseover = function() {
-			var that = this;
-			timer = setTimeout(function(){
-				fetch('/', {
-					method: "POST",
-					headers: new Headers({
-						'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
-					}),
-					body: "action_type=get_song_data&name=" + titleTxtValue + "&artist=" + artistTxtValue
-				}).then(function(response) {
-					return response.json();
-				}).then(function(responseJson) {
-					let vf_bars = new BarComputer.getVFBars(responseJson.bars)
-					let note_scheduler = new NoteScheduler(vf_bars, responseJson.song.beat_value, responseJson.song.beats_per_measure)
-					song_player = new SongPlayer(note_scheduler.getScheduledNotes(), responseJson.instrument, 80, responseJson.song.beats_per_measure)
-					song_player.start()
-				});
-			}, 1000);
-		};
-		currentRow.onmouseleave = function() {
-			clearTimeout(timer);
-			if (song_player != null) {
-				song_player.stop();
-			}
-		};*/
 	}
 }
 addRowHandlers();

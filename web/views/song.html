@@ -1,34 +1,36 @@
 <link rel="stylesheet" href="/build/dialogbox.css">
 <link rel="stylesheet" href="/build/songs.css">
-<div id="dialogbox">
-	<div id="dialogboxhead">Song Options</div>
-	<div id="dialogboxbody">
-		<input id="bpm" name="weight" type="range" min="10" max="150" step="1" />
-		<label id="bpm_label">BPM</label>
+<div id="boo">
+	<div id="header"></div>
+	<div id="timer_countdown"></div>
+	<div id="dialogbox">
+		<div id="dialogboxhead">Song Options</div>
+		<div id="dialogboxbody">
+			<input id="bpm" name="weight" type="range" min="10" max="350" step="1" />
+			<label id="bpm_label">BPM</label>
+		</div>
+		<div id="dialogboxfoot">
+			<button id="start_song">Start!</button>
+		</div>
 	</div>
-	<div id="dialogboxfoot">
-		<button id="start_song">Start!</button>
-	</div>
+	<table id="menu">
+		<tr>
+			<td id="checkbox-cell">
+				<ul id="checkbox">
+					<li class="menu-item"><input id="metronome-controller" type="checkbox" checked>Metronome</li>
+					<li class="menu-item"><input id="scroller-controller" type="checkbox" checked>Auto-Scroll</li>
+					<li class="menu-item"><input id="song-player-controller" type="checkbox">Play Notes</li>
+				</ul>
+			</td>
+			<td id="pause-cell">
+				<div class="pause-controller">
+					<input type="checkbox" value="None" id="pause-controller" name="check" />
+					<label id="pause-controller-label" for="pause-controller" tabindex=1></label>
+				</div>
+			</td>
+		</tr>
+	</table>
 </div>
-<div id="header"></div>
-<div id="boo"></div>
-<table id="menu">
-	<tr>
-		<td id="checkbox-cell">
-			<ul id="checkbox">
-				<li class="menu-item"><input id="metronome-controller" type="checkbox" checked>Metronome</li>
-				<li class="menu-item"><input id="scroller-controller" type="checkbox" checked>Auto-Scroll</li>
-				<li class="menu-item"><input id="song-player-controller" type="checkbox">Play Notes</li>
-			</ul>
-		</td>
-		<td id="pause-cell">
-			<div class="pause-controller">
-				<input type="checkbox" value="None" id="pause-controller" name="check" />
-				<label id="pause-controller-label" for="pause-controller" tabindex=1></label>
-			</div>
-		</td>
-	</tr>
-</table>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript">
 	var name = '{{s.name}}';
@@ -37,5 +39,8 @@
 	var keySignature = '{{s.key_signature}}';
 	var bars = {{bars|raw}};
 	var instrument = '{{ instrument }}';
+	var isDemo = '{{ is_demo }}';
+	var songId = '{{ song_id }}';
+	var bpmRequirement = '{{ bpm_requirement }}';
 </script>
 <script type="text/javascript" src="/build/test.js"></script>

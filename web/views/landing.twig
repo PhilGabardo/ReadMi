@@ -7,6 +7,17 @@
             <h2 id="description">An interactive sight reading tool that provides real-time feedback.</h2>
             <h2 id="welcome">Welcome,  {{ user_name }}!</h2>
         </header>
+        <u>Your Level:</u>&nbsp;{{ level }} <br>
+    </div>
+    <div id="level_info">
+        To advance to the next level, complete 5 of the following with 80% note accuracy or higher:
+        <table id="completion_criteria">
+            {% for song in completable_songs %}
+                <tr>
+                    <td class="{{ song.class }}"><div id="truncate_song">{{ song.name }}</div>&nbsp;at <u>&nbsp;{{ song.bpm }}&nbsp;BPM or higher</u></td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
     <script type="text/javascript" src="/build/landing.js"></script>
 {% endblock %}

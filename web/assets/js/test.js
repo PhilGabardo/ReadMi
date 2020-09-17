@@ -68,6 +68,8 @@ function startSession(audioStreamController) {
 		this.render = function(){
 			let dialogbox = document.getElementById('dialogbox');
 			dialogbox.style.display = "block";
+			dialogbox.style.left = 0.35 * boo.offsetWidth + "px";
+			dialogbox.style.width = 0.3 * boo.offsetWidth;
 			let bpm_slider = document.getElementById('bpm');
 			let bpm_label = document.getElementById('bpm_label');
 			bpm_label.innerHTML = bpm_slider.value + " BPM";
@@ -110,7 +112,7 @@ function startSession(audioStreamController) {
 		let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_slider.value, keySigStaffWidth);
 		let note_feedback = new NoteFeedback(renderer_context, note_scheduler.getScheduledNotes(), audioStreamController, beats_per_measure, bpm_slider.value, instrument)
 		let score_scroller = new ScoreScroller(beats_per_measure, bpm_slider.value, staveHeight, isPiano)
-		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, score_scroller, beats_per_measure, bpm_slider.value, bars.length);
+		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, score_scroller, beats_per_measure, bpm_slider.value, bars.length, isDemo, songId, bpmRequirement);
 		session_controller.start();
 	};
 

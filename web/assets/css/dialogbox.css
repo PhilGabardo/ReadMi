@@ -1,12 +1,12 @@
 #dialogbox{
+    width: 30%;
+    top: 40%;
     display:none;
     background:#000000;
-    width: 40%;
     z-index:10;
     border-radius:7px;
     position: fixed;
-    left: 30%;
-    top: 30%;
+    opacity: 90%;
 }
 
 #dialogbox #dialogboxhead{
