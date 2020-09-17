@@ -44,7 +44,6 @@ export default class SessionController {
 		this.menu.style.left = (boo.offsetWidth / 2 - this.menu.offsetWidth / 2) + "px";
 		this.menu.style.visibility = 'visible';
 		for (let i = 0; i < this.beats_per_measure; i++) {
-			console.log(this.bpm)
 			setTimeout(this.metronome.click, (60 * 1000 * i / this.bpm), this.metronome);
 			setTimeout(this.showCountDown, (60 * 1000 * i / this.bpm), this.beats_per_measure - i, 60 * 1000 / 2 / this.bpm);
 		}

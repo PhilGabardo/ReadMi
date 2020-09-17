@@ -2,6 +2,8 @@ import Timing from './timing'
 import Instruments from './instruments'
 import key_signatures from './key_signatures'
 import note_detection from './note_detection'
+import VexFlow from 'vexflow';
+
 
 export default class NoteFeedback {
 	constructor(rendering_context, vf_bars, audio_stream_controller, beats_per_measure, beats_per_minute, instrument) {
@@ -14,6 +16,7 @@ export default class NoteFeedback {
 		this.correctNotes = 0;
 		this.func = null;
 		this.instrument = instrument;
+		this.current_closest_freq = null;
 	}
 
 	start() {
@@ -65,13 +68,38 @@ export default class NoteFeedback {
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
 				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 				note_feedback.correctNotes++;
+				note_feedback.current_closest_freq = null;
 			} else {
 				if (percentage > minOffsettedPercentageThroughStave) {
 					// note flexibility
 					note_feedback.vf_bars[offsettedStavesPassed].unshift(noteObj);
+					if (currentNote) {
+						let freq_diff = Math.abs(expected_freq - actual_freq);
+						let current_closest_diff = note_feedback.current_closest_freq == null ? 1000000 : Math.abs(expected_freq - note_feedback.current_closest_freq);
+						if (current_closest_diff > freq_diff) {
+							note_feedback.current_closest_freq = actual_freq;
+						}
+					}
 					return;
 				}
-				note.setStyle({fillStyle: "red", strokeStyle: "red"});
+				if (note_feedback.current_closest_freq != null) {
+					let incorrectNote = note_detection.estimateNote(note_feedback.current_closest_freq);
+					let incorrectStaveNote = new VexFlow.Flow.StaveNote({
+						keys: [incorrectNote.key + "/" + incorrectNote.octave],
+						duration: note.duration,
+						clef: note.clef,
+						x: note.x
+					});
+					incorrectStaveNote.keys = [incorrectNote.key + "/" + incorrectNote.octave]
+					incorrectStaveNote.setContext(note_feedback.rendering_context);
+					incorrectStaveNote.setTickContext(note.getTickContext())
+					incorrectStaveNote.setStave(note.getStave())
+					incorrectStaveNote.setStyle({fillStyle: "red", strokeStyle: "red"});
+					incorrectStaveNote.draw();
+				} else {
+					note.setStyle({fillStyle: 'rgba(255, 0, 0, 0.8)', strokeStyle: "red"});
+				}
+				note_feedback.current_closest_freq = null;
 			}
 			note_feedback.last_note_key = expected_note.name;
 			note_feedback.last_note_octave = expected_note.octave;

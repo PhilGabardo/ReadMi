@@ -97,4 +97,5 @@ function getNoteFromSamples(buffer, sampleRate) {
 export default {
 	getFrequencyForNote: getFrequencyForNote,
 	getNoteFromSamples: getNoteFromSamples,
+	estimateNote: estimateNote,
 }
