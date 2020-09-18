@@ -24,28 +24,24 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	}})
 		.then(function(stream) {
 			console.log(stream);
-			let localPeerConnection = new RTCPeerConnection();
-			window.localPeerConnection = localPeerConnection;
-			stream.getTracks().forEach(track => localPeerConnection.addTrack(track, stream));
-			localPeerConnection.onnegotiationneeded = function() {
-				try {
-					console.log("TEST");
-					localPeerConnection.createOffer({offerToReceiveAudio: 1})
-						.then(function (offer) {
-							console.log(offer.sdp);
-							return offer.sdp.replace('\na=fmtp:111 minptime=10;useinbandfec=1', '');
-						}).then(function (sdp) {
-						localPeerConnection.setLocalDescription({type: 'offer', sdp: 'v=0\no=- 6674842143219411319 2 IN IP4 127.0.0.1\ns=-\nt=0 0\n'})
-						startSession(getAudioStreamController(localPeerConnection.getLocalStreams()[0]))
-					});
-				} catch (e) {
-					console.log(e);
-				}
-			};;
+			var pc = new RTCPeerConnection();
+			pc.createOffer({offerToReceiveAudio: 1})
+				.then(function (offer) {
+					let lines = offer.sdp.split('\n')
+						.map(l => l.trim()); // split and remove trailing CR
+					lines.forEach(function(line) {
+						console.log(line);
+						if (line.indexOf('a=fingerprint:') === 0) {
+							let parts = line.substr(14).split(' ');
+							console.log('algorithm', parts[0]);
+							console.log('fingerprint', parts[1]);
+						}
+					})
+				})
+			startSession(getAudioStreamController(stream))
 		})
 		// Error callback
 		.catch(function(err) {
-			console.log(err);
 			alert("ReadMi does not have access to your microphone.");
 		})
 } else {
