@@ -13,7 +13,7 @@ import ScoreScroller from './score_scroller'
 
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
-		autoGainControl: true,
+		autoGainControl: false,
 		channelCount: 2,
 		echoCancellation: false,
 		latency: 0,
@@ -33,7 +33,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 						.then(function (offer) {
 							return offer.sdp.replace('useinbandfec=1', 'useinbandfec=1; stereo=1; maxaveragebitrate=510000');
 						}).then(function (sdp) {
-						localPeerConnection.setLocalDescription({type: 'offer', sdp: 'v=0\no=- 6674842143219411319 2 IN IP4 127.0.0.1\ns=-\nt=0 0\n'})
+						localPeerConnection.setLocalDescription({type: 'offer', sdp: sdp})
 						startSession(getAudioStreamController(localPeerConnection.getLocalStreams()[0]))
 					});
 				} catch (e) {
