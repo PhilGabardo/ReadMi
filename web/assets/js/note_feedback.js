@@ -88,9 +88,9 @@ export default class NoteFeedback {
 						keys: [incorrectNote.key + "/" + incorrectNote.octave],
 						duration: note.duration,
 						clef: note.clef,
-						x: note.x
+						x: note.x,
 					});
-					incorrectStaveNote.keys = [incorrectNote.key + "/" + incorrectNote.octave]
+
 					incorrectStaveNote.setContext(note_feedback.rendering_context);
 					incorrectStaveNote.setTickContext(note.getTickContext())
 					incorrectStaveNote.setStave(note.getStave())
