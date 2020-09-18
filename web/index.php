@@ -24,6 +24,7 @@ require_once __DIR__ . '/actions/AccountViewAction.php';
 require_once __DIR__ . '/actions/CancelGoldAction.php';
 require_once __DIR__ . '/actions/RenewGoldAction.php';
 require_once __DIR__ . '/actions/SongCompletionAction.php';
+require_once __DIR__ . '/actions/AudioTestAction.php';
 require_once __DIR__ . '/misc/DifficultyComputer.php';
 
 
@@ -130,6 +131,10 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 $app->get('/compute_levels', function(Request $request) use($app) {
 	DifficultyComputer::updateLevels($app);
 	return '';
+});
+
+$app->get('/audio_test', function(Request $request) use($app) {
+	return \Actions\AudioTestAction::execute($app, $request);
 });
 
 // Our web handlers
