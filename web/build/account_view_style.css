@@ -1,11 +1,1 @@
-#account_info_header, #gold_info_header {
-    text-align: center;
-}
-
-#account_info, #gold_info {
-    margin: auto;
-    border: dotted;
-}
-
-
-/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vYWNjb3VudF92aWV3LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLGtCQUFrQjtBQUN0Qjs7QUFFQTtJQUNJLFlBQVk7SUFDWixjQUFjO0FBQ2xCIiwiZmlsZSI6ImFjY291bnRfdmlld19zdHlsZS5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIjYWNjb3VudF9pbmZvX2hlYWRlciwgI2dvbGRfaW5mb19oZWFkZXIge1xuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbn1cblxuI2FjY291bnRfaW5mbywgI2dvbGRfaW5mbyB7XG4gICAgbWFyZ2luOiBhdXRvO1xuICAgIGJvcmRlcjogZG90dGVkO1xufVxuIl0sInNvdXJjZVJvb3QiOiIifQ==*/
+#account_info_header,#gold_info_header{text-align:center}#account_info,#gold_info{margin:auto;border:dotted}

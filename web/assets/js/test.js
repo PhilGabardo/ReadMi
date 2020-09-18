@@ -14,7 +14,7 @@ import ScoreScroller from './score_scroller'
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
 		echoCancellation: false,
-		//noiseSuppression: false,
+		noiseSuppression: false,
 		autoGainControl: true,
 		sampleRate: 48000,
 		 sampleSize: 16,
@@ -33,7 +33,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 					localPeerConnection.createOffer({offerToReceiveAudio: 1})
 						.then(function (offer) {
 							console.log(offer.sdp);
-							return offer.sdp.replace('useinbandfec=1', 'useinbandfec=1; stereo=1; maxaveragebitrate=510000');
+							return offer.sdp.replace('useinbandfec=1', 'cbr=1');
 						}).then(function (sdp) {
 						localPeerConnection.setLocalDescription({type: 'offer', sdp: sdp})
 						startSession(getAudioStreamController(localPeerConnection.getLocalStreams()[0]))
