@@ -33,9 +33,9 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 					localPeerConnection.createOffer({offerToReceiveAudio: 1})
 						.then(function (offer) {
 							console.log(offer.sdp);
-							return offer.sdp.replace('\na=fmtp:111 minptime=10;useinbandfec=1', '');
+							return offer.sdp.replace('useinbandfec=1', 'useinbandfec=1; stereo=1; maxaveragebitrate=510000');
 						}).then(function (sdp) {
-						localPeerConnection.setLocalDescription({type: 'offer', sdp: 'v=0\no=- 6674842143219411319 2 IN IP4 127.0.0.1\ns=-\nt=0 0\n'})
+						localPeerConnection.setLocalDescription({type: 'offer', sdp: sdp})
 						startSession(getAudioStreamController(localPeerConnection.getLocalStreams()[0]))
 					});
 				} catch (e) {
