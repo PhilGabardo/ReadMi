@@ -14,7 +14,7 @@ import ScoreScroller from './score_scroller'
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
 		echoCancellation: false,
-		//noiseSuppression: true,
+		noiseSuppression: true,
 		autoGainControl: true,
 		sampleRate: 48000,
 		 sampleSize: 16,
@@ -27,9 +27,11 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		})
 		// Error callback
 		.catch(function(err) {
+			console.log(err);
 			alert("ReadMi does not have access to your microphone.");
 		})
 } else {
+	console.log(navigator.getUserMedia)
 	alert("ReadMi is not supported on this browser.");
 }
 
