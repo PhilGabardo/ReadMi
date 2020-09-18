@@ -14,8 +14,8 @@ import ScoreScroller from './score_scroller'
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
 		echoCancellation: false,
-		noiseSuppression: true,
-		autoGainControl: true,
+		noiseSuppression: false,
+		autoGainControl: false,
 		sampleRate: 48000,
 		 sampleSize: 16,
 		 volume: 1.0,
