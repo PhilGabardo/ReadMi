@@ -66,6 +66,7 @@ export default class NoteFeedback {
 			let expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
 			let actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
 			if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
+				console.log("CORRECT!");
 				note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});
 				note_feedback.correctNotes++;
 				note_feedback.current_closest_freq = null;
@@ -82,6 +83,10 @@ export default class NoteFeedback {
 					}
 					return;
 				}
+				console.log("Incorrect!");
+				console.log("Expected:" + expected_freq);
+				console.log("Actual:" + actual_freq);
+				console.log("Closest:" + note_feedback.current_closest_freq);
 				if (note_feedback.current_closest_freq != null) {
 					let incorrectNote = note_detection.estimateNote(note_feedback.current_closest_freq);
 					let incorrectStaveNote = new VexFlow.Flow.StaveNote({
