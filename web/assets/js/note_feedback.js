@@ -71,16 +71,16 @@ export default class NoteFeedback {
 				note_feedback.correctNotes++;
 				note_feedback.current_closest_freq = null;
 			} else {
+				if (currentNote) {
+					let freq_diff = Math.abs(expected_freq - actual_freq);
+					let current_closest_diff = note_feedback.current_closest_freq == null ? 1000000 : Math.abs(expected_freq - note_feedback.current_closest_freq);
+					if (current_closest_diff > freq_diff) {
+						note_feedback.current_closest_freq = actual_freq;
+					}
+				}
 				if (percentage > minOffsettedPercentageThroughStave) {
 					// note flexibility
 					note_feedback.vf_bars[offsettedStavesPassed].unshift(noteObj);
-					if (currentNote) {
-						let freq_diff = Math.abs(expected_freq - actual_freq);
-						let current_closest_diff = note_feedback.current_closest_freq == null ? 1000000 : Math.abs(expected_freq - note_feedback.current_closest_freq);
-						if (current_closest_diff > freq_diff) {
-							note_feedback.current_closest_freq = actual_freq;
-						}
-					}
 					return;
 				}
 				console.log("Incorrect!");
