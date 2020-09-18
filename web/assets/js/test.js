@@ -14,8 +14,8 @@ import ScoreScroller from './score_scroller'
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
 		echoCancellation: false,
-		noiseSuppression: false,
-		autoGainControl: false,
+		//noiseSuppression: false,
+		autoGainControl: true,
 		sampleRate: 48000,
 		 sampleSize: 16,
 		 volume: 1.0,
@@ -23,11 +23,25 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		 latency: 0,
 	}})
 		.then(function(stream) {
+			console.log(stream);
+			var pc = new RTCPeerConnection();
+			pc.createOffer({offerToReceiveAudio: 1})
+				.then(function (offer) {
+					let lines = offer.sdp.split('\n')
+						.map(l => l.trim()); // split and remove trailing CR
+					lines.forEach(function(line) {
+						console.log(line);
+						if (line.indexOf('a=fingerprint:') === 0) {
+							let parts = line.substr(14).split(' ');
+							console.log('algorithm', parts[0]);
+							console.log('fingerprint', parts[1]);
+						}
+					})
+				})
 			startSession(getAudioStreamController(stream))
 		})
 		// Error callback
 		.catch(function(err) {
-			console.log(err);
 			alert("ReadMi does not have access to your microphone.");
 		})
 } else {
