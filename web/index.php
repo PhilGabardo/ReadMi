@@ -108,7 +108,6 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 	$daily_double_row = random_int(0, 4);
 	$daily_double_col = random_int(0, 5);
 	$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['double'] = true;
-	$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['question'] = 'DAILY DOUBLE! ' .$questions_by_category[$categories[$daily_double_col]][$daily_double_row]['question'];
 	$clues = [];
 	$is_double = (bool)$request->get('double');
 	$multiplier = $is_double ? 400 : 200;
