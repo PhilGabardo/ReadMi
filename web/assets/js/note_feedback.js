@@ -3,6 +3,7 @@ import Instruments from './instruments'
 import key_signatures from './key_signatures'
 import note_detection from './note_detection'
 import VexFlow from 'vexflow';
+import AudioContext from './audio_context';
 
 
 export default class NoteFeedback {
@@ -62,6 +63,8 @@ export default class NoteFeedback {
 			let key = props.key;
 			let octave = props.octave;
 			let expected_note = key_signatures.getOffsetNote(key, octave, 0 - Instruments.getInstrumentKeyOffset(note_feedback.instrument));
+			console.log("Lag = " + (note_feedback.audio_stream_controller.getTimeSinceInit() - (note_feedback.audio_stream_controller.getContextTime() * 1000)));
+
 			let currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getByteTimeDomainData(), note_feedback.audio_stream_controller.getSampleRate());
 			let expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
 			let actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
