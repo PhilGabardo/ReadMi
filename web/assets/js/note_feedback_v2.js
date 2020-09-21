@@ -31,7 +31,7 @@ export default class NoteFeedbackV2 {
 	}
 
 	getSamplingBufferTime() {
-		return 0.08 * this.beats_per_measure * (60 / this.beats_per_minute) * 1000;
+		return 0.12 * this.beats_per_measure * (60 / this.beats_per_minute) * 1000;
 	}
 
 	start() {
