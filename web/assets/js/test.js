@@ -8,7 +8,7 @@ import SongPlayer from './song_player'
 import NoteScheduler from './note_scheduler'
 import TimingBar from './timing_bar'
 import KeySignatures from './key_signatures'
-import NoteFeedback from './note_feedback'
+import NoteFeedbackV2 from './note_feedback_v2'
 import ScoreScroller from './score_scroller'
 
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -54,7 +54,7 @@ function startSession(audioStreamController) {
 	renderer.resize(boo.offsetWidth, staveHeight * (vf_bars.length / 3 + 1));
 	let staveWidth = (boo.offsetWidth * 0.97 - keySigStaffWidth) / 3.0
 	let renderer_context = renderer.getContext();
-	let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure);
+	let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure, 0);
 	let score_renderer = new ScoreRenderer(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), isPiano);
 	if (isPiano) {
 		score_renderer.renderForPiano();
@@ -90,7 +90,8 @@ function startSession(audioStreamController) {
 		let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_slider.value, beats_per_measure);
 		songPlayer.setController();
 		let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_slider.value, keySigStaffWidth);
-		let note_feedback = new NoteFeedback(renderer_context, note_scheduler.getScheduledNotes(), audioStreamController, beats_per_measure, bpm_slider.value, instrument)
+		let note_scheduler_2 = new NoteScheduler(vf_bars, beat_value, beats_per_measure, bpm_slider.value);
+		let note_feedback = new NoteFeedbackV2(renderer_context, note_scheduler_2, audioStreamController, beats_per_measure, bpm_slider.value, instrument)
 		let score_scroller = new ScoreScroller(beats_per_measure, bpm_slider.value, staveHeight, isPiano)
 		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, score_scroller, beats_per_measure, bpm_slider.value, bars.length, isDemo, songId, bpmRequirement);
 		session_controller.start();

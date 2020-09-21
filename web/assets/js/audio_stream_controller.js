@@ -27,7 +27,7 @@ export default class AudioStreamController {
 	}
 
 	getContextTime() {
-		return this.audio_context.getOutputTimestamp().contextTime;
+		return this.audio_context.getOutputTimestamp().contextTime * 1000;
 	}
 
 	getTimeSinceInit() {

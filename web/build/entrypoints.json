@@ -80,6 +80,11 @@
         "/build/note_feedback.js"
       ]
     },
+    "note_feedback_v2": {
+      "js": [
+        "/build/note_feedback_v2.js"
+      ]
+    },
     "score_scroller": {
       "js": [
         "/build/score_scroller.js"

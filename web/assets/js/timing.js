@@ -12,6 +12,10 @@ export default class Timing {
 		Timing.pauseDelay += Date.now() - Timing.pauseStart
 	}
 
+	static getPauseDelay() {
+		return Timing.pauseDelay;
+	}
+
 	static getTimeSinceStart() {
 		return Date.now() - Timing.startTime - this.pauseDelay
 	}
