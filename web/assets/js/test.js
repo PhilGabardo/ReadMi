@@ -91,7 +91,7 @@ function startSession(audioStreamController) {
 					metronome.start()
 				}, 150);
 			}
-			bpm_slider.touchend = function () {
+			bpm_slider.ontouchend = function () {
 				if (future_metronome_click) {
 					clearTimeout(future_metronome_click);
 				}
