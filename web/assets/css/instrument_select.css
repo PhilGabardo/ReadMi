@@ -1,25 +1,20 @@
 #instrument_select_table {
-    width: 50%;
+    font-size: 3vh;
     margin-left: auto;
     margin-right: auto;
 }
 
 .instrument_select_table_cell {
-    border-radius: 25px;
+    border-radius: 2vh;
     background: black;
     background-position: left top;
     background-repeat: repeat;
     width: 200px;
-    height: 75px;
+    height: 12vh;
     color: white;
 }
 
 .instrument_select_table_cell:hover {
-    border-radius: 25px;
     background: beige;
-    background-position: left top;
-    background-repeat: repeat;
-    width: 200px;
-    height: 75px;
     color: black;
 }

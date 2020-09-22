@@ -29,6 +29,24 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		.catch(function(err) {
 			alert("ReadMi does not have access to your microphone.");
 		})
+} else if (navigator.getUserMedia) {
+	navigator.getUserMedia({audio: {
+		echoCancellation: false,
+		//noiseSuppression: true,
+		autoGainControl: true,
+		sampleRate: 48000,
+		sampleSize: 16,
+		volume: 1.0,
+		channelCount: 2,
+		latency: 0,
+	}})
+		.then(function(stream) {
+			startSession(getAudioStreamController(stream))
+		})
+		// Error callback
+		.catch(function(err) {
+			alert("ReadMi does not have access to your microphone.");
+		})
 } else {
 	alert("ReadMi is not supported on this browser.");
 }
