@@ -43,7 +43,11 @@ class DifficultyComputer {
 		}
 		foreach ($level_map as $level => $ids) {
 			$id_list = implode(',', $ids);
+			$premium_list = array_slice($ids, 0, 3);
+			$premium_list_str = implode(',', $premium_list);
 			$st = $app['pdo']->prepare("UPDATE readmi_songs set level = $level where id in ($id_list)");
+			$st->execute();
+			$st = $app['pdo']->prepare("UPDATE readmi_songs set is_premium = 1 where id in ($premium_list_str)");
 			$st->execute();
 		}
 	}

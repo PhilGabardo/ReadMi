@@ -108,11 +108,10 @@ abstract class LoggedInAction extends ReadMiAction {
 		$instrument = $user_info['instrument'];
 		$instrument_data = json_decode($user_info["{$instrument}_data"], true);
 		$level = $instrument_data['level'];
-		$next_level = $level + 1;
 		$completed_songs = array_flip($instrument_data['completed_songs']);
 		$is_piano = $instrument === 'piano' ? 1 : 0;
 
-		$st = $app['pdo']->prepare("SELECT id, name, level, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE piano = {$is_piano} and level <= {$next_level} ORDER BY level ASC");
+		$st = $app['pdo']->prepare("SELECT id, name, level, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE piano = {$is_piano} and level <= {$level} ORDER BY level ASC");
 		$st->execute();
 
 		$key_signatures = [];
@@ -127,7 +126,7 @@ abstract class LoggedInAction extends ReadMiAction {
 			$key_signatures[] = $row['key_signature'];
 			$time_signatures[] = $row['time_signature'];
 			$class = isset($completed_songs[$row['id']]) ? 'completed' : 'incomplete';
-			if ($row['level'] <= $level) {
+			if (!$row['is_premium'] || $is_premium_user) {
 				$row['class'] = $class;
 				$enabled_songs[] = $row;
 			} else {
