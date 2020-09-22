@@ -135,11 +135,6 @@
         "/build/account_view.js"
       ]
     },
-    "dialogbox": {
-      "css": [
-        "/build/dialogbox.css"
-      ]
-    },
     "filterable_table": {
       "css": [
         "/build/filterable_table.css"

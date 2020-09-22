@@ -47,7 +47,6 @@ Encore
 	.addEntry('account_view', './web/assets/js/account_view.js')
 
 	// will output as web/build/global.css
-	.addStyleEntry('dialogbox', './web/assets/css/dialogbox.css')
 	.addStyleEntry('filterable_table', './web/assets/css/filterable_table.css')
 	.addStyleEntry('layout_style', './web/assets/css/layout.css')
 	.addStyleEntry('demo_layout', './web/assets/css/demo_layout.css')

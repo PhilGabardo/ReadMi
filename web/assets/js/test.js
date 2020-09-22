@@ -10,6 +10,8 @@ import TimingBar from './timing_bar'
 import KeySignatures from './key_signatures'
 import NoteFeedbackV2 from './note_feedback_v2'
 import ScoreScroller from './score_scroller'
+import swal2 from 'sweetalert2';
+
 
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
@@ -27,6 +29,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		})
 		// Error callback
 		.catch(function(err) {
+			console.log(err);
 			alert("ReadMi does not have access to your microphone.");
 		})
 } else if (navigator.getUserMedia) {
@@ -45,6 +48,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		})
 		// Error callback
 		.catch(function(err) {
+			console.log(err);
 			alert("ReadMi does not have access to your microphone.");
 		})
 } else {
@@ -81,28 +85,36 @@ function startSession(audioStreamController) {
 	}
 	window.scrollTo(0, 0);
 
-	function CustomPrompt(){
+	swal2.fire({
+		title: 'Select your BPM',
+		html: `<input type="number" value="60" step="1" class="swal2-input" id="bpm">`,
+		input: 'range',
+		inputAttributes: {
+			min: 10,
+			max: 120,
+			step: 1
+		},
+		confirmButtonText: 'Start!',
+		onOpen: () => {
+			const inputRange = swal2.getInput()
+			const inputNumber = swal2.getContent().querySelector('#bpm')
 
-		this.render = function(){
-			let dialogbox = document.getElementById('dialogbox');
-			dialogbox.style.display = "block";
-			dialogbox.style.left = 0.35 * boo.offsetWidth + "px";
-			dialogbox.style.width = 0.3 * boo.offsetWidth;
-			let bpm_slider = document.getElementById('bpm');
-			let bpm_label = document.getElementById('bpm_label');
-			bpm_label.innerHTML = bpm_slider.value + " BPM";
-			bpm_slider.oninput = function() {
-				let bpm_value = this.value;
-				bpm_label.innerHTML = bpm_value + " BPM";
-			}
+			// remove default output
+			inputRange.nextElementSibling.style.display = 'none'
+			inputRange.style.width = '100%'
+
+			// sync input[type=number] with input[type=range]
+			inputRange.addEventListener('input', () => {
+				inputNumber.value = inputRange.value
+			})
+
+			// sync input[type=range] with input[type=number]
+			inputNumber.addEventListener('change', () => {
+				inputRange.value = inputNumber.value
+			})
 		}
-	}
-	let prompt = new CustomPrompt();
-	prompt.render();
-	let start_song = document.getElementById('start_song');
-	start_song.onclick = function() {
+	}).then((result) => {
 		audioStreamController.startStream();
-		document.getElementById('dialogbox').style.display = "none";
 		let bpm_slider = document.getElementById('bpm');
 		let metronome = new ScheduledMetronome(bpm_slider.value, beats_per_measure * vf_bars.length)
 		let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_slider.value, beats_per_measure);
@@ -113,6 +125,6 @@ function startSession(audioStreamController) {
 		let score_scroller = new ScoreScroller(beats_per_measure, bpm_slider.value, staveHeight, isPiano)
 		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, score_scroller, beats_per_measure, bpm_slider.value, bars.length, isDemo, songId, bpmRequirement);
 		session_controller.start();
-	};
+	})
 
 }
