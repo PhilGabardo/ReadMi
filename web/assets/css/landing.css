@@ -47,7 +47,7 @@
     width: 75%;
 }
 
-.toolbar_button {
+.readmi_button {
     font-size: min(2.5vw, 2.5vh);
     color: #494949 !important;
     text-decoration: none;
@@ -62,7 +62,7 @@
     opacity: 1;
 }
 
-.toolbar_button:hover {
+.readmi_button:hover {
     color: #ffffff !important;
     background: #f6b93b;
     border-color: #f6b93b !important;
