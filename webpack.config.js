@@ -47,6 +47,7 @@ Encore
 	.addEntry('account_view', './web/assets/js/account_view.js')
 	.addEntry('draw_keyboard', './web/assets/js/draw_keyboard.js')
 
+
 	// will output as web/build/global.css
 	.addStyleEntry('filterable_table', './web/assets/css/filterable_table.css')
 	.addStyleEntry('layout_style', './web/assets/css/layout.css')

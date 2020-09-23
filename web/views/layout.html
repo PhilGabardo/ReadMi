@@ -8,10 +8,8 @@
 <body>
 <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/build/landing_style.css">
 <link rel="stylesheet" href="/build/layout_style.css">
 <link rel="stylesheet" href="/build/selectize_override.css">
-<link rel="stylesheet" href="/build/filterable_table.css">
 <link rel="stylesheet" href="/build/text.css">
 <div id="toolbar">
   <button id="logout" type="button" class="readmi_button">Logout</button>
@@ -20,56 +18,6 @@
 </div>
 <div class="main_content">
   {% block content %}{% endblock %}
-</div>
-<div class="sidenav">
-  <table id="headerTable">
-    <tr>
-      <input class="filter" type="text" placeholder="Search for a song or artist..">
-    </tr>
-    <tr>
-      <select id="keyFilterSelect" placeholder="Key Signature">
-        <option value="">Key Signature...</option>
-        {% for k in key_signatures %}
-        <option>{{ k }}</option>
-        {% endfor %}
-      </select>
-    </tr>
-    <tr>
-      <select id="timeFilterSelect" placeholder="Time Signature">
-        <option value="">Time Signature...</option>
-        {% for t in time_signatures %}
-        <option>{{ t }}</option>
-        {% endfor %}
-      </select>
-    </tr>
-  </table>
-  <table id="songsTable">
-    <tbody>
-    {% for s in enabled_songs %}
-    <tr data-value="{{s.id}}" class="{{s.class}}">
-      <td class="songName">
-        <span class="songTitle">{{ s.name }}</span><br>
-        <span class="songArtist">{{ s.artist }}</span><br>
-        <span class="songLevel">Level&nbsp;{{ s.level }}</span>
-      </td>
-      <td class="songKey">{{ s.key_signature }}</td>
-      <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>
-    </tr>
-    {% endfor %}
-    {% for s in disabled_songs %}
-    <tr class="songDisabled">
-      <td class="tooltiptext">Requires Gold Membership</td>
-      <td class="songName">
-        <span class="songTitle">{{ s.name }}</span><br>
-        <span class="songArtist">{{ s.artist }}</span><br>
-        <span class="songLevel">Level&nbsp;{{ s.level }}</span>
-      </td>
-      <td class="songKey">{{ s.key_signature }}</td>
-      <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-  </table>
 </div>
 <script type="text/javascript" src="/build/filter_table.js"></script>
 <script type="text/javascript" src="/build/layout.js"></script>

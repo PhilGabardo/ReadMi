@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
+    <link rel="stylesheet" href="/build/landing_style.css">
+    <link rel="stylesheet" href="/build/filterable_table.css">
     <div id="header">
         <header>
             <h1 id="_header">ReadMi</h1>
@@ -17,6 +19,56 @@
                     <td class="{{ song.class }}"><div id="truncate_song">{{ song.name }}</div>&nbsp;at <u>&nbsp;{{ song.bpm }}&nbsp;BPM or higher</u></td>
                 </tr>
             {% endfor %}
+        </table>
+    </div>
+    <div class="sidenav">
+        <table id="headerTable">
+            <tr>
+                <input class="filter" type="text" placeholder="Search for a song or artist..">
+            </tr>
+            <tr>
+                <select id="keyFilterSelect" placeholder="Key Signature">
+                    <option value="">Key Signature...</option>
+                    {% for k in key_signatures %}
+                        <option>{{ k }}</option>
+                    {% endfor %}
+                </select>
+            </tr>
+            <tr>
+                <select id="timeFilterSelect" placeholder="Time Signature">
+                    <option value="">Time Signature...</option>
+                    {% for t in time_signatures %}
+                        <option>{{ t }}</option>
+                    {% endfor %}
+                </select>
+            </tr>
+        </table>
+        <table id="songsTable">
+            <tbody>
+            {% for s in enabled_songs %}
+                <tr data-value="{{s.id}}" class="{{s.class}}">
+                    <td class="songName">
+                        <span class="songTitle">{{ s.name }}</span><br>
+                        <span class="songArtist">{{ s.artist }}</span><br>
+                        <span class="songLevel">Level&nbsp;{{ s.level }}</span>
+                    </td>
+                    <td class="songKey">{{ s.key_signature }}</td>
+                    <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>
+                </tr>
+            {% endfor %}
+            {% for s in disabled_songs %}
+                <tr class="songDisabled">
+                    <td class="tooltiptext">Requires Gold Membership</td>
+                    <td class="songName">
+                        <span class="songTitle">{{ s.name }}</span><br>
+                        <span class="songArtist">{{ s.artist }}</span><br>
+                        <span class="songLevel">Level&nbsp;{{ s.level }}</span>
+                    </td>
+                    <td class="songKey">{{ s.key_signature }}</td>
+                    <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
         </table>
     </div>
     <script type="text/javascript" src="/build/landing.js"></script>

@@ -1,17 +1,54 @@
-import Instruments from './instruments';
 import DrawKeyboard from './draw_keyboard'
 import NoteDetection from './note_detection'
 import Timing from './timing'
+import Vexflow from 'vexflow'
 
 export default class NoteHinter {
 
-	constructor(beats_per_minute, beats_per_measure, vf_bars) {
-		this.canvas = document.getElementById("canvas");
-		this.canvas.style.display = "block";
+	static getHinter(instrument, beats_per_minute, beats_per_measure, vf_bars) {
+		switch (instrument) {
+			case 'piano':
+				return new PianoNoteHinter(beats_per_minute, beats_per_measure, vf_bars)
+			/*case 'guitar':
+				return new GuitarNoteHinter(beats_per_minute, beats_per_measure, vf_bars)*/
+			default:
+				return new NoteHinter(beats_per_minute, beats_per_measure, vf_bars)
+		}
 
+	}
+
+	start() {}
+
+	pause() {}
+
+	draw(note_hinter) {}
+
+	hintNextNote(offsettedStavesPassed) {}
+
+	resume() {}
+
+	setController() {}
+
+	stop() {}
+}
+
+export class PianoNoteHinter extends NoteHinter {
+	constructor(beats_per_minute, beats_per_measure, vf_bars) {
+		super()
 		let boo = document.getElementById("boo");
-		this.canvas.style.left = (boo.offsetWidth / 2 - this.canvas.offsetWidth / 2) + "px";
-		this.draw_keyboard = new DrawKeyboard(canvas);
+		this.canvas = document.createElement('canvas');
+		this.canvas.style.width = Math.min(boo.offsetWidth * 0.6, 650) +"px";
+		this.canvas.style.height = Math.min(boo.offsetWidth * 0.6, 650) * 0.11 + "px";
+		this.canvas.style.display = "block";
+		this.canvas.style.position = "fixed";
+		this.canvas.style.bottom = '2%'
+		this.canvas.style.outline = "black 3px solid";
+		this.canvas.style.left = (0.15 * boo.offsetWidth) + "px";
+		document.body.appendChild(this.canvas);
+		this.canvas.width = 650;
+		this.canvas.height = 72;
+
+		this.draw_keyboard = new DrawKeyboard(this.canvas, 650, 72);
 		this.draw_keyboard.init()
 		this.beats_per_minute = beats_per_minute
 		this.beats_per_measure = beats_per_measure
@@ -24,6 +61,16 @@ export default class NoteHinter {
 
 	pause() {
 		window.clearInterval(this.func);
+	}
+
+	setController() {
+		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
+			if (event.target.checked) {
+				this.canvas.style.display = "block";
+			} else {
+				this.canvas.style.display = "none";
+			}
+		})
 	}
 
 	draw(note_hinter) {
@@ -85,3 +132,71 @@ export default class NoteHinter {
 		this.canvas.style.display = "none";
 	}
 }
+
+export class GuitarNoteHinter extends NoteHinter {
+	constructor(beats_per_minute, beats_per_measure, vf_bars) {
+		super()
+		let div = document.createElement('div');
+		div.style.width = Math.min(boo.offsetWidth * 0.6, 650) +"px";
+		div.style.height = Math.min(boo.offsetWidth * 0.6, 650) * 0.11 + "px";
+		div.style.display = "block";
+		div.style.position = "fixed";
+		div.style.bottom = '2%'
+		div.style.outline = "black 3px solid";
+		div.style.left = (0.15 * boo.offsetWidth) + "px";
+		document.body.appendChild(div);
+		var renderer = new Vexflow.Flow.Renderer(div, Vexflow.Flow.Renderer.Backends.SVG);
+		var context = renderer.getContext()
+
+		// Size our SVG:
+		renderer.resize(Math.min(boo.offsetWidth * 0.6, 650), Math.min(boo.offsetWidth * 0.6, 650) * 0.11);
+
+		// Create a tab stave of width 400 at position 10, 40 on the canvas.
+		var stave = new Vexflow.Flow.TabStave(10, 40, Math.min(boo.offsetWidth * 0.3, 650));
+		stave.addClef("tab").setContext(context).draw();
+
+		var notes = [
+			// A single note
+			new Vexflow.Flow.TabNote({
+				positions: [{str: 3, fret: 7}],
+				duration: "q"}),
+
+			// A chord with the note on the 3rd string bent
+			new Vexflow.Flow.TabNote({
+				positions: [{str: 2, fret: 10},
+					{str: 3, fret: 9}],
+				duration: "q"}).
+			addModifier(new Vexflow.Flow.Bend("Full"), 1),
+
+			// A single note with a harsh vibrato
+			new Vexflow.Flow.TabNote({
+				positions: [{str: 2, fret: 5}],
+				duration: "h"}).
+			addModifier(new Vexflow.Flow.Vibrato().setHarsh(true).setVibratoWidth(70), 0)
+		];
+
+		Vexflow.Flow.Formatter.FormatAndDraw(context, stave, notes);
+	}
+
+	start() {
+		this.func = setInterval(this.draw, 10, this);
+	}
+
+	pause() {
+		window.clearInterval(this.func);
+	}
+
+	draw(note_hinter) {
+	}
+
+	hintNextNote(offsettedStavesPassed) {
+	}
+
+	resume() {
+		this.start();
+	}
+
+	stop() {
+	}
+}
+

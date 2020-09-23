@@ -33,13 +33,20 @@
     }
 }
 
-#menu {
+#menu_div {
+    z-index: 100;
     position: fixed;
-    bottom: 5%;
-    width: 8em;
-    margin: -2.5em 0 0 0;
-    z-index: 500;
-    background: hsla(80, 90%, 40%, 0.7);
+    bottom: 0;
+    right: 0;
+    width: 25%;
+    height: auto;
+    margin-top: 2vh;
+}
+
+#menu {
+    margin: auto;
+    margin-bottom: 10px;
+    background: hsla(80, 90%, 40%, 1);
     color: white;
     font-weight: bold;
     font-size: large;
@@ -48,8 +55,6 @@
     border-right: none;
     box-shadow: 0 1px 3px black;
     border-radius: 3em 3em 3em 3em;
-    visibility: hidden;
-    table-layout: fixed;
     #checkbox-cell {
         width: 150px;
     }
@@ -78,7 +83,23 @@
 }
 
 #canvas {
+    outline: black 3px solid;
     position: fixed;
-    bottom: 0;
-    display: none;
+    bottom: 2%;
+    left: 2%;
+}
+
+#toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1050;
+}
+
+.main_content {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 100%; /* Set the width of the sidebar */
+    z-index: 1; /* Stay on top */
+    padding-top: 20px;
 }

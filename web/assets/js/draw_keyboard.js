@@ -1,6 +1,5 @@
 export default class KeyBoardDrawer {
 
-
 	constructor(canvas) {
 		this.ctx = canvas.getContext("2d");
 		this.width = canvas.width;

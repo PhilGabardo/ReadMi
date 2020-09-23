@@ -1,10 +1,9 @@
 import Timing from './timing'
 import swal from 'sweetalert';
-import NoteHinter from './note_hinter'
 
 export default class SessionController {
 	constructor(audio_stream_controller, note_feedback, metronome, song_player, timing_bar,
-	            score_scroller, beats_per_measure, bpm, total_bar_count, is_demo, song_id, bpm_requirement) {
+	            score_scroller, beats_per_measure, bpm, total_bar_count, is_demo, song_id, bpm_requirement, note_hinter) {
 		this.note_feedback = note_feedback;
 		this.metronome = metronome;
 		this.song_player = song_player;
@@ -16,14 +15,13 @@ export default class SessionController {
 		this.instrument = instrument;
 		this.playingState = true;
 		this.completion = null;
-		this.total_bar_count = total_bar_count;
-		this.menu = document.getElementById('menu');
+		this.total_bar_count = total_bar_count;;
 		this.pause_controller_label = document.getElementById('pause-controller-label');
 		this.is_demo = is_demo;
 		this.song_id = song_id;
 		this.bpm_requirement = bpm_requirement;
-		//this.note_hinter = note_hinter;
-		//this.note_hinter.hintNextNote(0);
+		this.note_hinter = note_hinter;
+		this.note_hinter.hintNextNote(0);
 		this.setPauseController();
 	}
 
@@ -44,8 +42,6 @@ export default class SessionController {
 
 	start() {
 		let boo = document.getElementById("boo");
-		this.menu.style.left = (boo.offsetWidth / 2 - this.menu.offsetWidth / 2) + "px";
-		this.menu.style.visibility = 'visible';
 		for (let i = 0; i < this.beats_per_measure; i++) {
 			setTimeout(this.metronome.click, (60 * 1000 * i / this.bpm), this.metronome);
 			setTimeout(this.showCountDown, (60 * 1000 * i / this.bpm), this.beats_per_measure - i, 60 * 1000 / 2 / this.bpm);
@@ -64,7 +60,7 @@ export default class SessionController {
 		session_controller.note_feedback.start();
 		session_controller.score_scroller.start()
 		session_controller.completion = setTimeout(session_controller.complete, session_controller.getTotalTimeInMs(), session_controller);
-		//session_controller.note_hinter.start();
+		session_controller.note_hinter.start();
 	}
 
 	invertState() {
@@ -75,7 +71,7 @@ export default class SessionController {
 			this.note_feedback.pause();
 			this.timing_bar.pause();
 			this.score_scroller.pause();
-			//this.note_hinter.pause();
+			this.note_hinter.pause();
 			this.playingState = false;
 			window.clearTimeout(this.completion);
 		} else {
@@ -85,7 +81,7 @@ export default class SessionController {
 			this.note_feedback.resume();
 			this.timing_bar.resume();
 			this.score_scroller.resume();
-			//this.note_hinter.resume();
+			this.note_hinter.resume();
 			this.playingState = true;
 			this.completion = setTimeout(this.complete, this.getTotalTimeInMs() - Timing.getTimeSinceStart(), this);
 		}
@@ -94,7 +90,6 @@ export default class SessionController {
 	complete(session_controller) {
 		Timing.pause();
 		session_controller.pause_controller_label.style.visibility = 'hidden';
-		session_controller.menu.style.visibility = 'hidden';
 		session_controller.metronome.pause();
 		session_controller.song_player.pause();
 		session_controller.note_feedback.pause();
@@ -102,7 +97,7 @@ export default class SessionController {
 		session_controller.timing_bar.clearLastChild();
 		session_controller.score_scroller.pause();
 		session_controller.playingState = false;
-		//session_controller.note_hinter.pause();
+		session_controller.note_hinter.pause();
 
 		// TODO: show result box
 		// TODO: log result to history table
