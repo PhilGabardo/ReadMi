@@ -58,6 +58,10 @@
     }
 }
 
+#bpm {
+    text-align: center;
+}
+
 #checkbox {
     list-style: none;
 }
@@ -71,4 +75,10 @@
     position: fixed;
     text-align: center;
     font-size: 300px;
+}
+
+#canvas {
+    position: fixed;
+    bottom: 0;
+    display: none;
 }

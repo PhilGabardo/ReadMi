@@ -41,6 +41,6 @@ export default class AudioStreamController {
 	}
 
 	getSampleRate() {
-		return AudioContext.getAudioContext().sampleRate;
+		return this.audio_context.sampleRate;
 	}
 }

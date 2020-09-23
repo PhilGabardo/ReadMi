@@ -13,6 +13,27 @@ let noteFrequencies =
 
 let noteNames = ["B", "A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C"];
 
+let noteNameIndexMap = {
+	"C": 0,
+	"C#": 1,
+	"DB": 1,
+	"D": 2,
+	"D#": 3,
+	"EB": 3,
+	"E": 4,
+	"F": 5,
+	"F#": 6,
+	"GB": 6,
+	"G": 7,
+	"G#": 8,
+	"AB": 8,
+	"A": 9,
+	"A#": 10,
+	"BB": 10,
+	"B": 11,
+};
+
+
 function estimateNote(frequency) {
 	let length = noteFrequencies.length;
 	let frequencyIndex = 0;
@@ -50,6 +71,11 @@ function getFrequencyForNote(note_name, note_octave) {
 		}
 	}
 	return noteFrequencies[noteFrequencies.length - 1 - (note_octave * noteNames.length) - (noteNames.length - noteNameIndex - 1)]
+}
+
+function getIndexForNote(note_name, note_octave) {
+	console.log(note_name);
+	return note_octave * 12 + noteNameIndexMap[note_name]
 }
 
 function getNoteFromSamples(buffer, sampleRate) {
@@ -98,4 +124,5 @@ export default {
 	getFrequencyForNote: getFrequencyForNote,
 	getNoteFromSamples: getNoteFromSamples,
 	estimateNote: estimateNote,
+	getIndexForNote: getIndexForNote,
 }

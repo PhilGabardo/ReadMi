@@ -119,6 +119,7 @@ function startSession(audioStreamController) {
 		let metronome = new ScheduledMetronome(bpm_slider.value, beats_per_measure * vf_bars.length)
 		let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_slider.value, beats_per_measure);
 		songPlayer.setController();
+		//let note_hinter = new NoteHinter(bpm_slider.value, beats_per_measure, note_scheduler.getScheduledNotes());
 		let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_slider.value, keySigStaffWidth);
 		let note_scheduler_2 = new NoteScheduler(vf_bars, beat_value, beats_per_measure, bpm_slider.value);
 		let note_feedback = new NoteFeedbackV2(renderer_context, note_scheduler_2, audioStreamController, beats_per_measure, bpm_slider.value, instrument)
@@ -126,5 +127,4 @@ function startSession(audioStreamController) {
 		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, score_scroller, beats_per_measure, bpm_slider.value, bars.length, isDemo, songId, bpmRequirement);
 		session_controller.start();
 	})
-
 }

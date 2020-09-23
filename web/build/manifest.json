@@ -6,6 +6,7 @@
   "build/bar_computer.js": "/build/bar_computer.js",
   "build/demo.js": "/build/demo.js",
   "build/demo_layout.css": "/build/demo_layout.css",
+  "build/draw_keyboard.js": "/build/draw_keyboard.js",
   "build/feedback.js": "/build/feedback.js",
   "build/feedback_style.css": "/build/feedback_style.css",
   "build/filter_table.js": "/build/filter_table.js",

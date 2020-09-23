@@ -45,6 +45,7 @@ Encore
 	.addEntry('audio_context', './web/assets/js/audio_context.js')
 	.addEntry('feedback', './web/assets/js/feedback.js')
 	.addEntry('account_view', './web/assets/js/account_view.js')
+	.addEntry('draw_keyboard', './web/assets/js/draw_keyboard.js')
 
 	// will output as web/build/global.css
 	.addStyleEntry('filterable_table', './web/assets/css/filterable_table.css')

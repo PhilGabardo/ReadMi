@@ -1,5 +1,6 @@
 import Timing from './timing'
 import swal from 'sweetalert';
+import NoteHinter from './note_hinter'
 
 export default class SessionController {
 	constructor(audio_stream_controller, note_feedback, metronome, song_player, timing_bar,
@@ -21,6 +22,8 @@ export default class SessionController {
 		this.is_demo = is_demo;
 		this.song_id = song_id;
 		this.bpm_requirement = bpm_requirement;
+		//this.note_hinter = note_hinter;
+		//this.note_hinter.hintNextNote(0);
 		this.setPauseController();
 	}
 
@@ -61,6 +64,7 @@ export default class SessionController {
 		session_controller.note_feedback.start();
 		session_controller.score_scroller.start()
 		session_controller.completion = setTimeout(session_controller.complete, session_controller.getTotalTimeInMs(), session_controller);
+		//session_controller.note_hinter.start();
 	}
 
 	invertState() {
@@ -71,6 +75,7 @@ export default class SessionController {
 			this.note_feedback.pause();
 			this.timing_bar.pause();
 			this.score_scroller.pause();
+			//this.note_hinter.pause();
 			this.playingState = false;
 			window.clearTimeout(this.completion);
 		} else {
@@ -80,6 +85,7 @@ export default class SessionController {
 			this.note_feedback.resume();
 			this.timing_bar.resume();
 			this.score_scroller.resume();
+			//this.note_hinter.resume();
 			this.playingState = true;
 			this.completion = setTimeout(this.complete, this.getTotalTimeInMs() - Timing.getTimeSinceStart(), this);
 		}
@@ -96,6 +102,7 @@ export default class SessionController {
 		session_controller.timing_bar.clearLastChild();
 		session_controller.score_scroller.pause();
 		session_controller.playingState = false;
+		//session_controller.note_hinter.pause();
 
 		// TODO: show result box
 		// TODO: log result to history table

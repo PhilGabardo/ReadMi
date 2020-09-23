@@ -2,7 +2,6 @@ import VexFlow from 'vexflow';
 import key_signatures from './key_signatures'
 import bar_computer from './bar_computer'
 import note_detection from './note_detection'
-import NoteHinter from './note_hinter'
 import Instruments from './instruments'
 import Timing from './timing'
 import SongPlayer from './song_player'
@@ -18,7 +17,6 @@ export default class ScoreRenderer {
 		this.beats_per_measure = beats_per_measure;
 		this.beat_value = beat_value;
 		this.name = name;
-		this.note_hinter = new NoteHinter();
 		this.scaling_factor = document.getElementById("boo").offsetWidth / 1280;
 
 		let keySigInfo = key_signatures.getKeySignatureInfo(key);

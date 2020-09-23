@@ -135,6 +135,11 @@
         "/build/account_view.js"
       ]
     },
+    "draw_keyboard": {
+      "js": [
+        "/build/draw_keyboard.js"
+      ]
+    },
     "filterable_table": {
       "css": [
         "/build/filterable_table.css"
