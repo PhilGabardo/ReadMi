@@ -86,7 +86,7 @@ function startSession(audioStreamController) {
 	window.scrollTo(0, 0);
 
 	swal2.fire({
-		title: 'Select your BPM',
+		title: 'Select BPM',
 		html: `<input type="number" value="60" step="1" class="swal2-input" id="bpm">`,
 		input: 'range',
 		inputAttributes: {

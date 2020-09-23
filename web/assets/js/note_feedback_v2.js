@@ -16,7 +16,6 @@ export default class NoteFeedbackV2 {
 				this.notes.push(vf_bars['note_percentages'][i][j]);
 			}
 		}
-		this.vf_bars = vf_bars;
 		this.beats_per_measure = beats_per_measure;
 		this.beats_per_minute = beats_per_minute;
 		this.totalNotes = 0;
@@ -47,6 +46,7 @@ export default class NoteFeedbackV2 {
 		let normalized_context_time = context_time - note_feedback.getCountDownTimeInMs() - Timing.getPauseDelay()
 		let note = note_feedback.notes[0].note;
 		if (note.attrs.type === 'GhostNote') {
+			console.log(note_feedback.notes)
 			note_feedback.notes.shift()
 			return;
 		}
