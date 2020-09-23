@@ -34,7 +34,7 @@ export default class ScoreRenderer {
 		for (let row = 0; row < (this.scheduled_notes.length / 3); row++) {
 
 			// treble
-			let trebleKeySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row, this.keySigStaffWidth);
+			let trebleKeySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row + 50, this.keySigStaffWidth);
 			//trebleKeySigStaff.options.spacing_between_lines_px = 15 * this.scaling_factor;
 			trebleKeySigStaff.addClef('treble');
 			if (row === 0) {
@@ -45,7 +45,7 @@ export default class ScoreRenderer {
 			trebleKeySigStaff.setContext(this.context).draw();
 
 			//base
-			let bassKeySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row + staveHeight / 2, this.keySigStaffWidth);
+			let bassKeySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row + staveHeight / 2 + 50, this.keySigStaffWidth);
 			//bassKeySigStaff.options.spacing_between_lines_px = 15 * this.scaling_factor;
 			bassKeySigStaff.addClef('bass');
 			let baseKeySig = new VexFlow.Flow.KeySignature(this.key.replace(' major', '').replace(' minor', 'm'));
@@ -56,12 +56,12 @@ export default class ScoreRenderer {
 				let horiz_offset =  leftPadding + this.keySigStaffWidth + this.staveWidth * col;
 
 				// treble
-				let trebleStaff = new VexFlow.Flow.Stave(horiz_offset, staveHeight * row, this.staveWidth);
+				let trebleStaff = new VexFlow.Flow.Stave(horiz_offset, staveHeight * row + 50, this.staveWidth);
 				//trebleStaff.options.spacing_between_lines_px = 15 * this.scaling_factor;
 				trebleStaff.setContext(this.context).draw();
 
 				// bass
-				let bassStaff = new VexFlow.Flow.Stave(horiz_offset, staveHeight * row + staveHeight / 2, this.staveWidth);
+				let bassStaff = new VexFlow.Flow.Stave(horiz_offset, staveHeight * row + staveHeight / 2 + 50, this.staveWidth);
 				//bassStaff.options.spacing_between_lines_px = 15 * this.scaling_factor;
 				bassStaff.setContext(this.context).draw();
 
@@ -123,7 +123,7 @@ export default class ScoreRenderer {
 		let staveHeight = 150 * this.scaling_factor;
 		let voices = [];
 		for (let row = 0; row < (this.scheduled_notes.length / 3); row++) {
-			let keySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row, this.keySigStaffWidth);
+			let keySigStaff = new VexFlow.Flow.Stave(leftPadding, staveHeight * row + 50, this.keySigStaffWidth);
 			//keySigStaff.options.spacing_between_lines_px = 15 * this.scaling_factor;
 			keySigStaff.addClef('treble');
 			if (row === 0) {
@@ -134,7 +134,7 @@ export default class ScoreRenderer {
 			keySigStaff.setContext(this.context).draw();
 			for (let col = 0; col < 3; col++) {
 				let horiz_offset =  leftPadding + this.keySigStaffWidth + this.staveWidth * col;
-				let staff = new VexFlow.Flow.Stave(horiz_offset, staveHeight * row, this.staveWidth);
+				let staff = new VexFlow.Flow.Stave(horiz_offset, staveHeight * row + 50, this.staveWidth);
 				//staff.options.spacing_between_lines_px = 15 * this.scaling_factor;
 				staff.setContext(this.context).draw();
 				let scheduled_notes = this.scheduled_notes[row * 3 + col];

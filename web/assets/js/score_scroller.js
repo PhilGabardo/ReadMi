@@ -52,7 +52,7 @@ function scrollToNiceSpot(stavesPassed, percentageThroughStave, staveHeight, is_
 	if (stavesPassed > 1) {
 		penalty -= stave_height / 2;
 	}
-	window.scrollTo(0, height - penalty)
+	window.scrollTo(0, height - penalty - 50)
 }
 
 

@@ -51,7 +51,7 @@ export default class TimingBar {
 }
 
 function getPosition(stavesPassed, percentageThroughStave, leftPadding, staveHeight, staveWidth, keySigStaffWidth) {
-	let height = Math.floor(stavesPassed / 3) * staveHeight;
+	let height = Math.floor(stavesPassed / 3) * staveHeight + 50;
 	let width = leftPadding + (stavesPassed % 3) * staveWidth + (percentageThroughStave * staveWidth);
 	width += keySigStaffWidth;
 	return {
