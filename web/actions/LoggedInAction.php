@@ -24,9 +24,10 @@ abstract class LoggedInAction extends ReadMiAction {
 		'tenor_saxophone' => 'Tenor Saxophone',
 		'soprano_saxophone' => 'Soprano Saxophone',
 		'clarinet' => 'Clarinet',
-		'bass_clarinet' => 'Bass Clarinet',
+		//'bass_clarinet' => 'Bass Clarinet',
 		'french_horn' => 'French Horn',
 		'trumpet' => 'Trumpet',
+		'singing' => 'Singing',
 	];
 
 	protected static function getPublishableKey() : string {

@@ -11,6 +11,8 @@ export default class NoteHinter {
 				return new PianoNoteHinter(beats_per_minute, beats_per_measure, vf_bars)
 			/*case 'guitar':
 				return new GuitarNoteHinter(beats_per_minute, beats_per_measure, vf_bars)*/
+			case 'singing':
+				return new SingingNoteHinter(beats_per_minute, beats_per_measure, vf_bars)
 			default:
 				return new NoteHinter(beats_per_minute, beats_per_measure, vf_bars)
 		}
@@ -155,6 +157,61 @@ export class PianoNoteHinter extends NoteHinter {
 		let octave = props.octave;
 		let index = NoteDetection.getIndexForNote(key, octave);
 		this.draw_keyboard.drawRedKey(index - 9, false)
+		super.hint(note)
+	}
+}
+
+export class SingingNoteHinter extends NoteHinter {
+	constructor(beats_per_minute, beats_per_measure, vf_bars) {
+		super(beats_per_minute, beats_per_measure, vf_bars)
+		let boo = document.getElementById("boo");
+		this.do_re_me_text = document.createElement('text');
+		this.do_re_me_text.style.display = "block";
+		this.do_re_me_text.style.position = "fixed";
+		this.do_re_me_text.style.bottom = '2%'
+		this.do_re_me_text.style.left = '40%';
+		this.do_re_me_text.style.fontSize = '5vw';
+		document.body.appendChild(this.do_re_me_text);
+	}
+
+	setController() {
+		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
+			if (event.target.checked) {
+				this.do_re_me_text.style.display = "block";
+			} else {
+				this.do_re_me_text.style.display = "none";
+			}
+		})
+	}
+
+	undoLastHint(key, octave) {
+		this.do_re_me_text.innerHTML = '';
+		super.undoLastHint(key, octave)
+	}
+
+	hint(note) {
+		let props = note.getKeyProps()[0];
+		let key = props.key;
+		let do_re_mi_map = {
+			"C": 'Do',
+			"C#": 'Di',
+			"DB": 'Di',
+			"D": 'Re',
+			"D#": 'Ri',
+			"EB": 'Ri',
+			"E": 'Me',
+			"F": 'Fa',
+			"F#": 'Fi',
+			"GB": 'Fi',
+			"G": 'Sol',
+			"G#": 'Si',
+			"AB": 'Si',
+			"A": 'La',
+			"A#": 'Li',
+			"BB": 'Li',
+			"B": 'Ti',
+		};
+		this.do_re_me_text.innerHTML = do_re_mi_map[key];
 		super.hint(note)
 	}
 }

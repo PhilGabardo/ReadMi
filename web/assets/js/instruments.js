@@ -9,6 +9,7 @@ function getInstrumentKeyOffset(instrument) {
 		'french_horn': 7,
 		'trumpet': 2,
 		'piano': 0,
+		'singing': 0,
 	}
 	return key_offsets[instrument];
 }
