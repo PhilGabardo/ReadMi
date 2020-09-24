@@ -44,6 +44,9 @@ export default class NoteFeedbackV2 {
 	draw(note_feedback) {
 		let context_time = note_feedback.audio_stream_controller.getContextTime();
 		let normalized_context_time = context_time - note_feedback.getCountDownTimeInMs() - Timing.getPauseDelay()
+		if (note_feedback.notes.length == 0) {
+			return;
+		}
 		let note = note_feedback.notes[0].note;
 		if (note.attrs.type === 'GhostNote') {
 			console.log(note_feedback.notes)

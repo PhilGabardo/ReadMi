@@ -108,3 +108,16 @@ svg {
     overflow: visible;
 }
 
+#note_hint_div {
+    position: fixed;
+    bottom: 3.5%;
+    left: 2%;
+}
+
+#note_hint {
+    background: #f8d486;
+    padding: 10px;
+    border-radius: 2em 2em 2em 2em;
+    display: none;
+}
+

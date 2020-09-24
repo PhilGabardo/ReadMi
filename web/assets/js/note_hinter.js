@@ -17,39 +17,9 @@ export default class NoteHinter {
 
 	}
 
-	start() {}
-
-	pause() {}
-
-	draw(note_hinter) {}
-
-	hintNextNote(offsettedStavesPassed) {}
-
-	resume() {}
-
-	setController() {}
-
-	stop() {}
-}
-
-export class PianoNoteHinter extends NoteHinter {
 	constructor(beats_per_minute, beats_per_measure, vf_bars) {
-		super()
-		let boo = document.getElementById("boo");
-		this.canvas = document.createElement('canvas');
-		this.canvas.style.width = Math.min(boo.offsetWidth * 0.6, 650) +"px";
-		this.canvas.style.height = Math.min(boo.offsetWidth * 0.6, 650) * 0.11 + "px";
-		this.canvas.style.display = "block";
-		this.canvas.style.position = "fixed";
-		this.canvas.style.bottom = '2%'
-		this.canvas.style.outline = "black 3px solid";
-		this.canvas.style.left = (0.15 * boo.offsetWidth) + "px";
-		document.body.appendChild(this.canvas);
-		this.canvas.width = 650;
-		this.canvas.height = 72;
-
-		this.draw_keyboard = new DrawKeyboard(this.canvas, 650, 72);
-		this.draw_keyboard.init()
+		this.note_hint = document.getElementById("note_hint");
+		this.note_hint.style.display = 'block'
 		this.beats_per_minute = beats_per_minute
 		this.beats_per_measure = beats_per_measure
 		this.vf_bars = vf_bars;
@@ -66,9 +36,9 @@ export class PianoNoteHinter extends NoteHinter {
 	setController() {
 		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
 			if (event.target.checked) {
-				this.canvas.style.display = "block";
+				this.note_hint.style.display = "block";
 			} else {
-				this.canvas.style.display = "none";
+				this.note_hint.style.display = "none";
 			}
 		})
 	}
@@ -101,27 +71,37 @@ export class PianoNoteHinter extends NoteHinter {
 			let props = note.getKeyProps()[0];
 			let key = props.key;
 			let octave = props.octave;
-			let index = NoteDetection.getIndexForNote(key, octave);
-			note_hinter.draw_keyboard.drawRedKey(index - 9, true)
-			note_hinter.hintNextNote(offsettedStavesPassed)
+			note_hinter.undoLastHint(key, octave);
+			let next_note = note_hinter.getNextNote(offsettedStavesPassed)
+			if (next_note) {
+				note_hinter.hint(next_note)
+			}
 		}
 	}
 
-	hintNextNote(offsettedStavesPassed) {
+	getNextNote(offsettedStavesPassed) {
 		for (let i = offsettedStavesPassed; i < this.vf_bars.length; i++) {
 			for (let j = 0; j < this.vf_bars[i].length; j++) {
 				let note = this.vf_bars[i][j].note;
 				if (note.attrs.type !== 'GhostNote') {
-					let props = note.getKeyProps()[0];
-					let key = props.key;
-					let octave = props.octave;
-					let index = NoteDetection.getIndexForNote(key, octave);
-					console.log(index)
-					this.draw_keyboard.drawRedKey(index - 9, false)
-					return;
+					return note;
 				}
 			}
 		}
+	}
+
+	undoLastHint(key, octave) {
+		this.note_hint.innerHTML = 'Next Note:';
+	}
+
+	hint(note) {
+		let props = note.getKeyProps()[0];
+		let key = props.key;
+		let octave = props.octave;
+		if (key.length > 1) {
+			key = key.charAt(0) + key.charAt(1).replace('B', '<sup>♭</sup>').replace('#', '<sup>#</sup>')
+		}
+		this.note_hint.innerHTML = 'Next Note:&nbsp;' + key + octave;
 	}
 
 	resume() {
@@ -130,6 +110,52 @@ export class PianoNoteHinter extends NoteHinter {
 
 	stop() {
 		this.canvas.style.display = "none";
+	}
+}
+
+export class PianoNoteHinter extends NoteHinter {
+	constructor(beats_per_minute, beats_per_measure, vf_bars) {
+		super(beats_per_minute, beats_per_measure, vf_bars)
+		let boo = document.getElementById("boo");
+		this.canvas = document.createElement('canvas');
+		this.canvas.style.width = Math.min(boo.offsetWidth * 0.6, 650) +"px";
+		this.canvas.style.height = Math.min(boo.offsetWidth * 0.6, 650) * 0.11 + "px";
+		this.canvas.style.display = "block";
+		this.canvas.style.position = "fixed";
+		this.canvas.style.bottom = '2%'
+		this.canvas.style.outline = "black 3px solid";
+		this.canvas.style.left = (0.15 * boo.offsetWidth) + "px";
+		document.body.appendChild(this.canvas);
+		this.canvas.width = 650;
+		this.canvas.height = 72;
+
+		this.draw_keyboard = new DrawKeyboard(this.canvas, 650, 72);
+		this.draw_keyboard.init()
+	}
+
+	setController() {
+		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
+			if (event.target.checked) {
+				this.canvas.style.display = "block";
+			} else {
+				this.canvas.style.display = "none";
+			}
+		})
+	}
+
+	undoLastHint(key, octave) {
+		let index = NoteDetection.getIndexForNote(key, octave);
+		this.draw_keyboard.drawRedKey(index - 9, true)
+		super.undoLastHint(key, octave)
+	}
+
+	hint(note) {
+		let props = note.getKeyProps()[0];
+		let key = props.key;
+		let octave = props.octave;
+		let index = NoteDetection.getIndexForNote(key, octave);
+		this.draw_keyboard.drawRedKey(index - 9, false)
+		super.hint(note)
 	}
 }
 

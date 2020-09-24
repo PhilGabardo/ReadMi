@@ -9,9 +9,7 @@
 					<ul id="checkbox">
 						<li class="menu-item"><input id="metronome-controller" type="checkbox" checked>Metronome</li>
 						<li class="menu-item"><input id="scroller-controller" type="checkbox" checked>Auto-Scroll</li>
-						{% if instrument == 'piano' %}
 						<li class="menu-item"><input id="note-hinter-controller" type="checkbox" checked>Hint Notes</li>
-						{% endif %}
 						<li class="menu-item"><input id="song-player-controller" type="checkbox">Play Notes</li>
 					</ul>
 				</td>
@@ -24,6 +22,7 @@
 			</tr>
 		</table>
 	</div>
+	<div id="note_hint_div"><text id="note_hint">Next Note: C5</text></div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript">

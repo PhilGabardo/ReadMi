@@ -21,7 +21,7 @@ export default class SessionController {
 		this.song_id = song_id;
 		this.bpm_requirement = bpm_requirement;
 		this.note_hinter = note_hinter;
-		this.note_hinter.hintNextNote(0);
+		this.note_hinter.hint(this.note_hinter.getNextNote(0));
 		this.setPauseController();
 	}
 
