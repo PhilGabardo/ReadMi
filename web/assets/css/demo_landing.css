@@ -1,7 +1,7 @@
 #header {
     text-align: center;
     font-size: xx-large;
- }
+}
 
 #level_info {
     text-align: center;
@@ -45,13 +45,6 @@
     left: 0;
     width: 75%;
     z-index: 1050;
-}
-
-.main_content {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 75%; /* Set the width of the sidebar */
-    z-index: 1; /* Stay on top */
-    padding-top: 5vh;
 }
 
 #welcome {

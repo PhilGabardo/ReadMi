@@ -175,6 +175,11 @@
         "/build/landing_style.css"
       ]
     },
+    "demo_landing_style": {
+      "css": [
+        "/build/demo_landing_style.css"
+      ]
+    },
     "instrument_select": {
       "css": [
         "/build/instrument_select.css"

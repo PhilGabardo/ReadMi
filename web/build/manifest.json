@@ -5,6 +5,7 @@
   "build/audio_stream_controller.js": "/build/audio_stream_controller.js",
   "build/bar_computer.js": "/build/bar_computer.js",
   "build/demo.js": "/build/demo.js",
+  "build/demo_landing_style.css": "/build/demo_landing_style.css",
   "build/demo_layout.css": "/build/demo_layout.css",
   "build/draw_keyboard.js": "/build/draw_keyboard.js",
   "build/feedback.js": "/build/feedback.js",

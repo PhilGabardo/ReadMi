@@ -56,6 +56,7 @@ Encore
 	.addStyleEntry('songs', './web/assets/css/songs.scss')
 	.addStyleEntry('selectize_override', './web/assets/css/selectize_override.css')
 	.addStyleEntry('landing_style', './web/assets/css/landing.css')
+	.addStyleEntry('demo_landing_style', './web/assets/css/demo_landing.css')
 	.addStyleEntry('instrument_select', './web/assets/css/instrument_select.css')
 	.addStyleEntry('feedback_style', './web/assets/css/feedback.css')
 	.addStyleEntry('account_view_style', './web/assets/css/account_view.css')

@@ -41,6 +41,7 @@
     width: 25%;
     height: auto;
     margin-top: 2vh;
+    font-size: 1.1vw;
 }
 
 #menu {
@@ -49,7 +50,6 @@
     background: hsla(80, 90%, 40%, 1);
     color: white;
     font-weight: bold;
-    font-size: large;
     text-align: left;
     border: solid hsla(80, 90%, 40%, 0.5);
     border-right: none;
@@ -101,5 +101,10 @@
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 100%; /* Set the width of the sidebar */
     z-index: 1; /* Stay on top */
-    padding-top: 20px;
 }
+
+
+svg {
+    overflow: visible;
+}
+
