@@ -13,6 +13,7 @@ import swal2 from 'sweetalert2';
 import NoteHinter from './note_hinter'
 import StaveUpdater from './non_piano_stave_updater'
 
+
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
 		echoCancellation: false,
