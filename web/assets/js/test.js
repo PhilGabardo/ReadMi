@@ -13,10 +13,6 @@ import swal2 from 'sweetalert2';
 import NoteHinter from './note_hinter'
 import StaveUpdater from './non_piano_stave_updater'
 
-
-let locOrientation = window.screen.lockOrientation || window.screen.mozLockOrientation || window.screen.msLockOrientation || window.screen.orientation.lock;
-locOrientation('landscape-primary');
-
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
 		echoCancellation: false,
@@ -77,7 +73,7 @@ function startSession(audioStreamController) {
 	let boo = document.getElementById("boo");
 	let renderer = new VexFlow.Flow.Renderer(boo, VexFlow.Flow.Renderer.Backends.SVG);
 	let staveHeight = isPiano ? 300 * document.getElementById("boo").offsetWidth / 1280 : 150 * document.getElementById("boo").offsetWidth / 1280;
-	renderer.resize(boo.offsetWidth, staveHeight * (vf_bars.length / 3 + 1));
+	//renderer.resize(boo.offsetWidth, staveHeight * (vf_bars.length / 3 + 1));
 	let staveWidth = (boo.offsetWidth * 0.97 - keySigStaffWidth) / 3.0
 	let renderer_context = renderer.getContext();
 	let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure, 0);
