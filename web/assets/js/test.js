@@ -14,6 +14,9 @@ import NoteHinter from './note_hinter'
 import StaveUpdater from './non_piano_stave_updater'
 
 
+let locOrientation = window.screen.lockOrientation || window.screen.mozLockOrientation || window.screen.msLockOrientation || window.screen.orientation.lock;
+locOrientation('landscape-primary');
+
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
 		echoCancellation: false,
