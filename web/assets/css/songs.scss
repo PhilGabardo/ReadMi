@@ -5,12 +5,15 @@
 
 #header {
     text-align: center;
-    margin: 0;
-    height: 25vh;
+    height: 25%;
+    display: table;
+    width: 100%
 }
 
 #_header {
-    padding: 11vh;
+    vertical-align: middle;
+    display: table-cell;
+    width: 100%;
 }
 
 .pause-controller {
@@ -140,5 +143,11 @@ svg {
         top: 100%;
         left: 0;
     }
+}
+
+body {
+    position: fixed;
+    height: 100%;
+    width: 100%;
 }
 

@@ -30,7 +30,7 @@ export default class NoteHinter {
 		note_hint_div.style.top = boo.offsetTop +total_stave_area + "px";
 		note_hint_div.style.left = KeySignatures.getKeySignatureStaffWidth(key) + "px";
 
-		this.note_hint.style.display = 'block'
+		//this.note_hint.style.display = 'block'
 		this.beats_per_minute = beats_per_minute
 		this.beats_per_measure = beats_per_measure
 		this.vf_bars = vf_bars;

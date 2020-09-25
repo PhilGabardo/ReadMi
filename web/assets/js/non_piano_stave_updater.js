@@ -27,7 +27,7 @@ export default class StaveUpdater {
 
 	renderForPiano() {
 		// treble
-		let total_area = 0.35 * window.innerHeight;
+		let total_area = 0.35 * (window.orientation == 0 ? window.innerWidth : window.innerHeight);
 		let stave_height = total_area / 2;
 		let spacing_between_lines_px = stave_height / 12;
 
@@ -109,9 +109,8 @@ export default class StaveUpdater {
 	}
 
 	renderForNonPiano() {
-
 		// treble
-		let total_area = 0.35 * window.innerHeight;
+		let total_area = 0.35 * (window.orientation == 0 ? window.innerWidth : window.innerHeight);
 		let stave_height = total_area / 2;
 		let spacing_between_lines_px = stave_height / 12;
 

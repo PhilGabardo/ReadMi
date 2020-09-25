@@ -77,15 +77,6 @@ function startSession(audioStreamController) {
 	let staveWidth = (boo.offsetWidth * 0.97 - keySigStaffWidth) / 3.0
 	let renderer_context = renderer.getContext();
 	let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure, 0);
-	/*
-	let score_renderer = new ScoreRenderer(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), isPiano);
-	if (isPiano) {
-		score_renderer.renderForPiano();
-	} else {
-		score_renderer.render();
-	}
-	*/
-	window.scrollTo(0, 0);
 
 	swal2.fire({
 		title: 'Select BPM',
