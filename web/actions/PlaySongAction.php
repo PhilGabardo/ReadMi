@@ -19,7 +19,7 @@ class PlaySongAction extends LoggedInAction {
 		$st->execute();
 		$song_row = $st->fetch(PDO::FETCH_ASSOC);
 		$bars = BarComputer::getBars(json_decode($song_row['notes'], true), $song_row['key_signature'],
-			(float)$song_row['beat_value'], (float) $song_row['beats_per_measure']);
+			(float)$song_row['beat_value'], (float) $song_row['beats_per_measure'], $instrument == 'piano');
 		return $app['twig']->render('play_song.twig', [
 				's' => $song_row,
 				'is_demo' => false,

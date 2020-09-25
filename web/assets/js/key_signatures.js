@@ -111,6 +111,12 @@ function getKeySignatureInfo(key) {
 	return key_sigs[key];
 }
 
+function getKeySignatureStaffWidth(key) {
+	let keySigInfo = getKeySignatureInfo(key);
+	let keySigNotesCount = Object.keys(keySigInfo.notes).length;
+	return 300 + keySigNotesCount * 10;
+}
+
 function getOffsetNote(key, octave, offset) {
 	let notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 	let startIndex = 0;
@@ -130,6 +136,7 @@ function getOffsetNote(key, octave, offset) {
 
 export default {
 	getKeySignatureInfo: getKeySignatureInfo,
-	getOffsetNote: getOffsetNote
+	getOffsetNote: getOffsetNote,
+	getKeySignatureStaffWidth: getKeySignatureStaffWidth,
 }
 

@@ -22,7 +22,7 @@ class AudioTestAction extends LoggedOutAction {
 				];
 			}
 		}
-		$bars = BarComputer::getBars($notes, 'C major', 4, 4);
+		$bars = BarComputer::getBars($notes, 'C major', 4, 4, true);
 
 		return $app['twig']->render('play_song_demo.twig', [
 			's' => [

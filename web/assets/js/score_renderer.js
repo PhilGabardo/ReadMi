@@ -65,7 +65,6 @@ export default class ScoreRenderer {
 				//bassStaff.options.spacing_between_lines_px = 15 * this.scaling_factor;
 				bassStaff.setContext(this.context).draw();
 
-				let scheduled_notes = this.scheduled_notes[row * 3 + col];
 				// Create a voice in 4/4 and add above notes
 				let trebleVoice = new VexFlow.Flow.Voice({num_beats: this.beats_per_measure,  beat_value: this.beat_value, resolution: VexFlow.Flow.RESOLUTION});
 				trebleVoice.setStrict(false);
@@ -73,6 +72,7 @@ export default class ScoreRenderer {
 				let bassVoice = new VexFlow.Flow.Voice({num_beats: this.beats_per_measure,  beat_value: this.beat_value, resolution: VexFlow.Flow.RESOLUTION});
 				bassVoice.setStrict(false);
 
+				/*
 				let trebleNotes = [];
 				let percentages = [];
 				let bassNotes = [];
@@ -107,15 +107,16 @@ export default class ScoreRenderer {
 
 				// Render voice
 				voices.push(trebleVoice);
-				voices.push(bassVoice);
+				voices.push(bassVoice);*/
 			}
 		}
+		/*
 		for (let i = 0; i < voices.length; i++) {
 			let notes  = voices[i].getTickables();
 			for (let j = 0; j < notes.length; j++) {
 				notes[j].draw();
 			}
-		}
+		}*/
 	}
 
 	render() {
@@ -141,6 +142,7 @@ export default class ScoreRenderer {
 				// Create a voice in 4/4 and add above notes
 				let voice = new VexFlow.Flow.Voice({num_beats: this.beats_per_measure,  beat_value: this.beat_value, resolution: VexFlow.Flow.RESOLUTION});
 				voice.setStrict(false);
+				/*
 				let notes = [];
 				for (let i in scheduled_notes) {
 					notes.push(scheduled_notes[i].note)
@@ -161,14 +163,16 @@ export default class ScoreRenderer {
 
 				// Render voice
 				voices.push(voice);
+				*/
 			}
 		}
+		/*
 		for (let i = 0; i < voices.length; i++) {
 			let notes  = voices[i].getTickables();
 			for (let j = 0; j < notes.length; j++) {
 				notes[j].draw();
 			}
-		}
+		}*/
 	}
 }
 

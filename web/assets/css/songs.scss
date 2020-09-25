@@ -1,9 +1,16 @@
+
 #boo {
     position: relative;
 }
 
 #header {
     text-align: center;
+    margin: 0;
+    height: 25vh;
+}
+
+#_header {
+    padding: 11vh;
 }
 
 .pause-controller {
@@ -36,12 +43,12 @@
 #menu_div {
     z-index: 100;
     position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 25%;
+    bottom: 2%;
+    right: 1%;
+    width: 18%;
     height: auto;
     margin-top: 2vh;
-    font-size: 1.1vw;
+    font-size: 1.3vw;
 }
 
 #menu {
@@ -69,6 +76,7 @@
 
 #checkbox {
     list-style: none;
+    padding: 1vw;
 }
 
 .menu-item {
@@ -119,5 +127,18 @@ svg {
     padding: 10px;
     border-radius: 2em 2em 2em 2em;
     display: none;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
+    html {
+        transform: rotate(-90deg);
+        transform-origin: left top;
+        width: 100vh;
+        height: 100vw;
+        overflow-x: hidden;
+        position: absolute;
+        top: 100%;
+        left: 0;
+    }
 }
 

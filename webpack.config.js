@@ -35,7 +35,6 @@ Encore
 	.addEntry('note_timing', './web/assets/js/note_timing.js')
 	.addEntry('note_feedback', './web/assets/js/note_timing.js')
 	.addEntry('note_feedback_v2', './web/assets/js/note_feedback_v2.js')
-	.addEntry('score_scroller', './web/assets/js/score_scroller.js')
 	.addEntry('landing', './web/assets/js/landing.js')
 	.addEntry('layout', './web/assets/js/layout.js')
 	.addEntry('login', './web/assets/js/login.js')
@@ -46,6 +45,7 @@ Encore
 	.addEntry('feedback', './web/assets/js/feedback.js')
 	.addEntry('account_view', './web/assets/js/account_view.js')
 	.addEntry('draw_keyboard', './web/assets/js/draw_keyboard.js')
+	.addEntry('non_piano_stave_updater', './web/assets/js/non_piano_stave_updater.js')
 
 
 	// will output as web/build/global.css

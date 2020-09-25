@@ -85,11 +85,6 @@
         "/build/note_feedback_v2.js"
       ]
     },
-    "score_scroller": {
-      "js": [
-        "/build/score_scroller.js"
-      ]
-    },
     "landing": {
       "js": [
         "/build/landing.js"
@@ -138,6 +133,11 @@
     "draw_keyboard": {
       "js": [
         "/build/draw_keyboard.js"
+      ]
+    },
+    "non_piano_stave_updater": {
+      "js": [
+        "/build/non_piano_stave_updater.js"
       ]
     },
     "filterable_table": {

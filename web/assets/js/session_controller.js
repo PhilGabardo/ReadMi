@@ -2,13 +2,11 @@ import Timing from './timing'
 import swal from 'sweetalert';
 
 export default class SessionController {
-	constructor(audio_stream_controller, note_feedback, metronome, song_player, timing_bar,
-	            score_scroller, beats_per_measure, bpm, total_bar_count, is_demo, song_id, bpm_requirement, note_hinter) {
+	constructor(audio_stream_controller, note_feedback, metronome, song_player, timing_bar, beats_per_measure, bpm, total_bar_count, is_demo, song_id, bpm_requirement, note_hinter, stave_updater) {
 		this.note_feedback = note_feedback;
 		this.metronome = metronome;
 		this.song_player = song_player;
 		this.timing_bar = timing_bar;
-		this.score_scroller = score_scroller;
 		this.audio_stream_controller = audio_stream_controller;
 		this.bpm = bpm;
 		this.beats_per_measure = beats_per_measure;
@@ -23,6 +21,8 @@ export default class SessionController {
 		this.note_hinter = note_hinter;
 		this.note_hinter.hint(this.note_hinter.getNextNote(0));
 		this.setPauseController();
+		this.stave_updater = stave_updater
+		this.timing = new Timing()
 	}
 
 	setPauseController() {
@@ -42,6 +42,7 @@ export default class SessionController {
 
 	start() {
 		let boo = document.getElementById("boo");
+		this.stave_updater.start()
 		for (let i = 0; i < this.beats_per_measure; i++) {
 			setTimeout(this.metronome.click, (60 * 1000 * i / this.bpm), this.metronome);
 			setTimeout(this.showCountDown, (60 * 1000 * i / this.bpm), this.beats_per_measure - i, 60 * 1000 / 2 / this.bpm);
@@ -50,52 +51,55 @@ export default class SessionController {
 	}
 
 	_start(session_controller) {
+		//session_controller.stave_updater.start()
 		let timerCountdown = document.getElementById("timer_countdown");
 		timerCountdown.style.display = 'none';
-		Timing.startTiming();
+		session_controller.timing.startTiming()
 		session_controller.pause_controller_label.style.visibility = 'visible';
 		session_controller.metronome.start();
 		session_controller.song_player.start();
-		session_controller.timing_bar.start();
+		//session_controller.timing_bar.start();
 		session_controller.note_feedback.start();
-		session_controller.score_scroller.start()
+		//session_controller.score_scroller.start()
 		session_controller.completion = setTimeout(session_controller.complete, session_controller.getTotalTimeInMs(), session_controller);
 		session_controller.note_hinter.start();
 	}
 
 	invertState() {
 		if (this.playingState) {
-			Timing.pause();
+			this.timing.pause()
+			this.stave_updater.pause()
 			this.metronome.pause();
 			this.song_player.pause();
 			this.note_feedback.pause();
-			this.timing_bar.pause();
-			this.score_scroller.pause();
+			//this.timing_bar.pause();
+			//this.score_scroller.pause();
 			this.note_hinter.pause();
 			this.playingState = false;
 			window.clearTimeout(this.completion);
 		} else {
-			Timing.resume();
+			this.timing.resume()
+			this.stave_updater.resume()
 			this.metronome.resume();
 			this.song_player.resume();
 			this.note_feedback.resume();
-			this.timing_bar.resume();
-			this.score_scroller.resume();
+			//this.timing_bar.resume();
+			//this.score_scroller.resume();
 			this.note_hinter.resume();
 			this.playingState = true;
-			this.completion = setTimeout(this.complete, this.getTotalTimeInMs() - Timing.getTimeSinceStart(), this);
+			this.completion = setTimeout(this.complete, this.getTotalTimeInMs() - this.timing.getTimeSinceStart(), this);
 		}
 	}
 
 	complete(session_controller) {
-		Timing.pause();
+		session_controller.timing.pause();
 		session_controller.pause_controller_label.style.visibility = 'hidden';
 		session_controller.metronome.pause();
 		session_controller.song_player.pause();
 		session_controller.note_feedback.pause();
-		session_controller.timing_bar.pause();
-		session_controller.timing_bar.clearLastChild();
-		session_controller.score_scroller.pause();
+		//session_controller.timing_bar.pause();
+		//session_controller.timing_bar.clearLastChild();
+		//session_controller.score_scroller.pause();
 		session_controller.playingState = false;
 		session_controller.note_hinter.pause();
 

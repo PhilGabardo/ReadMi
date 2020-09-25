@@ -22,9 +22,9 @@ class DifficultyComputer {
 				$non_piano_songs[] = $row;
 			}
 		}
-		$piano_difficulty_map = self::getDifficultyMap($piano_songs);
+		$piano_difficulty_map = self::getDifficultyMap($piano_songs, true);
 		self::updateLevelsFromDifficultyMap($app, $piano_difficulty_map);
-		$non_piano_difficulty_map = self::getDifficultyMap($non_piano_songs);
+		$non_piano_difficulty_map = self::getDifficultyMap($non_piano_songs, false);
 		self::updateLevelsFromDifficultyMap($app, $non_piano_difficulty_map);
 	}
 
@@ -52,7 +52,7 @@ class DifficultyComputer {
 		}
 	}
 
-	private static function getDifficultyMap(array $songs) : array {
+	private static function getDifficultyMap(array $songs, bool $piano) : array {
 		$max_accidental_complexity = 0;
 		$max_timing_complexity = 0;
 		foreach ($songs as $song) {
@@ -60,24 +60,24 @@ class DifficultyComputer {
 			$beat_value = $song['beat_value'];
 			$beats_per_measure = $song['beats_per_measure'];
 			$notes = json_decode($song['notes'], true);
-			$bars = BarComputer::getBars($notes, $key_signature, $beat_value, $beats_per_measure);
+			$bars = BarComputer::getBars($notes, $key_signature, $beat_value, $beats_per_measure, $piano);
 			$norm_notes = self::array_flatten($bars);
 			$max_timing_complexity = max($max_timing_complexity, self::getTimingComplexity($norm_notes, $beat_value));
 			$max_accidental_complexity = max($max_accidental_complexity, self::getAccidentalComplexity($norm_notes));
 		}
 		$difficulty_map = [];
 		foreach ($songs as $song) {
-			$difficulty_map[$song['id']] = self::computeDifficulty($song, $max_accidental_complexity, $max_timing_complexity);
+			$difficulty_map[$song['id']] = self::computeDifficulty($song, $max_accidental_complexity, $max_timing_complexity, $piano);
 		}
 		return $difficulty_map;
 	}
 
-	private static function computeDifficulty(array $song, float $max_accidental_complexity, float $max_timing_complexity) : float {
+	private static function computeDifficulty(array $song, float $max_accidental_complexity, float $max_timing_complexity, bool $piano) : float {
 		$key_signature = $song['key_signature'];
 		$beat_value = $song['beat_value'];
 		$beats_per_measure = $song['beats_per_measure'];
 		$notes = json_decode($song['notes'], true);
-		$bars = BarComputer::getBars($notes, $key_signature, $beat_value, $beats_per_measure);
+		$bars = BarComputer::getBars($notes, $key_signature, $beat_value, $beats_per_measure, $piano);
 		$norm_notes = self::array_flatten($bars);
 		$key_signature_complexity = self::getKeySignatureComplexity($key_signature);
 		$accidental_complexity = self::getAccidentalComplexity($norm_notes) / $max_accidental_complexity;

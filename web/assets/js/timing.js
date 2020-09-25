@@ -1,22 +1,22 @@
 export default class Timing {
-	static startTiming() {
-		Timing.startTime = Date.now();
-		Timing.pauseDelay = 0;
+	startTiming() {
+		this.startTime = Date.now();
+		this.pauseDelay = 0;
 	}
 
-	static pause() {
-		Timing.pauseStart = Date.now()
+	pause() {
+		this.pauseStart = Date.now()
 	}
 
-	static resume() {
-		Timing.pauseDelay += Date.now() - Timing.pauseStart
+	resume() {
+		this.pauseDelay += Date.now() - this.pauseStart
 	}
 
-	static getPauseDelay() {
-		return Timing.pauseDelay;
+	getPauseDelay() {
+		return this.pauseDelay;
 	}
 
-	static getTimeSinceStart() {
-		return Date.now() - Timing.startTime - this.pauseDelay
+	getTimeSinceStart() {
+		return Date.now() - this.startTime - this.pauseDelay
 	}
 }

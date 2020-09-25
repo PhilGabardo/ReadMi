@@ -74,7 +74,7 @@ class BarComputer {
 		'G' => 'n',
 	];
 
-	public static function getBars(array $notes, string $key, float $beat_value, float $beats_per_measure) {
+	public static function getBars(array $notes, string $key, float $beat_value, float $beats_per_measure, bool $is_piano) {
 		$sum = 0;
 		$bars = [];
 		$current_bar = [];
@@ -96,7 +96,7 @@ class BarComputer {
 					throw new Exception("Unknown note length: {$length_breakdown[$j]}");
 				}
 				$note_struct = [
-					'clef' => (int)$note['octave'] < 4 ? 'bass' : 'treble',
+					'clef' => (int)$note['octave'] < 4 && $is_piano ? 'bass' : 'treble',
 					'keys' => [$note['name'] . '/' . $note['octave']],
 					'duration' => self::TIMING_MAP[(string)$length_breakdown[$j]],
 					'raw_duration' => $length_breakdown[$j],

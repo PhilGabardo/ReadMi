@@ -9,9 +9,9 @@ import NoteScheduler from './note_scheduler'
 import TimingBar from './timing_bar'
 import KeySignatures from './key_signatures'
 import NoteFeedbackV2 from './note_feedback_v2'
-import ScoreScroller from './score_scroller'
 import swal2 from 'sweetalert2';
 import NoteHinter from './note_hinter'
+import StaveUpdater from './non_piano_stave_updater'
 
 
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -65,7 +65,7 @@ function startSession(audioStreamController) {
 	let isPiano = instrument == 'piano';
 	let beats_per_measure = beatsPerMeasure;
 	let header = document.getElementById("header")
-	header.innerHTML = '<h1 id="header" align="center" itemprop="headline">' + name + '</h1>'
+	header.innerHTML = '<h1 id="_header" align="center" itemprop="headline">' + name + '</h1>'
 	let beat_value = beatValue;
 	let vf_bars = bar_computer.getVFBars(bars);
 	let keySigInfo = KeySignatures.getKeySignatureInfo(keySignature);
@@ -78,12 +78,14 @@ function startSession(audioStreamController) {
 	let staveWidth = (boo.offsetWidth * 0.97 - keySigStaffWidth) / 3.0
 	let renderer_context = renderer.getContext();
 	let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure, 0);
+	/*
 	let score_renderer = new ScoreRenderer(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), isPiano);
 	if (isPiano) {
 		score_renderer.renderForPiano();
 	} else {
 		score_renderer.render();
 	}
+	*/
 	window.scrollTo(0, 0);
 
 	swal2.fire({
@@ -118,15 +120,20 @@ function startSession(audioStreamController) {
 		audioStreamController.startStream();
 		let bpm_slider = document.getElementById('bpm');
 		let metronome = new ScheduledMetronome(bpm_slider.value, beats_per_measure * vf_bars.length)
+		let stave_updater = new StaveUpdater(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), bpm_slider.value)
+		if (isPiano) {
+			stave_updater.renderForPiano()
+		} else {
+			stave_updater.renderForNonPiano()
+		}
 		let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_slider.value, beats_per_measure);
 		songPlayer.setController();
-		let note_hinter = NoteHinter.getHinter(instrument, bpm_slider.value, beats_per_measure, note_scheduler.getScheduledNotes());
+		let note_hinter = NoteHinter.getHinter(instrument, bpm_slider.value, beats_per_measure, note_scheduler.getScheduledNotes(), keySignature);
 		note_hinter.setController();
 		let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_slider.value, keySigStaffWidth);
 		let note_scheduler_2 = new NoteScheduler(vf_bars, beat_value, beats_per_measure, bpm_slider.value);
 		let note_feedback = new NoteFeedbackV2(renderer_context, note_scheduler_2, audioStreamController, beats_per_measure, bpm_slider.value, instrument)
-		let score_scroller = new ScoreScroller(beats_per_measure, bpm_slider.value, staveHeight, isPiano)
-		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, score_scroller, beats_per_measure, bpm_slider.value, bars.length, isDemo, songId, bpmRequirement, note_hinter);
+		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, beats_per_measure, bpm_slider.value, bars.length, isDemo, songId, bpmRequirement, note_hinter, stave_updater);
 		session_controller.start();
 	})
 }

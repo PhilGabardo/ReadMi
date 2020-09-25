@@ -1,28 +1,27 @@
 <link rel="stylesheet" href="/build/songs.css">
+<div id="header"></div>
+<div id="timer_countdown"></div>
+<div id="menu_div">
+	<table id="menu">
+		<tr>
+			<td id="checkbox-cell">
+				<ul id="checkbox">
+					<li class="menu-item"><input id="metronome-controller" type="checkbox" checked>Metronome</li>
+					<li class="menu-item"><input id="note-hinter-controller" type="checkbox" checked>Hint Notes</li>
+					<li class="menu-item"><input id="song-player-controller" type="checkbox">Play Notes</li>
+				</ul>
+			</td>
+			<td id="pause-cell">
+				<div class="pause-controller">
+					<input type="checkbox" value="None" id="pause-controller" name="check" />
+					<label id="pause-controller-label" for="pause-controller" tabindex=1></label>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="note_hint_div"><text id="note_hint">Next Note: C5</text></div>
 <div id="boo">
-	<div id="header"></div>
-	<div id="timer_countdown"></div>
-	<div id="menu_div">
-		<table id="menu">
-			<tr>
-				<td id="checkbox-cell">
-					<ul id="checkbox">
-						<li class="menu-item"><input id="metronome-controller" type="checkbox" checked>Metronome</li>
-						<li class="menu-item"><input id="scroller-controller" type="checkbox" checked>Auto-Scroll</li>
-						<li class="menu-item"><input id="note-hinter-controller" type="checkbox" checked>Hint Notes</li>
-						<li class="menu-item"><input id="song-player-controller" type="checkbox">Play Notes</li>
-					</ul>
-				</td>
-				<td id="pause-cell">
-					<div class="pause-controller">
-						<input type="checkbox" value="None" id="pause-controller" name="check" />
-						<label id="pause-controller-label" for="pause-controller" tabindex=1></label>
-					</div>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<div id="note_hint_div"><text id="note_hint">Next Note: C5</text></div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript">

@@ -2,36 +2,48 @@ import DrawKeyboard from './draw_keyboard'
 import NoteDetection from './note_detection'
 import Timing from './timing'
 import Vexflow from 'vexflow'
+import KeySignatures from './key_signatures'
 
 export default class NoteHinter {
 
-	static getHinter(instrument, beats_per_minute, beats_per_measure, vf_bars) {
+	static getHinter(instrument, beats_per_minute, beats_per_measure, vf_bars, key) {
 		switch (instrument) {
 			case 'piano':
-				return new PianoNoteHinter(beats_per_minute, beats_per_measure, vf_bars)
+				return new PianoNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 			/*case 'guitar':
 				return new GuitarNoteHinter(beats_per_minute, beats_per_measure, vf_bars)*/
 			case 'singing':
-				return new SingingNoteHinter(beats_per_minute, beats_per_measure, vf_bars)
+				return new SingingNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 			default:
-				return new NoteHinter(beats_per_minute, beats_per_measure, vf_bars)
+				return new NoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 		}
 
 	}
 
-	constructor(beats_per_minute, beats_per_measure, vf_bars) {
+	constructor(beats_per_minute, beats_per_measure, vf_bars, key) {
 		this.note_hint = document.getElementById("note_hint");
+		let boo = document.getElementById("boo");
+		let note_hint_div = document.getElementById("note_hint_div");
+
+
+		let total_stave_area = 0.35 * window.innerHeight;
+		note_hint_div.style.top = boo.offsetTop +total_stave_area + "px";
+		note_hint_div.style.left = KeySignatures.getKeySignatureStaffWidth(key) + "px";
+
 		this.note_hint.style.display = 'block'
 		this.beats_per_minute = beats_per_minute
 		this.beats_per_measure = beats_per_measure
 		this.vf_bars = vf_bars;
+		this.timing = new Timing()
 	}
 
 	start() {
+		this.timing.startTiming()
 		this.func = setInterval(this.draw, 10, this);
 	}
 
 	pause() {
+		this.timing.pause()
 		window.clearInterval(this.func);
 	}
 
@@ -46,7 +58,7 @@ export default class NoteHinter {
 	}
 
 	draw(note_hinter) {
-		let timeInMs = Timing.getTimeSinceStart();
+		let timeInMs = note_hinter.timing.getTimeSinceStart();
 		let bps = note_hinter.beats_per_minute / 60;
 		let beatsPassed = (timeInMs * bps) / (1000);
 		let stavesPassed = Math.floor(beatsPassed / note_hinter.beats_per_measure);
@@ -65,7 +77,7 @@ export default class NoteHinter {
 			}
 		}
 		let note = null;
-		if (note_hinter.vf_bars[offsettedStavesPassed][0] && note_hinter.vf_bars[offsettedStavesPassed][0].percentage < maxOffsettedPercentageThroughStave) {
+		if (note_hinter.vf_bars[offsettedStavesPassed].length > 0 && note_hinter.vf_bars[offsettedStavesPassed][0] && note_hinter.vf_bars[offsettedStavesPassed][0].percentage < maxOffsettedPercentageThroughStave) {
 			note = note_hinter.vf_bars[offsettedStavesPassed][0].note;
 			note_hinter.vf_bars[offsettedStavesPassed].shift();
 		}
@@ -107,7 +119,8 @@ export default class NoteHinter {
 	}
 
 	resume() {
-		this.start();
+		this.timing.resume()
+		this.func = setInterval(this.draw, 10, this);
 	}
 
 	stop() {
@@ -116,17 +129,17 @@ export default class NoteHinter {
 }
 
 export class PianoNoteHinter extends NoteHinter {
-	constructor(beats_per_minute, beats_per_measure, vf_bars) {
-		super(beats_per_minute, beats_per_measure, vf_bars)
+	constructor(beats_per_minute, beats_per_measure, vf_bars, key) {
+		super(beats_per_minute, beats_per_measure, vf_bars, key)
 		let boo = document.getElementById("boo");
 		this.canvas = document.createElement('canvas');
 		this.canvas.style.width = Math.min(boo.offsetWidth * 0.6, 650) +"px";
 		this.canvas.style.height = Math.min(boo.offsetWidth * 0.6, 650) * 0.11 + "px";
 		this.canvas.style.display = "block";
 		this.canvas.style.position = "fixed";
-		this.canvas.style.bottom = '2%'
+		this.canvas.style.bottom = '15%'
 		this.canvas.style.outline = "black 3px solid";
-		this.canvas.style.left = (0.15 * boo.offsetWidth) + "px";
+		this.canvas.style.left = (0.5 * boo.offsetWidth - Math.min(boo.offsetWidth * 0.6, 650) * 0.5) + "px";
 		document.body.appendChild(this.canvas);
 		this.canvas.width = 650;
 		this.canvas.height = 72;
@@ -162,13 +175,13 @@ export class PianoNoteHinter extends NoteHinter {
 }
 
 export class SingingNoteHinter extends NoteHinter {
-	constructor(beats_per_minute, beats_per_measure, vf_bars) {
-		super(beats_per_minute, beats_per_measure, vf_bars)
+	constructor(beats_per_minute, beats_per_measure, vf_bars, key) {
+		super(beats_per_minute, beats_per_measure, vf_bars, key)
 		let boo = document.getElementById("boo");
 		this.do_re_me_text = document.createElement('text');
 		this.do_re_me_text.style.display = "block";
 		this.do_re_me_text.style.position = "fixed";
-		this.do_re_me_text.style.bottom = '2%'
+		this.do_re_me_text.style.bottom = '10%'
 		this.do_re_me_text.style.left = '40%';
 		this.do_re_me_text.style.fontSize = '5vw';
 		document.body.appendChild(this.do_re_me_text);
@@ -262,10 +275,12 @@ export class GuitarNoteHinter extends NoteHinter {
 	}
 
 	start() {
+		this.timing.startTiming()
 		this.func = setInterval(this.draw, 10, this);
 	}
 
 	pause() {
+		this.timing.pause()
 		window.clearInterval(this.func);
 	}
 
@@ -276,7 +291,8 @@ export class GuitarNoteHinter extends NoteHinter {
 	}
 
 	resume() {
-		this.start();
+		this.timing.resume()
+		this.func = setInterval(this.draw, 10, this);
 	}
 
 	stop() {
