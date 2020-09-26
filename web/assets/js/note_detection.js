@@ -74,7 +74,6 @@ function getFrequencyForNote(note_name, note_octave) {
 }
 
 function getIndexForNote(note_name, note_octave) {
-	console.log(note_name);
 	return note_octave * 12 + noteNameIndexMap[note_name]
 }
 
