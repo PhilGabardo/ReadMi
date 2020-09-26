@@ -1,4 +1,5 @@
 import key_comparison from './key_comparison'
+import pitchfinder from 'pitchfinder'
 let noteFrequencies =
 	// B        A#        A      G#       G         F#       F        E         D#      D        C#       C
 	[7902.13, 7458.62, 7040.00, 6644.88, 6271.93, 5919.91, 5587.65, 5274.04, 4978.03, 4698.64, 4434.92, 4186.01,  // 8
@@ -78,8 +79,21 @@ function getIndexForNote(note_name, note_octave) {
 	return note_octave * 12 + noteNameIndexMap[note_name]
 }
 
-function getNoteFromSamples(buffer, sampleRate) {
-
+function getNoteFromSamples(buffer, sampleRate, expected_freq) {
+	if (expected_freq < 300) {
+		const detectPitch = new pitchfinder.AMDF({
+			sampleRate: 44100,
+			minFrequency: 82,
+			maxFrequency: expected_freq,
+			ratio: 5,
+			sensitivity: 0.1,
+		});
+		let pitch = detectPitch(buffer)
+		if (pitch != null) {
+			return estimateNote(fundamentalFreq);
+		}
+		return [];
+	}
 	// We use Autocorrelation to find the fundamental frequency.
 
 	// In order to correlate the signal with itself (hence the name of the algorithm), we will check two points 'k' frames away.
