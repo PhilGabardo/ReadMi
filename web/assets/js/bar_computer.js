@@ -2,6 +2,11 @@ import VexFlow from 'vexflow';
 function getVFBars(bars) {
 	let VF = VexFlow.Flow;
 	let vf_bars = [];
+	// treble
+	let total_area = 0.35 * (window.orientation == 0 ? window.innerWidth : window.innerHeight);
+	let stave_height = total_area / 2;
+	let spacing_between_lines_px = stave_height / 12;
+	let glyphs_size = (spacing_between_lines_px / 10) * 39;
 	for (let i = 0; i < bars.length; i++) {
 		let vf_bar = [];
 		let bar = bars[i];
@@ -10,6 +15,7 @@ function getVFBars(bars) {
 			if (note.ghost) {
 				vf_bar.push(new VF.GhostNote(note));
 			} else {
+				note.glyph_font_scale = glyphs_size;
 				let staveNote = new VF.StaveNote(note);
 				for (let k = 0; k < note.dot_count; k++) {
 					staveNote.addDot(0);

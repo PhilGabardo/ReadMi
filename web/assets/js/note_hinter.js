@@ -133,13 +133,14 @@ export class PianoNoteHinter extends NoteHinter {
 		super(beats_per_minute, beats_per_measure, vf_bars, key)
 		let boo = document.getElementById("boo");
 		this.canvas = document.createElement('canvas');
-		this.canvas.style.width = Math.min(boo.offsetWidth * 0.6, 650) +"px";
-		this.canvas.style.height = Math.min(boo.offsetWidth * 0.6, 650) * 0.11 + "px";
+		let width = window.orientation == 0 ? window.innerHeight : window.innerWidth;
+		this.canvas.style.width = '60%';
+		this.canvas.style.height = '10%';
 		this.canvas.style.display = "block";
 		this.canvas.style.position = "fixed";
-		this.canvas.style.bottom = '15%'
+		this.canvas.style.bottom = '20%'
 		this.canvas.style.outline = "black 3px solid";
-		this.canvas.style.left = (0.5 * boo.offsetWidth - Math.min(boo.offsetWidth * 0.6, 650) * 0.5) + "px";
+		this.canvas.style.left = '20%';
 		document.body.appendChild(this.canvas);
 		this.canvas.width = 650;
 		this.canvas.height = 72;
