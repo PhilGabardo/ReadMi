@@ -21,6 +21,7 @@ export default class StaveUpdater {
 		this.totalNotes = 0;
 		this.correctNotes = 0;
 		this.notes_on_staff = [];
+		this.last_step_time = null;
 		this.timing = new Timing()
 	}
 
