@@ -6,17 +6,23 @@
 	<table id="menu">
 		<tr>
 			<td id="checkbox-cell">
-				<ul id="checkbox">
-					<li class="menu-item"><input id="metronome-controller" type="checkbox" checked>Metronome</li>
-					<li class="menu-item"><input id="note-hinter-controller" type="checkbox" checked>Hint Notes</li>
-					<li class="menu-item"><input id="song-player-controller" type="checkbox">Play Notes</li>
-				</ul>
+				<input id="metronome-controller" type="checkbox" checked>Metronome
 			</td>
-			<td id="pause-cell">
+			<td id="pause-cell" rowspan="3">
 				<div class="pause-controller">
 					<input type="checkbox" value="None" id="pause-controller" name="check" />
 					<label id="pause-controller-label" for="pause-controller" tabindex=1></label>
 				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input id="note-hinter-controller" type="checkbox" checked>Hint Notes
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input id="song-player-controller" type="checkbox">Play Notes
 			</td>
 		</tr>
 	</table>

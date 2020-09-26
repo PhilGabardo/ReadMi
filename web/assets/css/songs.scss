@@ -31,6 +31,7 @@
         border-style: double;
         border-width: 0px 0 0px 60px;
         visibility: hidden;
+        margin: auto;
     }
     input[type="checkbox"] {
         position: absolute;
@@ -66,12 +67,13 @@
     border: solid hsla(80, 90%, 40%, 0.5);
     border-right: none;
     box-shadow: 0 1px 3px black;
-    border-radius: 3em 3em 3em 3em;
+    border-radius: 1em 1em 1em 1em;
     #checkbox-cell {
-        width: 150px;
+        width: 50%;
     }
     #pause-cell {
-        width: 100px;
+        width: 50%;
+        row-span: 3;
     }
 }
 
