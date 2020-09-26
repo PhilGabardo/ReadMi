@@ -51,13 +51,10 @@
     position: fixed;
     bottom: 2%;
     right: 4%;
-    width: 18%;
-    height: auto;
-    margin-top: 2vh;
-    font-size: 1.3vw;
 }
 
 #menu {
+    font-size: 20px;
     margin: auto;
     margin-bottom: 10px;
     background: hsla(80, 90%, 40%, 1);
@@ -69,10 +66,10 @@
     box-shadow: 0 1px 3px black;
     border-radius: 1em 1em 1em 1em;
     #checkbox-cell {
-        width: 50%;
+        width: 60%;
     }
     #pause-cell {
-        width: 50%;
+        width: 40%;
         row-span: 3;
     }
 }
@@ -92,8 +89,11 @@
 #timer_countdown {
     display: none;
     position: fixed;
-    text-align: center;
     font-size: 300px;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }
 
 #canvas {
