@@ -13,6 +13,15 @@ import swal2 from 'sweetalert2';
 import NoteHinter from './note_hinter'
 import StaveUpdater from './non_piano_stave_updater'
 
+window.onorientationchange = function() {
+	var orientation = window.orientation;
+	switch(orientation) {
+		case 0:
+		case 90:
+		case -90: window.location.reload();
+			break; }
+};
+
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 	navigator.mediaDevices.getUserMedia({audio: {
 		echoCancellation: false,

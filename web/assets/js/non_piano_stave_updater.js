@@ -27,12 +27,13 @@ export default class StaveUpdater {
 
 	renderForPiano() {
 		// treble
-		let total_area = 240;
+		let total_area = Math.min(240, 0.35 * (window.orientation == 0 ? window.innerWidth : window.innerHeight));
+
 		let stave_height = total_area / 2;
 		let spacing_between_lines_px = stave_height / 12;
 
 		let leftPadding = 20 * this.scaling_factor;
-		let trebleKeySigStaff = new VexFlow.Flow.Stave(leftPadding, 0, this.keySigStaffWidth);
+		let trebleKeySigStaff = new VexFlow.Flow.Stave(leftPadding, 0, this.keySigStaffWidth, {spacing_between_lines_px: spacing_between_lines_px});
 		trebleKeySigStaff.addClef('treble');
 		trebleKeySigStaff.addTimeSignature(String(this.beats_per_measure).concat("/").concat(String(this.beat_value)));
 		let trebleKeySig = new VexFlow.Flow.KeySignature(this.key.replace(' major', '').replace(' minor', 'm'));
@@ -40,7 +41,7 @@ export default class StaveUpdater {
 		trebleKeySigStaff.setContext(this.context).draw();
 
 		//base
-		let bassKeySigStaff = new VexFlow.Flow.Stave(leftPadding, stave_height, this.keySigStaffWidth);
+		let bassKeySigStaff = new VexFlow.Flow.Stave(leftPadding, stave_height, this.keySigStaffWidth, {spacing_between_lines_px: spacing_between_lines_px});
 		bassKeySigStaff.addClef('bass');
 		let baseKeySig = new VexFlow.Flow.KeySignature(this.key.replace(' major', '').replace(' minor', 'm'));
 		baseKeySig.addToStave(bassKeySigStaff);
@@ -50,11 +51,11 @@ export default class StaveUpdater {
 			let horiz_offset =  leftPadding + this.keySigStaffWidth + this.staveWidth * col;
 
 			// treble
-			let trebleStaff = new VexFlow.Flow.Stave(horiz_offset, 0, this.staveWidth);
+			let trebleStaff = new VexFlow.Flow.Stave(horiz_offset, 0, this.staveWidth, {spacing_between_lines_px: spacing_between_lines_px});
 			trebleStaff.setContext(this.context).draw();
 
 			// bass
-			let bassStaff = new VexFlow.Flow.Stave(horiz_offset, stave_height, this.staveWidth);
+			let bassStaff = new VexFlow.Flow.Stave(horiz_offset, stave_height, this.staveWidth, {spacing_between_lines_px: spacing_between_lines_px});
 			bassStaff.setContext(this.context).draw();
 
 			// Create a voice in 4/4 and add above notes
@@ -110,13 +111,13 @@ export default class StaveUpdater {
 
 	renderForNonPiano() {
 		// treble
-		let total_area = 240;
+		let total_area = Math.min(240, 0.35 * (window.orientation == 0 ? window.innerWidth : window.innerHeight));
 		let stave_height = total_area / 2;
 		let spacing_between_lines_px = stave_height / 12;
 
 		// treble
 		let leftPadding = 20 * this.scaling_factor;
-		let trebleKeySigStaff = new VexFlow.Flow.Stave(leftPadding, total_area / 2 - stave_height / 2, this.keySigStaffWidth);
+		let trebleKeySigStaff = new VexFlow.Flow.Stave(leftPadding, total_area / 2 - stave_height / 2, this.keySigStaffWidth, {spacing_between_lines_px: spacing_between_lines_px});
 		trebleKeySigStaff.addClef('treble');
 		trebleKeySigStaff.addTimeSignature(String(this.beats_per_measure).concat("/").concat(String(this.beat_value)));
 		let trebleKeySig = new VexFlow.Flow.KeySignature(this.key.replace(' major', '').replace(' minor', 'm'));
@@ -127,7 +128,7 @@ export default class StaveUpdater {
 			let horiz_offset =  leftPadding + this.keySigStaffWidth + this.staveWidth * col;
 
 			// treble
-			let trebleStaff = new VexFlow.Flow.Stave(horiz_offset, total_area / 2 - stave_height / 2, this.staveWidth);
+			let trebleStaff = new VexFlow.Flow.Stave(horiz_offset, total_area / 2 - stave_height / 2, this.staveWidth, {spacing_between_lines_px: spacing_between_lines_px});
 			trebleStaff.setContext(this.context).draw();
 
 
