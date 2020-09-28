@@ -2013,8 +2013,9 @@ function mini(){
         div_modal.style.opacity = 0;
 
         var inner = document.querySelectorAll("#question-modal .modal-inner")[0];
-        inner.innerHTML = cell.querySelectorAll(".answer")[0].outerHTML + "\n" + cell.querySelectorAll(".question")[0].outerHTML;
-	    var msg = new SpeechSynthesisUtterance(cell.querySelectorAll(".answer")[0].innerHTML.substring(6).replace('\&', 'and').replace(/\(.*\)/, ''));
+        console.log(cell.querySelectorAll(".answer")[0].outerHTML)
+        inner.innerHTML = cell.querySelectorAll(".answer")[0].outerHTML.replace(cell.querySelectorAll(".answer")[0].innerHTML, '') + "\n" + cell.querySelectorAll(".question")[0].outerHTML;
+	    var msg = new SpeechSynthesisUtterance(cell.querySelectorAll(".answer")[0].innerHTML.substring(6).replace('\&', 'and'));
 	    msg.onend = function() {
 	    	beep_future = setTimeout(function() {
 		    beep();

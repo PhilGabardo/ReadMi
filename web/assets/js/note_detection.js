@@ -75,12 +75,11 @@ function getFrequencyForNote(note_name, note_octave) {
 }
 
 function getIndexForNote(note_name, note_octave) {
-	console.log(note_name);
 	return note_octave * 12 + noteNameIndexMap[note_name]
 }
 
 function getNoteFromSamples(buffer, sampleRate, expected_freq) {
-	if (expected_freq < 300) {
+	/*if (expected_freq < 300) {
 		const detectPitch = new pitchfinder.AMDF({
 			sampleRate: 44100,
 			minFrequency: 82,
@@ -93,7 +92,7 @@ function getNoteFromSamples(buffer, sampleRate, expected_freq) {
 			return estimateNote(fundamentalFreq);
 		}
 		return [];
-	}
+	}*/
 	// We use Autocorrelation to find the fundamental frequency.
 
 	// In order to correlate the signal with itself (hence the name of the algorithm), we will check two points 'k' frames away.
@@ -103,8 +102,12 @@ function getNoteFromSamples(buffer, sampleRate, expected_freq) {
 	// while a 'k' equal to 8 would correspond to a 6000Hz one, which is enough to cover most (if not all)
 	// the notes we have in the notes.json file.
 
+	let k_expected = Math.floor(sampleRate / expected_freq);
+	let k_start = k_expected - 2;
+	let k_end = k_expected + 2;
+
 	var n = 1024, bestR = 0, bestK = -1;
-	for(var k = 8; k <= 1000; k++){
+	for(var k = k_start; k <= k_end; k++){
 
 		var sum = 0;
 		for(var i = 0; i < n; i++) {

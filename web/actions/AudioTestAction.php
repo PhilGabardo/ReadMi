@@ -12,7 +12,8 @@ class AudioTestAction extends LoggedOutAction {
 
 	protected static function _execute(Application $app, Request $request): string {
 		$notes = [];
-		for ($octave = 5; $octave >= 2; $octave--) {
+		$octave_start = $request->get('octave_start', 5);
+		for ($octave = $octave_start; $octave >= 2; $octave--) {
 			foreach (array_reverse(self::KEYS) as $key) {
 				$notes[] = [
 					'is_note' => true,
