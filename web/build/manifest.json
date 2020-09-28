@@ -25,7 +25,6 @@
   "build/metronome.js": "/build/metronome.js",
   "build/non_piano_stave_updater.js": "/build/non_piano_stave_updater.js",
   "build/note_detection.js": "/build/note_detection.js",
-  "build/note_feedback.js": "/build/note_feedback.js",
   "build/note_feedback_v2.js": "/build/note_feedback_v2.js",
   "build/note_hinter.js": "/build/note_hinter.js",
   "build/note_timing.js": "/build/note_timing.js",

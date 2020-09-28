@@ -33,7 +33,6 @@ Encore
 	.addEntry('metronome', './web/assets/js/metronome.js')
 	.addEntry('song_player', './web/assets/js/song_player.js')
 	.addEntry('note_timing', './web/assets/js/note_timing.js')
-	.addEntry('note_feedback', './web/assets/js/note_timing.js')
 	.addEntry('note_feedback_v2', './web/assets/js/note_feedback_v2.js')
 	.addEntry('landing', './web/assets/js/landing.js')
 	.addEntry('layout', './web/assets/js/layout.js')
