@@ -2014,11 +2014,12 @@ function mini(){
 
         var inner = document.querySelectorAll("#question-modal .modal-inner")[0];
         console.log(cell.querySelectorAll(".answer")[0].outerHTML)
-        inner.innerHTML = cell.querySelectorAll(".answer")[0].outerHTML.replace(cell.querySelectorAll(".answer")[0].innerHTML, '') + "\n" + cell.querySelectorAll(".question")[0].outerHTML;
+        inner.innerHTML = cell.querySelectorAll(".answer")[0].outerHTML + "\n" + cell.querySelectorAll(".question")[0].outerHTML;
 	    var msg = new SpeechSynthesisUtterance(cell.querySelectorAll(".answer")[0].innerHTML.substring(6).replace('\&', 'and'));
 	    msg.onend = function() {
 	    	beep_future = setTimeout(function() {
 		    beep();
+		    modal.reveal()
 	    }, 6000); };
 	    window.speechSynthesis.speak(msg);
 
