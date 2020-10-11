@@ -78,7 +78,7 @@ function getIndexForNote(note_name, note_octave) {
 }
 
 
-function estimateFrequency(wave, expected_freq) {
+function estimateFrequency(wave) {
 
 	function autoCorrelationDifference(wave) {
 		var compressedWave = new Array(wave.length / 2)
@@ -126,13 +126,12 @@ function estimateFrequency(wave, expected_freq) {
 		return resultBuffer;
 	}
 
-	function absoluteThreshold(resultBuffer, expected_freq) {
+	function absoluteThreshold(resultBuffer) {
 		var tau;
 		var length = resultBuffer.length;
-		var expected_tau = Math.floor(44100 / expected_freq);
 
 		// The first two values in the result buffer should be 1, so start at the third value
-		for (tau = expected_tau - 5; tau < expected_tau + 5; tau++) {
+		for (tau = 0; tau < length; tau++) {
 			// If we are less than the threshold, continue on until we find the lowest value
 			// indicating the lowest dip in the wave since we first crossed the threshold.
 			if (resultBuffer[tau] < 0.1) {
@@ -186,7 +185,7 @@ function estimateFrequency(wave, expected_freq) {
 
 	var resultBuffer = autoCorrelationDifference(wave);
 	resultBuffer = cumulativeMeanNormalizedDifference(resultBuffer)
-	var tau = absoluteThreshold(resultBuffer, expected_freq)
+	var tau = absoluteThreshold(resultBuffer)
 	if (tau == -1) {
 		return tau;
 	}
@@ -196,7 +195,7 @@ function estimateFrequency(wave, expected_freq) {
 
 function getNoteFromSamples(buffer, sampleRate, expected_freq) {
 	if (expected_freq < 300) {
-		let freq = estimateFrequency(buffer, expected_freq);
+		let freq = estimateFrequency(buffer);
 		return freq == -1 ? [] : estimateNote(freq)
 	}
 	// We use Autocorrelation to find the fundamental frequency.
@@ -208,12 +207,8 @@ function getNoteFromSamples(buffer, sampleRate, expected_freq) {
 	// while a 'k' equal to 8 would correspond to a 6000Hz one, which is enough to cover most (if not all)
 	// the notes we have in the notes.json file.
 
-	let k_expected = Math.floor(sampleRate / expected_freq);
-	let k_start = k_expected - 2;
-	let k_end = k_expected + 2;
-
 	var n = 1024, bestR = 0, bestK = -1;
-	for(var k = k_start; k <= k_end; k++){
+	for(var k = 8; k <= 1000; k++){
 
 		var sum = 0;
 		for(var i = 0; i < n; i++) {
