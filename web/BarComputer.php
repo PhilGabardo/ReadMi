@@ -83,7 +83,6 @@ class BarComputer {
 		foreach ($key_signature_info['notes'] as $note => $_) {
 			$default_notes_state[$note] = $key_signature_info['type'];
 		}
-		$current_notes_state = $default_notes_state;
 		for ($i = 0; $i < count($notes); $i++) {
 			$note = $notes[$i];
 			$quarter_length = (float)$note['quarterLength'];
@@ -103,9 +102,8 @@ class BarComputer {
 					'dot_count' => self::DOT_COUNT_MAP[(string)$length_breakdown[$j]],
 				];
 				$accidental = $note['name'][1] ?? 'n';
-				if ($current_notes_state[$note['name'][0]] != $accidental) {
+				if ($default_notes_state[$note['name'][0]] != $accidental) {
 					$note_struct['accidental'] = $accidental;
-					$current_notes_state[$note['name'][0]] = $accidental;
 				}
 				$current_bar[] = $note_struct;
 				$sum += $length_breakdown[$j] * ($beat_value / 4.0);
@@ -117,7 +115,6 @@ class BarComputer {
 				if ($sum > $beats_per_measure) {
 					$bars[] = $current_bar;
 					$current_bar = [];
-					$current_notes_state = $default_notes_state;
 					$remainder = ($sum - $beats_per_measure) * (4.0 / $beat_value);
 					$_length_breakdown = self::getLengthBreakDown($remainder);
 					for ($k = 0; $k < count($_length_breakdown); $k++) {
@@ -135,7 +132,6 @@ class BarComputer {
 					$sum = 0;
 					$bars[] = $current_bar;
 					$current_bar = [];
-					$current_notes_state = $default_notes_state;
 				}
 				for ($k = 0; $k < $leftover_bars; $k++) {
 					$bars[] = [];
