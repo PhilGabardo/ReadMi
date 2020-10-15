@@ -3,7 +3,6 @@ export default class Fretboard {
 	constructor(canvas, numberOfFrets=22) {
 		this.numberOfFrets = numberOfFrets;
 		this.width = canvas.width;
-		console.log(this.width);
 		this.canvas = canvas;
 
 		// this is an approxumation of the tempered scale

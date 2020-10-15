@@ -26,12 +26,7 @@ export default class NoteHinter {
 		let boo = document.getElementById("boo");
 		let note_hint_div = document.getElementById("note_hint_div");
 
-
-		let total_stave_area = 0.35 * window.innerHeight;
-		note_hint_div.style.top = boo.offsetTop +total_stave_area + "px";
-		note_hint_div.style.left = KeySignatures.getKeySignatureStaffWidth(key) + "px";
-
-		//this.note_hint.style.display = 'block'
+		this.note_hint.style.display = 'block'
 		this.beats_per_minute = beats_per_minute
 		this.beats_per_measure = beats_per_measure
 		this.vf_bars = vf_bars;
@@ -56,6 +51,11 @@ export default class NoteHinter {
 				this.note_hint.style.display = "none";
 			}
 		})
+		this._setController()
+	}
+
+	_setController() {
+
 	}
 
 	draw(note_hinter) {
@@ -150,7 +150,7 @@ export class PianoNoteHinter extends NoteHinter {
 		this.draw_keyboard.init()
 	}
 
-	setController() {
+	_setController() {
 		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
 			if (event.target.checked) {
 				this.canvas.style.display = "block";
@@ -189,7 +189,7 @@ export class SingingNoteHinter extends NoteHinter {
 		document.body.appendChild(this.do_re_me_text);
 	}
 
-	setController() {
+	_setController() {
 		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
 			if (event.target.checked) {
 				this.do_re_me_text.style.display = "block";
@@ -250,7 +250,7 @@ export class GuitarNoteHinter extends NoteHinter {
 		this.string_frets_index_map = NoteDetection.getStringFretsMap() // todo optimize fingering
 	}
 
-	setController() {
+	_setController() {
 		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
 			if (event.target.checked) {
 				this.canvas.style.display = "block";
