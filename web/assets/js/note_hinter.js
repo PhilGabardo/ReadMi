@@ -1,4 +1,5 @@
 import DrawKeyboard from './draw_keyboard'
+import DrawGuitar from './draw_guitar'
 import NoteDetection from './note_detection'
 import Timing from './timing'
 import Vexflow from 'vexflow'
@@ -10,8 +11,8 @@ export default class NoteHinter {
 		switch (instrument) {
 			case 'piano':
 				return new PianoNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
-			/*case 'guitar':
-				return new GuitarNoteHinter(beats_per_minute, beats_per_measure, vf_bars)*/
+			case 'guitar':
+				return new GuitarNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 			case 'singing':
 				return new SingingNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 			default:
@@ -231,72 +232,55 @@ export class SingingNoteHinter extends NoteHinter {
 }
 
 export class GuitarNoteHinter extends NoteHinter {
-	constructor(beats_per_minute, beats_per_measure, vf_bars) {
-		super()
-		let div = document.createElement('div');
-		div.style.width = Math.min(boo.offsetWidth * 0.6, 650) +"px";
-		div.style.height = Math.min(boo.offsetWidth * 0.6, 650) * 0.11 + "px";
-		div.style.display = "block";
-		div.style.position = "fixed";
-		div.style.bottom = '2%'
-		div.style.outline = "black 3px solid";
-		div.style.left = (0.15 * boo.offsetWidth) + "px";
-		document.body.appendChild(div);
-		var renderer = new Vexflow.Flow.Renderer(div, Vexflow.Flow.Renderer.Backends.SVG);
-		var context = renderer.getContext()
+	constructor(beats_per_minute, beats_per_measure, vf_bars, key) {
+		super(beats_per_minute, beats_per_measure, vf_bars, key)
+		this.canvas = document.createElement('canvas');
+		this.canvas.style.width = '60%';
+		this.canvas.style.height = '10%';
+		this.canvas.style.display = "block";
+		this.canvas.style.position = "fixed";
+		this.canvas.style.bottom = '20%'
+		//this.canvas.style.outline = "black 3px solid";
+		this.canvas.style.left = '20%';
+		document.body.appendChild(this.canvas);
+		this.canvas.width = 1000;
+		this.canvas.height = 90;
 
-		// Size our SVG:
-		renderer.resize(Math.min(boo.offsetWidth * 0.6, 650), Math.min(boo.offsetWidth * 0.6, 650) * 0.11);
-
-		// Create a tab stave of width 400 at position 10, 40 on the canvas.
-		var stave = new Vexflow.Flow.TabStave(10, 40, Math.min(boo.offsetWidth * 0.3, 650));
-		stave.addClef("tab").setContext(context).draw();
-
-		var notes = [
-			// A single note
-			new Vexflow.Flow.TabNote({
-				positions: [{str: 3, fret: 7}],
-				duration: "q"}),
-
-			// A chord with the note on the 3rd string bent
-			new Vexflow.Flow.TabNote({
-				positions: [{str: 2, fret: 10},
-					{str: 3, fret: 9}],
-				duration: "q"}).
-			addModifier(new Vexflow.Flow.Bend("Full"), 1),
-
-			// A single note with a harsh vibrato
-			new Vexflow.Flow.TabNote({
-				positions: [{str: 2, fret: 5}],
-				duration: "h"}).
-			addModifier(new Vexflow.Flow.Vibrato().setHarsh(true).setVibratoWidth(70), 0)
-		];
-
-		Vexflow.Flow.Formatter.FormatAndDraw(context, stave, notes);
+		this.draw_guitar = new DrawGuitar(this.canvas);
+		this.string_frets_index_map = NoteDetection.getStringFretsMap() // todo optimize fingering
 	}
 
-	start() {
-		this.timing.startTiming()
-		this.func = setInterval(this.draw, 10, this);
+	setController() {
+		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
+			if (event.target.checked) {
+				this.canvas.style.display = "block";
+			} else {
+				this.canvas.style.display = "none";
+			}
+		})
 	}
 
-	pause() {
-		this.timing.pause()
-		window.clearInterval(this.func);
+	undoLastHint(key, octave) {
+		let note_index = NoteDetection.getIndexForNote(key, octave) - (12 * 3 + 4);
+		let fingering = this.string_frets_index_map[note_index]
+		fingering.sort(function(a, b) {
+			return a[1] - b[1];
+		});
+		this.draw_guitar.drawNote(fingering[0][1] - 1, 5 - fingering[0][0], true)
+		super.undoLastHint(key, octave)
 	}
 
-	draw(note_hinter) {
-	}
-
-	hintNextNote(offsettedStavesPassed) {
-	}
-
-	resume() {
-		this.timing.resume()
-		this.func = setInterval(this.draw, 10, this);
-	}
-
-	stop() {
+	hint(note) {
+		let props = note.getKeyProps()[0];
+		let key = props.key;
+		let octave = props.octave;
+		let note_index = NoteDetection.getIndexForNote(key, octave) - (12 * 3 + 4);
+		let fingering = this.string_frets_index_map[note_index]
+		fingering.sort(function(a, b) {
+			return a[1] - b[1];
+		});
+		this.draw_guitar.drawNote(fingering[0][1] - 1, 5 - fingering[0][0])
+		super.hint(note)
 	}
 }
 

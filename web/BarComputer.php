@@ -141,9 +141,6 @@ class BarComputer {
 		if (count($current_bar) > 0) {
 			$bars[] = $current_bar;
 		}
-		while (count($bars) % 3 !== 0) {
-			$bars[] = [];
-		}
 		return $bars;
 	}
 

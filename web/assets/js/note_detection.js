@@ -73,6 +73,38 @@ function getFrequencyForNote(note_name, note_octave) {
 	return noteFrequencies[noteFrequencies.length - 1 - (note_octave * noteNames.length) - (noteNames.length - noteNameIndex - 1)]
 }
 
+function getStringFretsMap() {
+	/*
+	let note_index = getIndexForNote(note_name, note_octave) - 12 * 3 + 4; // starting from E3
+	if (note_index < 0) {
+		return [];
+	}
+
+	// index 0, 0 is low E
+
+
+	*/
+
+	let string_fret_freq_map = [];
+
+	for (let string = 0; string < 6; string++) {
+		let string_octave_offset = 0;
+		if (string >= 4) {
+			string_octave_offset = string * 5 - 1
+		} else {
+			string_octave_offset = string * 5
+		}
+		for (let fret = 0; fret < 22; fret++) {
+			if (!string_fret_freq_map[fret + string_octave_offset]) {
+				string_fret_freq_map[fret + string_octave_offset] = []
+			}
+			string_fret_freq_map[fret + string_octave_offset].push([string, fret])
+		}
+	}
+	return string_fret_freq_map;
+
+}
+
 function getIndexForNote(note_name, note_octave) {
 	return note_octave * 12 + noteNameIndexMap[note_name]
 }
@@ -243,4 +275,5 @@ export default {
 	getNoteFromSamples: getNoteFromSamples,
 	estimateNote: estimateNote,
 	getIndexForNote: getIndexForNote,
+	getStringFretsMap: getStringFretsMap,
 }

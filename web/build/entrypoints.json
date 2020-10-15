@@ -130,6 +130,11 @@
         "/build/draw_keyboard.js"
       ]
     },
+    "draw_guitar": {
+      "js": [
+        "/build/draw_guitar.js"
+      ]
+    },
     "non_piano_stave_updater": {
       "js": [
         "/build/non_piano_stave_updater.js"
