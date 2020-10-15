@@ -135,6 +135,11 @@
         "/build/draw_guitar.js"
       ]
     },
+    "draw_violin": {
+      "js": [
+        "/build/draw_violin.js"
+      ]
+    },
     "non_piano_stave_updater": {
       "js": [
         "/build/non_piano_stave_updater.js"

@@ -9,6 +9,7 @@
   "build/demo_layout.css": "/build/demo_layout.css",
   "build/draw_guitar.js": "/build/draw_guitar.js",
   "build/draw_keyboard.js": "/build/draw_keyboard.js",
+  "build/draw_violin.js": "/build/draw_violin.js",
   "build/feedback.js": "/build/feedback.js",
   "build/feedback_style.css": "/build/feedback_style.css",
   "build/filter_table.js": "/build/filter_table.js",

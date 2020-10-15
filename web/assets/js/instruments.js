@@ -10,6 +10,7 @@ function getInstrumentKeyOffset(instrument) {
 		'trumpet': 2,
 		'piano': 0,
 		'singing': 0,
+		'violin': 0
 	}
 	return key_offsets[instrument];
 }

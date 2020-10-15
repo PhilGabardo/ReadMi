@@ -73,17 +73,7 @@ function getFrequencyForNote(note_name, note_octave) {
 	return noteFrequencies[noteFrequencies.length - 1 - (note_octave * noteNames.length) - (noteNames.length - noteNameIndex - 1)]
 }
 
-function getStringFretsMap() {
-	/*
-	let note_index = getIndexForNote(note_name, note_octave) - 12 * 3 + 4; // starting from E3
-	if (note_index < 0) {
-		return [];
-	}
-
-	// index 0, 0 is low E
-
-
-	*/
+function getGuitarStringFretsMap() {
 
 	let string_fret_freq_map = [];
 
@@ -95,6 +85,24 @@ function getStringFretsMap() {
 			string_octave_offset = string * 5
 		}
 		for (let fret = 0; fret < 22; fret++) {
+			if (!string_fret_freq_map[fret + string_octave_offset]) {
+				string_fret_freq_map[fret + string_octave_offset] = []
+			}
+			string_fret_freq_map[fret + string_octave_offset].push([string, fret])
+		}
+	}
+	return string_fret_freq_map;
+
+}
+
+function getViolinStringFretsMap() {
+
+	let string_fret_freq_map = [];
+
+	for (let string = 0; string < 4; string++) {
+		let string_octave_offset = 0;
+		string_octave_offset = string * 7
+		for (let fret = 0; fret < 8; fret++) {
 			if (!string_fret_freq_map[fret + string_octave_offset]) {
 				string_fret_freq_map[fret + string_octave_offset] = []
 			}
@@ -275,5 +283,6 @@ export default {
 	getNoteFromSamples: getNoteFromSamples,
 	estimateNote: estimateNote,
 	getIndexForNote: getIndexForNote,
-	getStringFretsMap: getStringFretsMap,
+	getGuitarStringFretsMap: getGuitarStringFretsMap,
+	getViolinStringFretsMap: getViolinStringFretsMap,
 }

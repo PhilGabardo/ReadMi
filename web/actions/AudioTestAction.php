@@ -13,6 +13,7 @@ class AudioTestAction extends LoggedOutAction {
 	protected static function _execute(Application $app, Request $request): string {
 		$notes = [];
 		$octave_start = $request->get('octave_start', 5);
+		$instrument = $request->get('instrument', 'piano');
 		for ($octave = $octave_start; $octave >= 2; $octave--) {
 			foreach (array_reverse(self::KEYS) as $key) {
 				$notes[] = [
@@ -23,7 +24,7 @@ class AudioTestAction extends LoggedOutAction {
 				];
 			}
 		}
-		$bars = BarComputer::getBars($notes, 'C major', 4, 4, true);
+		$bars = BarComputer::getBars($notes, 'C major', 4, 4, $instrument === 'piano');
 
 		return $app['twig']->render('play_song_demo.twig', [
 			's' => [
@@ -35,7 +36,7 @@ class AudioTestAction extends LoggedOutAction {
 			'is_demo' => true,
 			'song_id' => 0,
 			'bpm_requirement' => 0,
-			'instrument' => 'piano',
+			'instrument' => $instrument,
 			'bars' => json_encode($bars),
 		]);
 	}

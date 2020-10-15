@@ -1,5 +1,6 @@
 import DrawKeyboard from './draw_keyboard'
 import DrawGuitar from './draw_guitar'
+import DrawViolin from './draw_violin'
 import NoteDetection from './note_detection'
 import Timing from './timing'
 import Vexflow from 'vexflow'
@@ -15,6 +16,8 @@ export default class NoteHinter {
 				return new GuitarNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 			case 'singing':
 				return new SingingNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
+			case 'violin':
+				return new ViolinNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 			default:
 				return new NoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 		}
@@ -247,7 +250,7 @@ export class GuitarNoteHinter extends NoteHinter {
 		this.canvas.height = 90;
 
 		this.draw_guitar = new DrawGuitar(this.canvas);
-		this.string_frets_index_map = NoteDetection.getStringFretsMap() // todo optimize fingering
+		this.string_frets_index_map = NoteDetection.getGuitarStringFretsMap() // todo optimize fingering
 	}
 
 	_setController() {
@@ -280,6 +283,60 @@ export class GuitarNoteHinter extends NoteHinter {
 			return a[1] - b[1];
 		});
 		this.draw_guitar.drawNote(fingering[0][1] - 1, 5 - fingering[0][0])
+		super.hint(note)
+	}
+}
+
+
+export class ViolinNoteHinter extends NoteHinter {
+	constructor(beats_per_minute, beats_per_measure, vf_bars, key) {
+		super(beats_per_minute, beats_per_measure, vf_bars, key)
+		this.canvas = document.createElement('canvas');
+		this.canvas.style.width = '60%';
+		this.canvas.style.height = '10%';
+		this.canvas.style.display = "block";
+		this.canvas.style.position = "fixed";
+		this.canvas.style.bottom = '20%'
+		//this.canvas.style.outline = "black 3px solid";
+		this.canvas.style.left = '20%';
+		document.body.appendChild(this.canvas);
+		this.canvas.width = 1000;
+		this.canvas.height = 90;
+
+		this.draw_violin = new DrawViolin(this.canvas);
+		this.string_frets_index_map = NoteDetection.getViolinStringFretsMap() // todo optimize fingering
+	}
+
+	_setController() {
+		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
+			if (event.target.checked) {
+				this.canvas.style.display = "block";
+			} else {
+				this.canvas.style.display = "none";
+			}
+		})
+	}
+
+	undoLastHint(key, octave) {
+		let note_index = NoteDetection.getIndexForNote(key, octave) - (12 * 3 + 7);
+		let fingering = this.string_frets_index_map[note_index]
+		fingering.sort(function(a, b) {
+			return a[1] - b[1];
+		});
+		this.draw_violin.drawNote(fingering[0][1] - 1, 3 - fingering[0][0], true)
+		super.undoLastHint(key, octave)
+	}
+
+	hint(note) {
+		let props = note.getKeyProps()[0];
+		let key = props.key;
+		let octave = props.octave;
+		let note_index = NoteDetection.getIndexForNote(key, octave) - (12 * 3 + 7);
+		let fingering = this.string_frets_index_map[note_index]
+		fingering.sort(function(a, b) {
+			return a[1] - b[1];
+		});
+		this.draw_violin.drawNote(fingering[0][1] - 1, 3 - fingering[0][0])
 		super.hint(note)
 	}
 }

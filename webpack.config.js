@@ -45,6 +45,7 @@ Encore
 	.addEntry('account_view', './web/assets/js/account_view.js')
 	.addEntry('draw_keyboard', './web/assets/js/draw_keyboard.js')
 	.addEntry('draw_guitar', './web/assets/js/draw_guitar.js')
+	.addEntry('draw_violin', './web/assets/js/draw_violin.js')
 	.addEntry('non_piano_stave_updater', './web/assets/js/non_piano_stave_updater.js')
 
 

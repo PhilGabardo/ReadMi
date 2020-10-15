@@ -20,6 +20,7 @@ abstract class LoggedInAction extends ReadMiAction {
 	private const SELECTABLE_INSTRUMENTS = [
 		'piano' => 'Piano',
 		'guitar' => 'Guitar',
+		'violin' => 'Violin',
 		'alto_saxophone' => 'Alto Saxophone',
 		'tenor_saxophone' => 'Tenor Saxophone',
 		'soprano_saxophone' => 'Soprano Saxophone',
@@ -27,7 +28,6 @@ abstract class LoggedInAction extends ReadMiAction {
 		//'bass_clarinet' => 'Bass Clarinet',
 		'french_horn' => 'French Horn',
 		'trumpet' => 'Trumpet',
-		'singing' => 'Singing',
 	];
 
 	protected static function getPublishableKey() : string {
