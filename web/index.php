@@ -17,7 +17,6 @@ require_once __DIR__ . '/actions/PlaySongAction.php';
 require_once __DIR__ . '/actions/PremiumInfoAction.php';
 require_once __DIR__ . '/actions/StripeSessionIdAction.php';
 require_once __DIR__ . '/actions/PaymentFailureAction.php';
-require_once __DIR__ . '/actions/PaymentSuccessAction.php';
 require_once __DIR__ . '/actions/InstrumentSelectAction.php';
 require_once __DIR__ . '/actions/InstrumentUpdateAction.php';
 require_once __DIR__ . '/actions/FeedbackAction.php';
@@ -27,7 +26,6 @@ require_once __DIR__ . '/actions/AudioTestAction.php';
 require_once __DIR__ . '/misc/DifficultyComputer.php';
 
 
-use Actions\PaymentSuccessAction;
 
 use \Symfony\Component\HttpFoundation\Request;
 
@@ -158,15 +156,6 @@ $app->post('/', function(Request $request) use($app) {
 
 $app->get('/', function(Request $request) use($app) {
 	return ReadMiAction::getResponse($app, $request);
-});
-
-$app->post('/payment_hook', function(Request $request) use($app) {
-	PaymentHooks::execute($app);
-	return '';
-});
-
-$app->get('/payment_success', function(Request $request) use($app) {
-	return PaymentSuccessAction::execute($app, $request);
 });
 
 

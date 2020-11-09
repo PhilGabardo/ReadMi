@@ -135,6 +135,7 @@ abstract class LoggedInAction extends ReadMiAction {
 		}
 
 		return [
+			'is_premium' => $is_premium_user,
 			'enabled_songs' => $enabled_songs,
 			'disabled_songs' => $disabled_songs,
 			'key_signatures' => array_unique($key_signatures),
