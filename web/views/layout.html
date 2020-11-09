@@ -26,17 +26,12 @@
 <link rel="stylesheet" href="/build/layout_style.css">
 <link rel="stylesheet" href="/build/selectize_override.css">
 <link rel="stylesheet" href="/build/text.css">
-<div id="toolbar">
-  <button id="logout" type="button" class="readmi_button">Logout</button>
-  <button id="my_account" type="button" class="readmi_button">My Account</button>
-  <button id="home" type="button" class="readmi_button">Home</button>
-</div>
 <div class="main_content">
   {% block content %}{% endblock %}
 </div>
+{% include "feedback.html" %}
 <script type="text/javascript" src="/build/layout.js"></script>
 
 </body>
 </div>
-{% include "feedback.html" %}
 </html>

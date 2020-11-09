@@ -5,6 +5,7 @@ import NoteDetection from './note_detection'
 import Timing from './timing'
 import Vexflow from 'vexflow'
 import KeySignatures from './key_signatures'
+import Instruments from './instruments'
 
 export default class NoteHinter {
 
@@ -116,10 +117,15 @@ export default class NoteHinter {
 		let props = note.getKeyProps()[0];
 		let key = props.key;
 		let octave = props.octave;
+		let expected_note = KeySignatures.getOffsetNote(key, octave, 0 - Instruments.getInstrumentKeyOffset(this.getInstrument()));
 		if (key.length > 1) {
 			key = key.charAt(0) + key.charAt(1).replace('B', '<sup>♭</sup>').replace('#', '<sup>#</sup>')
 		}
 		this.note_hint.innerHTML = 'Next Note:&nbsp;' + key + octave;
+	}
+
+	getInstrument() {
+		return '';
 	}
 
 	resume() {
@@ -151,6 +157,10 @@ export class PianoNoteHinter extends NoteHinter {
 
 		this.draw_keyboard = new DrawKeyboard(this.canvas, 650, 72);
 		this.draw_keyboard.init()
+	}
+
+	getInstrument() {
+		return 'piano';
 	}
 
 	_setController() {
@@ -190,6 +200,10 @@ export class SingingNoteHinter extends NoteHinter {
 		this.do_re_me_text.style.left = '40%';
 		this.do_re_me_text.style.fontSize = '5vw';
 		document.body.appendChild(this.do_re_me_text);
+	}
+
+	getInstrument() {
+		return 'singing';
 	}
 
 	_setController() {
@@ -253,6 +267,10 @@ export class GuitarNoteHinter extends NoteHinter {
 		this.string_frets_index_map = NoteDetection.getGuitarStringFretsMap() // todo optimize fingering
 	}
 
+	getInstrument() {
+		return 'guitar';
+	}
+
 	_setController() {
 		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
 			if (event.target.checked) {
@@ -305,6 +323,10 @@ export class ViolinNoteHinter extends NoteHinter {
 
 		this.draw_violin = new DrawViolin(this.canvas);
 		this.string_frets_index_map = NoteDetection.getViolinStringFretsMap() // todo optimize fingering
+	}
+
+	getInstrument() {
+		return 'violin';
 	}
 
 	_setController() {

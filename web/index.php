@@ -4,6 +4,7 @@
 require('../vendor/autoload.php');
 require_once __DIR__ . '/BarComputer.php';
 require_once __DIR__ . '/KeySignatures.php';
+require_once __DIR__ . '/Instruments.php';
 require_once __DIR__ . '/actions/ReadMiAction.php';
 require_once __DIR__ . '/actions/LoggedInAction.php';
 require_once __DIR__ . '/actions/LoggedOutAction.php';
@@ -21,8 +22,6 @@ require_once __DIR__ . '/actions/InstrumentSelectAction.php';
 require_once __DIR__ . '/actions/InstrumentUpdateAction.php';
 require_once __DIR__ . '/actions/FeedbackAction.php';
 require_once __DIR__ . '/actions/AccountViewAction.php';
-require_once __DIR__ . '/actions/CancelGoldAction.php';
-require_once __DIR__ . '/actions/RenewGoldAction.php';
 require_once __DIR__ . '/actions/SongCompletionAction.php';
 require_once __DIR__ . '/actions/AudioTestAction.php';
 require_once __DIR__ . '/misc/DifficultyComputer.php';
@@ -77,6 +76,9 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 $app->get('/jeopardy', function(Request $request) use($app) {
+	if (($_SERVER['HTTP_HOST'] !== 'localhost:8080')) {
+		return '';
+	}
 	$app->register(new Csanquer\Silex\PdoServiceProvider\Provider\PDOServiceProvider('pdo'),
 		array(
 			'pdo.server' => array(
@@ -127,8 +129,19 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 });
 
 
+$app->get('/compute_min_max_note_indexes', function(Request $request) use($app) {
+	if (ReadMiAction::isDev()) {
+		Instruments::computeMinMaxNoteIndexForSongs($app);
+		return '';
+	}
+	return '';
+});
+
 $app->get('/compute_levels', function(Request $request) use($app) {
-	DifficultyComputer::updateLevels($app);
+	if (ReadMiAction::isDev()) {
+		DifficultyComputer::updateLevels($app);
+		return '';
+	}
 	return '';
 });
 

@@ -11,8 +11,8 @@ use Stripe\Stripe;
 
 class StripeSessionIdAction extends LoggedInAction {
 
-	protected const DEV_PRODUCT_ID = 'price_1HRNu0Kfc5hHCIGNMj6oAx4R';
-	protected const PRODUCT_ID = 'price_1H8tJJKfc5hHCIGNEgXdJXBF';
+	protected const DEV_PRODUCT_ID = 'price_1HlO5eKfc5hHCIGNmhOOZsO9';
+	protected const PRODUCT_ID = 'price_1HlO52Kfc5hHCIGNl8nZIM6I';
 
 	protected static function _execute(Application $app, Request $request): string {
 		$host = self::isDev() ? 'http://localhost:8080' : 'https://www.readmimusic.com';
@@ -25,7 +25,7 @@ class StripeSessionIdAction extends LoggedInAction {
 				'price' => $product_id,
 				'quantity' => 1,
 			]],
-			'mode' => 'subscription',
+			'mode' => 'payment',
 			'success_url' => $host . '/payment_success?session_id={CHECKOUT_SESSION_ID}',
 			'cancel_url' => $host,
 		]);

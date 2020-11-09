@@ -183,11 +183,16 @@ export default class StaveUpdater {
 		for(let note of this.notes_on_staff){
 			var x = (stavesPassed + percentageThroughStave) * this.staveWidth;
 			let jquery_note = $(note.attrs.el)[0]
+			let jquery_note_bars = [];
 			let jquery_note_bar = $(note.attrs.el).prev('path')[0]
+			while (jquery_note_bar) {
+				jquery_note_bars.push(jquery_note_bar)
+				jquery_note_bar = $(jquery_note_bar).prev('path')[0]
+			}
 			let x_y = this.getTransformXY(jquery_note)
 			x_y.x = -x;
 			jquery_note.setAttribute('transform', `translate(${x_y.x},${x_y.y})`);
-			if (jquery_note_bar) {
+			for (let jquery_note_bar of jquery_note_bars) {
 				jquery_note_bar.setAttribute('transform', `translate(${x_y.x},${x_y.y})`);
 			}
 		}

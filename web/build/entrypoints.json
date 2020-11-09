@@ -199,6 +199,11 @@
       "css": [
         "/build/account_view_style.css"
       ]
+    },
+    "premium_info": {
+      "css": [
+        "/build/premium_info.css"
+      ]
     }
   }
 }

@@ -75,6 +75,7 @@ export default class NoteFeedbackV2 {
 				let expected_note = key_signatures.getOffsetNote(key, octave, 0 - Instruments.getInstrumentKeyOffset(note_feedback.instrument));
 				let expected_freq = note_detection.getFrequencyForNote(expected_note.name, expected_note.octave);
 				let currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getByteTimeDomainData(), note_feedback.audio_stream_controller.getSampleRate(), expected_freq);
+				console.log(currentNote);
 				let actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
 				if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
 					let bar = $(note.attrs.el).prev('path')[0]

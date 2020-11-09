@@ -6,6 +6,7 @@ namespace Actions;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use PDO;
+use Instruments;
 
 class SongCompletionAction extends LoggedInAction {
 
@@ -21,7 +22,7 @@ class SongCompletionAction extends LoggedInAction {
 		$level = $instrument_data['level'];
 		$completed_songs = array_flip($instrument_data['completed_songs']);
 		$accuracy = $notes_correct / $total_notes;
-		$accuracy_as_percent = $accuracy * 100;
+		$accuracy_as_percent = round($accuracy * 100, 3);
 		if (!isset($completed_songs[$song_id])) {
 			if ($accuracy < 0.8) {
 				return json_encode(['msg' => "Your note accuracy was {$accuracy_as_percent}%, you need 80% accuracy to complete this song. Practice makes perfect!"]);
@@ -33,7 +34,7 @@ class SongCompletionAction extends LoggedInAction {
 			$instrument_data['completed_songs'][] = $song_id;
 
 			// check for level up
-			$song_ids_for_level = self::getSongIdsForLevel($app, $instrument === 'piano', $level);
+			$song_ids_for_level = self::getSongIdsForLevel($app, $instrument, $level);
 			$songs_completed = array_intersect_key(array_flip($song_ids_for_level), array_flip($instrument_data['completed_songs']));
 			if (count($songs_completed) === 5) {
 				$instrument_data['level'] = $instrument_data['level'] + 1;
@@ -47,12 +48,15 @@ class SongCompletionAction extends LoggedInAction {
 			$st->execute();
 			return json_encode(['msg'  => $msg]);
 		} else {
-			return json_encode(['msg'  => 'Practice makes perfect!']);
+			return json_encode(['msg'  => "Your note accuracy was {$accuracy_as_percent}%. You have already completed this song. Practice makes perfect!"]);
 		}
 	}
 
-	private static function getSongIdsForLevel(Application $app, int $is_piano, int $level) {
-		$st = $app['pdo']->prepare("SELECT id FROM readmi_songs WHERE piano = {$is_piano} and level = {$level}");
+	private static function getSongIdsForLevel(Application $app, string $instrument, int $level) {
+		$is_piano = $instrument === 'piano' ? 1 : 0;
+		$max_note_index = Instruments::MAX_PLAYABLE_NOTE_INDEX[$instrument];
+		$min_note_index = Instruments::MIN_PLAYABLE_NOTE_INDEX[$instrument];
+		$st = $app['pdo']->prepare("SELECT id FROM readmi_songs WHERE piano = {$is_piano} and max_note_index <= {$max_note_index} and min_note_index >= {$min_note_index} level = {$level}");
 		$st->execute();
 		$ids = [];
 		while ($row = $st->fetch(PDO::FETCH_ASSOC)) {

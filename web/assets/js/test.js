@@ -85,52 +85,41 @@ function startSession(audioStreamController) {
 	let renderer_context = renderer.getContext();
 	let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure, 0);
 
-	swal2.fire({
-		title: 'Select BPM',
-		html: `<input type="number" value="60" step="1" class="swal2-input" id="bpm">`,
-		input: 'range',
-		inputAttributes: {
-			min: 10,
-			max: 120,
-			step: 1
-		},
-		confirmButtonText: 'Start!',
-		onOpen: () => {
-			const inputRange = swal2.getInput()
-			const inputNumber = swal2.getContent().querySelector('#bpm')
-
-			// remove default output
-			inputRange.nextElementSibling.style.display = 'none'
-			inputRange.style.width = '100%'
-
-			// sync input[type=number] with input[type=range]
-			inputRange.addEventListener('input', () => {
-				inputNumber.value = inputRange.value
-			})
-
-			// sync input[type=range] with input[type=number]
-			inputNumber.addEventListener('change', () => {
-				inputRange.value = inputNumber.value
-			})
-		}
-	}).then((result) => {
-		audioStreamController.startStream();
-		let bpm_slider = document.getElementById('bpm');
-		let metronome = new ScheduledMetronome(bpm_slider.value, beats_per_measure * vf_bars.length)
-		let stave_updater = new StaveUpdater(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), bpm_slider.value)
-		if (isPiano) {
-			stave_updater.renderForPiano()
-		} else {
-			stave_updater.renderForNonPiano()
-		}
-		let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_slider.value, beats_per_measure);
-		songPlayer.setController();
-		let note_hinter = NoteHinter.getHinter(instrument, bpm_slider.value, beats_per_measure, note_scheduler.getScheduledNotes(), keySignature);
-		note_hinter.setController();
-		let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_slider.value, keySigStaffWidth);
-		let note_scheduler_2 = new NoteScheduler(vf_bars, beat_value, beats_per_measure, bpm_slider.value);
-		let note_feedback = new NoteFeedbackV2(renderer_context, note_scheduler_2, audioStreamController, beats_per_measure, bpm_slider.value, instrument)
-		let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, beats_per_measure, bpm_slider.value, bars.length, isDemo, songId, bpmRequirement, note_hinter, stave_updater);
-		session_controller.start();
-	})
+	swal2.fire('Notes will move across the screen towards a rectangular box. Play the note when it reaches the box.' +
+		'If you play the note correctly, it will turn green. Otherwise, it will turn red.').then((result) => {
+		swal2.fire({
+			html: '<label for="my-input">Enter BPM (Beats Per Minute)</label>',
+			title: 'How fast do you want to play?',
+			input: 'range',
+			inputLabel: 'Your age',
+			inputAttributes: {
+				min: 10,
+				max: 120,
+				step: 1
+			},
+			inputValue: 60,
+			confirmButtonText: 'Start!',
+		}).then((result) => {
+			console.log(result);
+			audioStreamController.startStream();
+			//let bpm_slider = document.getElementById('bpm');
+			let bpm_value = result.value;
+			let metronome = new ScheduledMetronome(bpm_value, beats_per_measure * vf_bars.length)
+			let stave_updater = new StaveUpdater(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), bpm_value)
+			if (isPiano) {
+				stave_updater.renderForPiano()
+			} else {
+				stave_updater.renderForNonPiano()
+			}
+			let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_value, beats_per_measure);
+			songPlayer.setController();
+			let note_hinter = NoteHinter.getHinter(instrument, bpm_value, beats_per_measure, note_scheduler.getScheduledNotes(), keySignature);
+			note_hinter.setController();
+			let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_value, keySigStaffWidth);
+			let note_scheduler_2 = new NoteScheduler(vf_bars, beat_value, beats_per_measure, bpm_value);
+			let note_feedback = new NoteFeedbackV2(renderer_context, note_scheduler_2, audioStreamController, beats_per_measure, bpm_value, instrument)
+			let session_controller = new SessionController(audioStreamController, note_feedback, metronome, songPlayer, timing_bar, beats_per_measure, bpm_value, bars.length, isDemo, songId, bpmRequirement, note_hinter, stave_updater);
+			session_controller.start();
+		})
+	});
 }

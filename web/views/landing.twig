@@ -7,9 +7,8 @@
             <h1 id="_header">ReadMi</h1>
             <div id="sheet_sample"></div>
             <h2 id="description">An interactive sight reading tool that provides real-time feedback.</h2>
-            <h2 id="welcome">Welcome,  {{ user_name }}!</h2>
         </header>
-        <u>Your Level:</u>&nbsp;{{ level }} <br>
+        <u>Welcome, {{ user_name }}! You are Level</u>&nbsp;{{ level }} <br>
     </div>
     <div id="level_info">
         <div id="advance_info">To advance to the next level, complete 5 of the following with 80% note accuracy or higher:</div>
@@ -58,7 +57,7 @@
             {% endfor %}
             {% for s in disabled_songs %}
                 <tr class="songDisabled">
-                    <td class="tooltiptext">Requires Gold Membership</td>
+                    <td class="tooltiptext">Requires Level Up or Gold Account</td>
                     <td class="songName">
                         <span class="songTitle">{{ s.name }}</span><br>
                         <span class="songArtist">{{ s.artist }}</span><br>

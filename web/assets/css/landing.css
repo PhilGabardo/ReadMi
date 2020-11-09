@@ -29,7 +29,6 @@
 }
 
 #_header {
-    margin-top: 0;
     margin-bottom: 0;
     font-size: 10vh;
 }
@@ -51,7 +50,6 @@
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 75%; /* Set the width of the sidebar */
     z-index: 1; /* Stay on top */
-    padding-top: 5vh;
 }
 
 #welcome {

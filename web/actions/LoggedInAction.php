@@ -4,7 +4,9 @@ namespace Actions;
 use PDO;
 use Stripe\Customer;
 use Stripe\Stripe;
+use Stripe\StripeClient;
 use Stripe\Subscription;
+use Instruments;
 
 
 abstract class LoggedInAction extends ReadMiAction {
@@ -21,13 +23,14 @@ abstract class LoggedInAction extends ReadMiAction {
 		'piano' => 'Piano',
 		'guitar' => 'Guitar',
 		'violin' => 'Violin',
+		/*
 		'alto_saxophone' => 'Alto Saxophone',
 		'tenor_saxophone' => 'Tenor Saxophone',
 		'soprano_saxophone' => 'Soprano Saxophone',
 		'clarinet' => 'Clarinet',
 		//'bass_clarinet' => 'Bass Clarinet',
 		'french_horn' => 'French Horn',
-		'trumpet' => 'Trumpet',
+		'trumpet' => 'Trumpet',*/
 	];
 
 	protected static function getPublishableKey() : string {
@@ -53,30 +56,10 @@ abstract class LoggedInAction extends ReadMiAction {
 		return floor($multiplier * $beat_value);
 	}
 
-	protected static function getSubscriptionInfo($app) : array {
+	protected static function isPremiumUser($app) : bool {
 		$customer = self::getStripeCustomer($app);
-		$subscriptions = $customer->subscriptions;
-		if (!$subscriptions) {
-			return [];
-		}
-		$subscriptions = $subscriptions->all()->data;
-		/** @var Subscription $subscription */
-		$subscription = reset($subscriptions);
-		if (!$subscription) {
-			return [];
-		}
-		$pretty_period_end = date('l jS \of F Y', $subscription->current_period_end);
-		return [
-			'start' => $subscription->start_date,
-			'status' =>	$subscription->status,
-			'cancel_at_period_end' => $subscription->cancel_at_period_end,
-			'status_pretty' => $subscription->cancel_at_period_end ? "Active (until $pretty_period_end)" : "Active",
-			'start_pretty' => date('l jS \of F Y', $subscription->start_date),
-			'period_end_pretty' => date('l jS \of F Y', $subscription->current_period_end),
-			'period_start_pretty' => date('l jS \of F Y', $subscription->current_period_start),
-			'period_start' => $subscription->current_period_start,
-			'period_end' => $subscription->current_period_end,
-		];
+		$client = new StripeClient(self::getSecretKey());
+		return $client->charges->all(['customer' => $customer->id])->count() === 1;
 	}
 
 	protected static function getStripeCustomer($app) {
@@ -104,15 +87,15 @@ abstract class LoggedInAction extends ReadMiAction {
 
 	protected static function getLoggedInData($app) {
 		$user_info = self::getUserInfo($app);
-		$sub_info =  self::getSubscriptionInfo($app);
-		$is_premium_user = isset($sub_info['status']) ? self::getSubscriptionInfo($app)['status'] === 'active' : false;
+		$is_premium_user = self::isPremiumUser($app);
 		$instrument = $user_info['instrument'];
 		$instrument_data = json_decode($user_info["{$instrument}_data"], true);
 		$level = $instrument_data['level'];
 		$completed_songs = array_flip($instrument_data['completed_songs']);
 		$is_piano = $instrument === 'piano' ? 1 : 0;
-
-		$st = $app['pdo']->prepare("SELECT id, name, level, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE piano = {$is_piano} and level <= {$level} ORDER BY level ASC");
+		$max_note_index = Instruments::MAX_PLAYABLE_NOTE_INDEX[$instrument];
+		$min_note_index = Instruments::MIN_PLAYABLE_NOTE_INDEX[$instrument];
+		$st = $app['pdo']->prepare("SELECT id, name, level, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE piano = {$is_piano} and max_note_index <= {$max_note_index} and min_note_index >= {$min_note_index} ORDER BY level ASC");
 		$st->execute();
 
 		$key_signatures = [];
@@ -127,7 +110,7 @@ abstract class LoggedInAction extends ReadMiAction {
 			$key_signatures[] = $row['key_signature'];
 			$time_signatures[] = $row['time_signature'];
 			$class = isset($completed_songs[$row['id']]) ? 'completed' : 'incomplete';
-			if (!$row['is_premium'] || $is_premium_user) {
+			if ($row['level'] <= $level || $is_premium_user) {
 				$row['class'] = $class;
 				$enabled_songs[] = $row;
 			} else {

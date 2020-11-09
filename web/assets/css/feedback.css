@@ -14,8 +14,19 @@
     font-size: 17px;
     position: fixed;
     left: -40px;
-    top: 45%;
     z-index: 999;
+}
+
+#popup {
+    top: 45%;
+}
+
+#logout {
+    top: 65%;
+}
+
+#my_account {
+    top: 25%;
 }
 
 #feedback-main {

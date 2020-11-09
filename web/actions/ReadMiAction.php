@@ -82,7 +82,7 @@ abstract class ReadMiAction {
 	}
 
 
-	protected static function isDev() {
+	public static function isDev() {
 		return strpos($_SERVER['HTTP_HOST'], 'localhost:8080') !== false;
 	}
 }

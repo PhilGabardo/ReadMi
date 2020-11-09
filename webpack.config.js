@@ -61,6 +61,7 @@ Encore
 	.addStyleEntry('instrument_select', './web/assets/css/instrument_select.css')
 	.addStyleEntry('feedback_style', './web/assets/css/feedback.css')
 	.addStyleEntry('account_view_style', './web/assets/css/account_view.css')
+	.addStyleEntry('premium_info', './web/assets/css/premium_info.css')
 
 
 	// allow sass/scss files to be processed

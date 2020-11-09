@@ -31,6 +31,7 @@
   "build/note_hinter.js": "/build/note_hinter.js",
   "build/note_timing.js": "/build/note_timing.js",
   "build/payment.js": "/build/payment.js",
+  "build/premium_info.css": "/build/premium_info.css",
   "build/score_renderer.js": "/build/score_renderer.js",
   "build/selectize_override.css": "/build/selectize_override.css",
   "build/session_controller.js": "/build/session_controller.js",

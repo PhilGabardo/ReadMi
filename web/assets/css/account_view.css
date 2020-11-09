@@ -3,6 +3,7 @@
 }
 
 #account_info, #gold_info {
+    width: 25vw;
     margin: auto;
     border: dotted;
 }

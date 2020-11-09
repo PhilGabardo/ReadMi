@@ -1,0 +1,20 @@
+* {
+    text-align: center;
+}
+
+#_header {
+    font-size: 10vh;
+}
+
+ul {
+    font-size: 3vh;
+    list-style: none;
+}
+
+#checkout-button {
+    width: auto;
+}
+
+.main_content {
+    margin-top: 25vh;
+}
