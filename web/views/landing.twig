@@ -2,6 +2,18 @@
 {% block content %}
     <link rel="stylesheet" href="/build/landing_style.css">
     <link rel="stylesheet" href="/build/filterable_table.css">
+    <div id="instrument_selection">
+        Your Instrument:
+        <select id="instrument">
+            {% for instrument_key, instrument_value in selectable_instruments %}
+                {% if instrument_key == instrument %}
+                    <option value="{{ instrument_key }}" selected>{{instrument_value}}</option>
+                {% else %}
+                    <option value="{{ instrument_key }}">{{instrument_value}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
     <div id="header">
         <header>
             <h1 id="_header">ReadMi{% if is_premium %}<sup id="gold_sub">Gold</sup>{% endif %}</h1>

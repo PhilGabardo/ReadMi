@@ -1,4 +1,3 @@
-
 #boo {
     position: relative;
 }
@@ -54,7 +53,7 @@
 }
 
 #menu {
-    font-size: 20px;
+    font-size: 15px;
     margin: auto;
     margin-bottom: 10px;
     background: hsla(80, 90%, 40%, 1);
@@ -153,4 +152,28 @@ body {
     height: 100%;
     width: 100%;
 }
+
+.conv_button {
+    color: #494949 !important;
+    text-decoration: none;
+    background: #ffffff;
+    display: inline-block;
+    margin: 1%;
+    opacity: 1;
+    font-size: large;
+    text-decoration: underline;
+}
+
+#home_button {
+    position: fixed;
+    top: 2%;
+    left: 2%;
+}
+
+#restart_button {
+    position: fixed;
+    top: 2%;
+    right: 2%;
+}
+
 

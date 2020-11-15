@@ -1,3 +1,5 @@
+import $ from 'jquery';
+import selectize from 'selectize'
 import VexFlow from 'vexflow';
 // Create an SVG renderer and attach it to the DIV element named "boo".
 let div = document.getElementById("sheet_sample");
@@ -57,3 +59,8 @@ function colorNote(note, isGreen, rendering_context) {
 	note.setContext(rendering_context);
 	note.draw();
 }
+
+$('#instrument').on('change', (event) => {
+	let instrument_param = '<input type="hidden" name="instrument" value="'+event.target.value+'">';
+	$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="instrument_update">' + instrument_param + '</form>').appendTo($(document.body)).submit();
+})

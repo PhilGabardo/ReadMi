@@ -56,7 +56,7 @@ class SongCompletionAction extends LoggedInAction {
 		$is_piano = $instrument === 'piano' ? 1 : 0;
 		$max_note_index = Instruments::MAX_PLAYABLE_NOTE_INDEX[$instrument];
 		$min_note_index = Instruments::MIN_PLAYABLE_NOTE_INDEX[$instrument];
-		$st = $app['pdo']->prepare("SELECT id FROM readmi_songs WHERE piano = {$is_piano} and max_note_index <= {$max_note_index} and min_note_index >= {$min_note_index} level = {$level}");
+		$st = $app['pdo']->prepare("SELECT id FROM readmi_songs WHERE piano = {$is_piano} and max_note_index <= {$max_note_index} and min_note_index >= {$min_note_index} and level = {$level}");
 		$st->execute();
 		$ids = [];
 		while ($row = $st->fetch(PDO::FETCH_ASSOC)) {

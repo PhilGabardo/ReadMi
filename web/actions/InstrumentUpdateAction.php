@@ -15,6 +15,6 @@ class InstrumentUpdateAction extends LoggedInAction {
 		$user_id = $user_info['sub'];
 		$st = $app['pdo']->prepare("UPDATE users set instrument = '$instrument' where oauth_id = '$user_id'");
 		$st->execute();
-		return AccountViewAction::execute($app, $request);
+		return LandingAction::execute($app, $request);
 	}
 }
