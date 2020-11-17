@@ -2,12 +2,11 @@ import Timing from './timing'
 import swal from 'sweetalert';
 
 export default class SessionController {
-	constructor(audio_stream_controller, note_feedback, metronome, song_player, timing_bar, beats_per_measure, bpm, total_bar_count, is_demo, song_id, bpm_requirement, note_hinter, stave_updater) {
+	constructor(note_feedback, metronome, song_player, timing_bar, beats_per_measure, bpm, total_bar_count, is_demo, song_id, bpm_requirement, note_hinter, stave_updater) {
 		this.note_feedback = note_feedback;
 		this.metronome = metronome;
 		this.song_player = song_player;
 		this.timing_bar = timing_bar;
-		this.audio_stream_controller = audio_stream_controller;
 		this.bpm = bpm;
 		this.beats_per_measure = beats_per_measure;
 		this.instrument = instrument;
