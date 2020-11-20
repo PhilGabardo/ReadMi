@@ -45,12 +45,6 @@ abstract class LoggedInAction extends ReadMiAction {
 		return true;
 	}
 
-	protected static function getOauthId() : string {
-		$auth0 = ReadMiAction::getAuth0();
-		$user_info = $auth0->getUser();
-		return $user_info['sub'];
-	}
-
 	protected static function getBPMRequirement(int $level, int $beat_value) : int {
 		$multiplier = 10 + min(10, $level / 10);
 		return floor($multiplier * $beat_value);
@@ -78,8 +72,8 @@ abstract class LoggedInAction extends ReadMiAction {
 	}
 
 	protected static function getUserInfo($app) : array {
-		$oauth_id = self::getOauthId();
-		$st = $app['pdo']->prepare("SELECT * FROM users WHERE oauth_id = '{$oauth_id}'");
+		$user_id = $_SESSION['id'];
+		$st = $app['pdo']->prepare("SELECT * FROM readmi_users WHERE id = {$user_id}");
 		$st->execute();
 		$user_info = $st->fetch(PDO::FETCH_ASSOC) ?: [];
 		return $user_info;

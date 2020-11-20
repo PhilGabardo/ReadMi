@@ -13,9 +13,7 @@ class FeedbackAction extends LoggedInAction {
 	private const EMAIL = 'readmimusic@gmail.com';
 
 	protected static function _execute(Application $app, Request $request): string {
-		$auth0 = ReadMiAction::getAuth0();
-		$user_info = $auth0->getUser();
-		$user_id = $user_info['sub'];
+		$user_id = $_SESSION['username'];
 		$mail = new PHPMailer(true);
 		$comment = $request->get('comment');
 		$success = true;
@@ -45,6 +43,6 @@ class FeedbackAction extends LoggedInAction {
 		} catch (Exception $e) {
 			$success = false;
 		}
-		return json_encode(['success' => true]);
+		return json_encode(['success' => $success]);
 	}
 }

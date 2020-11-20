@@ -10,7 +10,7 @@ require_once __DIR__ . '/actions/LoggedInAction.php';
 require_once __DIR__ . '/actions/LoggedOutAction.php';
 require_once __DIR__ . '/actions/DemoLandingAction.php';
 require_once __DIR__ . '/actions/LandingAction.php';
-require_once __DIR__ . '/actions/LogInAction.php';
+require_once __DIR__ . '/actions/DisplayLogInAction.php';
 require_once __DIR__ . '/actions/LogOutAction.php';
 require_once __DIR__ . '/actions/PlayDemoAction.php';
 require_once __DIR__ . '/actions/PlaySongAction.php';
@@ -23,6 +23,11 @@ require_once __DIR__ . '/actions/FeedbackAction.php';
 require_once __DIR__ . '/actions/AccountViewAction.php';
 require_once __DIR__ . '/actions/SongCompletionAction.php';
 require_once __DIR__ . '/actions/AudioTestAction.php';
+require_once __DIR__ . '/actions/LogInAction.php';
+require_once __DIR__ . '/actions/CreateUserAction.php';
+require_once __DIR__ . '/actions/SendPasswordResetEmailAction.php';
+require_once __DIR__ . '/actions/PasswordResetAction.php';
+require_once __DIR__ . '/actions/DisplayPasswordResetAction.php';
 require_once __DIR__ . '/misc/DifficultyComputer.php';
 
 
@@ -31,6 +36,8 @@ use \Symfony\Component\HttpFoundation\Request;
 
 use Actions\ReadMiAction;
 use Misc\DifficultyComputer;
+
+session_start();
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -124,6 +131,10 @@ $app->get('/jeopardy', function(Request $request) use($app) {
 		'categories' => $categories,
 		'clues' => $clues,
 	]);
+});
+
+$app->get('/password_reset', function(Request $request) use($app) {
+	return \Actions\DisplayPasswordResetAction::execute($app, $request);
 });
 
 

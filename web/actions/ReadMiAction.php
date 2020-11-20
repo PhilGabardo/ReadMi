@@ -14,8 +14,12 @@ abstract class ReadMiAction {
 		switch ($action_type) {
 			case 'play_demo':
 				return PlayDemoAction::execute($app, $request);
+			case 'display_login':
+				return DisplayLogInAction::execute($app, $request);
 			case 'login':
 				return LogInAction::execute($app, $request);
+			case 'create_user':
+				return CreateUserAction::execute($app, $request);
 			case 'logout':
 				return LogOutAction::execute($app, $request);
 			case 'play_song':
@@ -24,8 +28,6 @@ abstract class ReadMiAction {
 				return PremiumInfoAction::execute($app, $request);
 			case 'stripe_session_id':
 				return StripeSessionIdAction::execute($app, $request);
-			case 'payment_success':
-				return PaymentSuccessAction::execute($app, $request);
 			case 'payment_failure':
 				return PaymentFailureAction::execute($app, $request);
 			case 'instrument_select':
@@ -36,12 +38,14 @@ abstract class ReadMiAction {
 				return AccountViewAction::execute($app, $request);
 			case 'feedback':
 				return FeedbackAction::execute($app, $request);
+			case 'reset_password':
+				return PasswordResetAction::execute($app, $request);
 			case 'song_completion':
 				return SongCompletionAction::execute($app, $request);
+			case 'send_reset_password_email':
+				return SendPasswordResetEmailAction::execute($app, $request);
 			default:
-				$auth0 = self::getAuth0();
-				$user_info = $auth0->getUser();
-				if (!$user_info) {
+				if (!self::isLoggedIn()) {
 					return DemoLandingAction::execute($app, $request);
 				} else {
 					return LandingAction::execute($app, $request);
@@ -49,34 +53,22 @@ abstract class ReadMiAction {
 		}
 	}
 
+	final public static function isLoggedIn() : bool {
+		return isset($_SESSION['loggedin']);
+	}
+
 	abstract protected static function expectsLoggedIn() : bool;
 
 	final public static function execute(Application $app, Request $request) : string {
-		$auth0 = self::getAuth0();
-
-		$user_info = $auth0->getUser();
-
-		if (!$user_info && static::expectsLoggedIn()) {
+		if (!self::isLoggedIn() && static::expectsLoggedIn()) {
 			return DemoLandingAction::_execute($app, $request);
-		} else if ($user_info && !static::expectsLoggedIn()) {
+		} else if (self::isLoggedIn() && !static::expectsLoggedIn()) {
 			throw new Exception("Invalid operation for logged out user");
 		}
 		return static::_execute($app, $request);
 	}
 
 	abstract protected static function _execute(Application $app, Request $request) : string;
-
-	public static function getAuth0($redirect_uri = null) {
-		$redirect_uri = $redirect_uri ?? (self::isDev() ? 'http://localhost:8080' : 'https://www.readmimusic.com');
-		return new Auth0([
-			'domain' => 'dev-x4bvwq5p.us.auth0.com',
-			'client_id' => 'qBKDTm0fwT9Wncy4Al81zkZiYR0LRUlD',
-			'client_secret' => 'MCLdqQfFQhIt-qeWwl-JJhJuSR_jcDR8UN4qjP8g2xSIgHFwrKLAwoxnbQnoraUW',
-			'redirect_uri' => $redirect_uri,
-			'scope' => 'openid profile email',
-		]);
-	}
-
 
 	public static function isDev() {
 		return strpos($_SERVER['HTTP_HOST'], 'localhost:8080') !== false;

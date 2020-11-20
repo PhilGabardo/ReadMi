@@ -9,14 +9,12 @@ class InstrumentSelectAction extends LoggedInAction {
 
 	protected static function _execute(Application $app, Request $request): string {
 		$instrument = $request->get('instrument');
-		$auth0 = ReadMiAction::getAuth0();
-		$user_info = $auth0->getUser();
-		$user_id = $user_info['sub'];
-		$st = $app['pdo']->prepare("INSERT INTO users (oauth_id, instrument) VALUES ('$user_id', '$instrument')");
+		$user_id = $_SESSION['id'];
+		$st = $app['pdo']->prepare("UPDATE readmi_users set instrument = '$instrument' where id = $user_id");
 		$st->execute();
 		return $app['twig']->render('landing.twig',
 			[
-				'user_name' => $user_info['name']
+				'user_name' => $_SESSION['username']
 			] + self::getLoggedInData($app));
 	}
 }

@@ -10,10 +10,8 @@ class InstrumentUpdateAction extends LoggedInAction {
 
 	protected static function _execute(Application $app, Request $request): string {
 		$instrument = $request->get('instrument');
-		$auth0 = ReadMiAction::getAuth0();
-		$user_info = $auth0->getUser();
-		$user_id = $user_info['sub'];
-		$st = $app['pdo']->prepare("UPDATE users set instrument = '$instrument' where oauth_id = '$user_id'");
+		$user_id = $_SESSION['id'];
+		$st = $app['pdo']->prepare("UPDATE readmi_users set instrument = '$instrument' where id = $user_id");
 		$st->execute();
 		return LandingAction::execute($app, $request);
 	}

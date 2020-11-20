@@ -145,6 +145,11 @@
         "/build/non_piano_stave_updater.js"
       ]
     },
+    "reset_password": {
+      "js": [
+        "/build/reset_password.js"
+      ]
+    },
     "filterable_table": {
       "css": [
         "/build/filterable_table.css"
@@ -203,6 +208,11 @@
     "premium_info": {
       "css": [
         "/build/premium_info.css"
+      ]
+    },
+    "login_style": {
+      "css": [
+        "/build/login_style.css"
       ]
     }
   }

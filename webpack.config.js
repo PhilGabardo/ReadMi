@@ -47,6 +47,7 @@ Encore
 	.addEntry('draw_guitar', './web/assets/js/draw_guitar.js')
 	.addEntry('draw_violin', './web/assets/js/draw_violin.js')
 	.addEntry('non_piano_stave_updater', './web/assets/js/non_piano_stave_updater.js')
+	.addEntry('reset_password', './web/assets/js/reset_password.js')
 
 
 	// will output as web/build/global.css
@@ -62,6 +63,7 @@ Encore
 	.addStyleEntry('feedback_style', './web/assets/css/feedback.css')
 	.addStyleEntry('account_view_style', './web/assets/css/account_view.css')
 	.addStyleEntry('premium_info', './web/assets/css/premium_info.css')
+	.addStyleEntry('login_style', './web/assets/css/login.css')
 
 
 	// allow sass/scss files to be processed

@@ -1,0 +1,29 @@
+{% extends "demo_layout.html" %}
+{% block content %}
+	<link rel="stylesheet" href="/build/login_style.css">
+	<div class="login-page">
+		<div class="form">
+			<h1 id="_header">ReadMi</h1>
+			<form class="register-form">
+				<input id="create_username" type="text" placeholder="username" maxlength="20"/>
+				<input id="create_password" type="password" placeholder="password" maxlength="20"/>
+				<input id="create_email_address" type="text" placeholder="email address" maxlength="20"/>
+				<button id="create_user" class="readmi_button">create</button>
+				<p id="sign_in" class="message">Already registered? <a href="#">Sign In</a></p>
+			</form>
+			<form class="login-form">
+				<input id="username_or_email" type="text" placeholder="username or email" maxlength="20"/>
+				<input id="login_password" type="password" placeholder="password" maxlength="20"/>
+				<button id="log_in" class="readmi_button">login</button>
+				<p id="reset_password" class="message"><a href="#">Forgot your password?</a></p>
+				<p id="create_account" class="message">Not registered? <a href="#">Create an account</a></p>
+			</form>
+			<form class="reset-password-form">
+				<input id="reset_email_address" type="text" placeholder="email address" maxlength="20"/>
+				<button id=send_reset_link" class="readmi_button">send reset link</button>
+				<p id="back" class="message"><a href="#">Back</a></p>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript" src="/build/login.js"></script>
+{% endblock %}

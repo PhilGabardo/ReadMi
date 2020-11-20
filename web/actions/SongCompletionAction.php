@@ -44,7 +44,7 @@ class SongCompletionAction extends LoggedInAction {
 				$msg = "Nice job! Your note accuracy was {$accuracy_as_percent}%. You have completed this song. You must complete $songs_left more songs at Level $level to advance to the next level.";
 			}
 			$encoded_instrument_data = json_encode($instrument_data);
-			$st = $app['pdo']->prepare("UPDATE users set {$instrument}_data = '{$encoded_instrument_data}' where id = {$user_info['id']}");
+			$st = $app['pdo']->prepare("UPDATE readmi_users set {$instrument}_data = '{$encoded_instrument_data}' where id = {$user_info['id']}");
 			$st->execute();
 			return json_encode(['msg'  => $msg]);
 		} else {
