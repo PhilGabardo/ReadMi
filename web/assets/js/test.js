@@ -91,7 +91,6 @@ function startSession(audioStreamController) {
 			html: '<label for="my-input">Enter BPM (Beats Per Minute)</label>',
 			title: 'How fast do you want to play?',
 			input: 'range',
-			inputLabel: 'Your age',
 			inputAttributes: {
 				min: 10,
 				max: 120,
