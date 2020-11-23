@@ -234,8 +234,8 @@ function estimateFrequency(wave) {
 }
 
 function getNoteFromSamples(buffer, sampleRate, expected_freq) {
-	//let freq = estimateFrequency(buffer)
-	//return freq ? estimateNote(freq) : [];
+	let freq = estimateFrequency(buffer)
+	return freq ? estimateNote(freq) : [];
 	// We use Autocorrelation to find the fundamental frequency.
 
 	// In order to correlate the signal with itself (hence the name of the algorithm), we will check two points 'k' frames away.

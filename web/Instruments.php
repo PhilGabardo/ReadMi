@@ -5,7 +5,7 @@ use Silex\Application;
 class Instruments {
 
 	public const MIN_PLAYABLE_NOTE_INDEX = [
-		'piano' => 9, // A0
+		'piano' => 10, // A0
 		'violin' => 43, // G3
 		'guitar' => 40, // E3
 	];
@@ -13,7 +13,7 @@ class Instruments {
 	public const MAX_PLAYABLE_NOTE_INDEX = [
 		'piano' => 96, // C8
 		'violin' => 71, // B5
-		'guitar' => 86, // D7
+		'guitar' => 85, // D7
 	];
 	
 	private const NOTE_INDEX_MAP = [
@@ -35,6 +35,8 @@ class Instruments {
 		"BB"=> 10,
 		"B"=> 11,
 	];
+
+	private const INDEX_NOTE_MAP = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 
 	public static function computeMinMaxNoteIndexForSongs(Application $app) {
 		$st = $app['pdo']->prepare("SELECT id, notes FROM readmi_songs ORDER BY name ASC");
@@ -80,6 +82,15 @@ class Instruments {
 	
 	private static function getIndexForNote(string $key, int $octave) {
 		return 12 * $octave + self::NOTE_INDEX_MAP[strtoupper($key)];
+	}
+
+	public static function getNoteFromIndex(int $index) {
+		$octave = floor($index / 12);
+		$key = self::INDEX_NOTE_MAP[$index % 12];
+		return [
+			'octave' => $octave,
+			'name' => $key
+		];
 	}
 
 }

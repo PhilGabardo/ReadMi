@@ -58,10 +58,16 @@ export default class NoteFeedbackV2 {
 		if (normalized_context_time > note_feedback.notes[0].time_offset) {
 			if (normalized_context_time > (note_feedback.notes[0].time_offset + note_feedback.getSamplingBufferTime())) {
 				// mark wrong
-				let bar = $(note.attrs.el).prev('path')[0]
-				if (bar) {
-					bar.remove()
+				let jquery_note_bars = [];
+				let jquery_note_bar = $(note.attrs.el).prev('path')[0]
+				while (jquery_note_bar) {
+					jquery_note_bars.push(jquery_note_bar)
+					jquery_note_bar = $(jquery_note_bar).prev('path')[0]
 				}
+				for (let jquery_note_bar of jquery_note_bars) {
+					jquery_note_bar.remove();
+				}
+
 				$(note.attrs.el)[0].remove()
 				note.setStyle({fillStyle: 'rgba(255, 0, 0, 0.8)', strokeStyle: "red"});
 				note_feedback.totalNotes++;
@@ -78,9 +84,14 @@ export default class NoteFeedbackV2 {
 				let currentNote = note_detection.getNoteFromSamples(note_feedback.audio_stream_controller.getByteTimeDomainData(), note_feedback.audio_stream_controller.getSampleRate(), expected_freq);
 				let actual_freq = note_detection.getFrequencyForNote(currentNote.key, currentNote.octave);
 				if ((note.isRest() && currentNote.length === 0) || (currentNote && actual_freq === expected_freq)) {
-					let bar = $(note.attrs.el).prev('path')[0]
-					if (bar) {
-						bar.remove()
+					let jquery_note_bars = [];
+					let jquery_note_bar = $(note.attrs.el).prev('path')[0]
+					while (jquery_note_bar) {
+						jquery_note_bars.push(jquery_note_bar)
+						jquery_note_bar = $(jquery_note_bar).prev('path')[0]
+					}
+					for (let jquery_note_bar of jquery_note_bars) {
+						jquery_note_bar.remove();
 					}
 					$(note.attrs.el)[0].remove()
 					note.setStyle({fillStyle: "lightgreen", strokeStyle: "lightgreen"});

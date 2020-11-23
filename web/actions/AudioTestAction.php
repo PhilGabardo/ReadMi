@@ -12,17 +12,14 @@ class AudioTestAction extends LoggedOutAction {
 
 	protected static function _execute(Application $app, Request $request): string {
 		$notes = [];
-		$octave_start = $request->get('octave_start', 5);
 		$instrument = $request->get('instrument', 'piano');
-		for ($octave = $octave_start; $octave >= 2; $octave--) {
-			foreach (array_reverse(self::KEYS) as $key) {
-				$notes[] = [
+		$highest_note_num = \Instruments::MAX_PLAYABLE_NOTE_INDEX[$instrument];
+		$lowest_note_num = \Instruments::MIN_PLAYABLE_NOTE_INDEX[$instrument];
+		for ($i = $highest_note_num; $i >= $lowest_note_num; $i--) {
+			$notes[] = \Instruments::getNoteFromIndex($i) + [
 					'is_note' => true,
-					'name' => $key,
-					'octave' => $octave,
 					'quarterLength' => '0.5'
 				];
-			}
 		}
 		$bars = BarComputer::getBars($notes, 'C major', 4, 4, $instrument === 'piano');
 
