@@ -43,5 +43,14 @@
 	var isDemo = '{{ is_demo }}';
 	var songId = '{{ song_id }}';
 	var bpmRequirement = '{{ bpm_requirement }}';
+	var restart_button = document.getElementById('restart_button');
+	restart_button.onclick = function(event) {
+		event.preventDefault();
+		if (isDemo) {
+			$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="play_demo"><input type="hidden" name="instrument" value="'+ instrument + '"></form>').appendTo($(document.body)).submit();
+		} else {
+			$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="play_song"><input type="hidden" name="instrument" value="' + instrument + '"><input type="hidden" name="id" value="' + songId + '"></form>').appendTo($(document.body)).submit();
+		}
+	}
 </script>
 <script type="text/javascript" src="/build/test.js"></script>
