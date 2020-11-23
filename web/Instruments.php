@@ -8,12 +8,14 @@ class Instruments {
 		'piano' => 10, // A0
 		'violin' => 43, // G3
 		'guitar' => 40, // E3
+		'alto_saxophone' => 46,
 	];
 
 	public const MAX_PLAYABLE_NOTE_INDEX = [
 		'piano' => 96, // C8
 		'violin' => 71, // B5
 		'guitar' => 85, // D7
+		'alto_saxophone' => 78,
 	];
 	
 	private const NOTE_INDEX_MAP = [

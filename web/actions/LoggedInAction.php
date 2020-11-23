@@ -23,8 +23,8 @@ abstract class LoggedInAction extends ReadMiAction {
 		'piano' => 'Piano',
 		'guitar' => 'Guitar',
 		'violin' => 'Violin',
-		/*
 		'alto_saxophone' => 'Alto Saxophone',
+		/*
 		'tenor_saxophone' => 'Tenor Saxophone',
 		'soprano_saxophone' => 'Soprano Saxophone',
 		'clarinet' => 'Clarinet',

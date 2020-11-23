@@ -19,6 +19,8 @@ export default class NoteHinter {
 				return new SingingNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 			case 'violin':
 				return new ViolinNoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
+			case 'alto_saxophone':
+				return new AltoSaxHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 			default:
 				return new NoteHinter(beats_per_minute, beats_per_measure, vf_bars, key)
 		}
@@ -359,6 +361,51 @@ export class ViolinNoteHinter extends NoteHinter {
 			return a[1] - b[1];
 		});
 		this.draw_violin.drawNote(fingering[0][1] - 1, 3 - fingering[0][0])
+		super.hint(note)
+	}
+}
+
+export class AltoSaxHinter extends NoteHinter {
+	constructor(beats_per_minute, beats_per_measure, vf_bars, key) {
+		super(beats_per_minute, beats_per_measure, vf_bars, key)
+		let boo = document.getElementById("boo");
+		this.img = document.createElement("img");
+		//this.img.src = '../../assets/images/saxophone/14.gif';
+		this.img.style.height = '40%';
+		this.img.style.display = "block";
+		this.img.style.position = "fixed";
+		this.img.style.bottom = '2%'
+		this.img.style.left = '40%';
+
+		// This next line will just add it to the <body> tag
+		document.body.appendChild(this.img);
+	}
+
+	getInstrument() {
+		return 'alto_saxophone';
+	}
+
+	_setController() {
+		document.getElementById('note-hinter-controller').addEventListener('change', (event) => {
+			if (event.target.checked) {
+				this.img.style.display = "block";
+			} else {
+				this.img.style.display = "none";
+			}
+		})
+	}
+
+	undoLastHint(key, octave) {
+		//this.img.src = '';
+		super.undoLastHint(key, octave)
+	}
+
+	hint(note) {
+		let props = note.getKeyProps()[0];
+		let key = props.key;
+		let octave = props.octave;
+		let index = NoteDetection.getIndexForNote(key, octave);
+		this.img.src = '../../build/images/saxophone/' + (index - 32) + '.gif';
 		super.hint(note)
 	}
 }

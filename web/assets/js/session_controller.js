@@ -131,7 +131,7 @@ export default class SessionController {
 			})
 				.then((confirmed) => {
 					if (confirmed) {
-						$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="login"></form>').appendTo($(document.body)).submit();
+						$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="display_login"></form>').appendTo($(document.body)).submit();
 					} else {
 						$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value=""></form>').appendTo($(document.body)).submit();
 					}
