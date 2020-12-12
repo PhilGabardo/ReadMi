@@ -9,6 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 class CreateUserAction extends LoggedOutAction {
 
 	protected static function _execute(Application $app, Request $request): string {
+		// removes backslashes
+		$captcha = $request->get('token');
+
+		if (!self::validateCaptcha($captcha)) {
+			return json_encode(['message' => 'Captcha check failed.']);
+		}
+
 		// username validation
 		$username = trim($request->get('username'));
 		if ($username == '') {

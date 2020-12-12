@@ -10,6 +10,12 @@ class LogInAction extends LoggedOutAction {
 
 	protected static function _execute(Application $app, Request $request): string {
 		// removes backslashes
+		$captcha = $request->get('token');
+
+		if (!self::validateCaptcha($captcha)) {
+			return json_encode(['message' => 'Captcha check failed.']);
+		}
+
 		$username_or_email = trim($request->get('username_or_email'));
 		if (!preg_match("/^[a-zA-Z0-9_]+$/", $username_or_email) && !filter_var($username_or_email, FILTER_VALIDATE_EMAIL)) {
 			return json_encode(['message' => 'Invalid username or email.']);

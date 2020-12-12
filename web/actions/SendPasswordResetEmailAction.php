@@ -11,6 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 class SendPasswordResetEmailAction extends LoggedOutAction {
 
 	protected static function _execute(Application $app, Request $request): string {
+
+		$captcha = $request->get('token');
+
+		if (!self::validateCaptcha($captcha)) {
+			return json_encode(['message' => 'Captcha check failed.']);
+		}
+		
 		// email validation
 		$email = trim($request->get('email'));
 		if ($email == '') {
