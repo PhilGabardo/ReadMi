@@ -17,7 +17,7 @@ class SendPasswordResetEmailAction extends LoggedOutAction {
 		if (!self::validateCaptcha($captcha)) {
 			return json_encode(['message' => 'Captcha check failed.']);
 		}
-		
+
 		// email validation
 		$email = trim($request->get('email'));
 		if ($email == '') {

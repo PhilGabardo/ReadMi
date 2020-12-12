@@ -118,34 +118,22 @@ function getIndexForNote(note_name, note_octave) {
 }
 
 
-function estimateFrequency(wave) {
+function estimateFrequency(wave, sampleRate, expected_freq) {
 
 	function autoCorrelationDifference(wave) {
-		var compressedWave = new Array(wave.length / 2)
-		var compressedResultBuffer = new Array(compressedWave.length / 2)
+
 		var resultBuffer = new Array(wave.length / 2)
 
-
-		for (var i = 0; i < wave.length - 1; i += 2) {
-			compressedWave[i / 2] = (wave[i] + wave[i + 1]) / 2;
-		}
-
-		for (var j = 0; j < compressedResultBuffer.length; j++) {
-			for (var i = 0; i < compressedResultBuffer.length; i++) {
+		for (var j = 0; j < resultBuffer.length; j++) {
+			for (var i = 0; i < resultBuffer.length; i++) {
 				// d sub t (tau) = (x(i) - x(i - tau))^2, from i = 1 to result buffer size
-				if (!(j in compressedResultBuffer)) {
-					compressedResultBuffer[j] = 0;
+				if (!(j in resultBuffer)) {
+					resultBuffer[j] = 0;
 				}
-				compressedResultBuffer[j] += Math.pow((compressedWave[i] - compressedWave[i + j]), 2);
+				resultBuffer[j] += Math.pow((wave[i] - wave[i + j]), 2);
 			}
 		}
 
-		for (var i = 0; i < resultBuffer.length - 1; i += 2) {
-			var iNorm = i / 2;
-			var diff = (compressedResultBuffer[iNorm + 1] - compressedResultBuffer[iNorm]) / 2;
-			resultBuffer[i] = compressedResultBuffer[iNorm];
-			resultBuffer[i + 1] = compressedResultBuffer[iNorm] + diff;
-		}
 		return resultBuffer;
 	}
 
@@ -166,7 +154,7 @@ function estimateFrequency(wave) {
 		return resultBuffer;
 	}
 
-	function absoluteThreshold(resultBuffer) {
+	function absoluteThreshold(resultBuffer, expected_tau) {
 		var tau;
 		var length = resultBuffer.length;
 
@@ -225,16 +213,17 @@ function estimateFrequency(wave) {
 
 	var resultBuffer = autoCorrelationDifference(wave);
 	resultBuffer = cumulativeMeanNormalizedDifference(resultBuffer)
-	var tau = absoluteThreshold(resultBuffer)
+	var expected_tau = Math.floor(sampleRate / expected_freq);
+	var tau = absoluteThreshold(resultBuffer, expected_tau)
 	if (tau == -1) {
 		return tau;
 	}
 	tau = parabolicInterpretation(tau, resultBuffer)
-	return 44100 / tau
+	return sampleRate / tau
 }
 
 function getNoteFromSamples(buffer, sampleRate, expected_freq) {
-	let freq = estimateFrequency(buffer)
+	let freq = estimateFrequency(buffer, sampleRate, expected_freq)
 	return freq ? estimateNote(freq) : [];
 	// We use Autocorrelation to find the fundamental frequency.
 
@@ -245,7 +234,8 @@ function getNoteFromSamples(buffer, sampleRate, expected_freq) {
 	// while a 'k' equal to 8 would correspond to a 6000Hz one, which is enough to cover most (if not all)
 	// the notes we have in the notes.json file.
 
-	var n = 1024, bestR = 0, bestK = -1;
+	var n = buffer.length / 2, bestR = 0, bestK = -1;
+	console.log(buffer.length)
 	for(var k = 8; k <= 1000; k++){
 
 		var sum = 0;
