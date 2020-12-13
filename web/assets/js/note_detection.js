@@ -1,4 +1,5 @@
 import key_comparison from './key_comparison'
+import fftjs from 'fft-js'
 let noteFrequencies =
 	// B        A#        A      G#       G         F#       F        E         D#      D        C#       C
 	[7902.13, 7458.62, 7040.00, 6644.88, 6271.93, 5919.91, 5587.65, 5274.04, 4978.03, 4698.64, 4434.92, 4186.01,  // 8
@@ -120,6 +121,25 @@ function getIndexForNote(note_name, note_octave) {
 
 function estimateFrequency(wave, sampleRate, expected_freq) {
 
+	function autoCorrelationDifference2(wave) {
+		var phasors = fftjs.fft(wave);
+
+		var complex_conjugate_multiple = new Array(phasors.length);
+
+		for (var i = 0; i < phasors.length; i++) {
+			complex_conjugate_multiple[i] = [phasors[i][0] * phasors[i][0], -1 * phasors[i][1] * phasors[i][1]];
+		}
+
+		var phasors = fftjs.ifft(complex_conjugate_multiple);
+
+		var differenceBuffer = new Array(wave.length);
+		for (var tau = 0; tau < differenceBuffer.length; tau++) {
+			differenceBuffer[tau] = 2 * phasors[0][1] - 2 * phasors[tau][1];
+		}
+
+		return differenceBuffer;
+	}
+
 	function autoCorrelationDifference(wave) {
 
 		var resultBuffer = new Array(wave.length / 2)
@@ -154,7 +174,7 @@ function estimateFrequency(wave, sampleRate, expected_freq) {
 		return resultBuffer;
 	}
 
-	function absoluteThreshold(resultBuffer, expected_tau) {
+	function absoluteThreshold(resultBuffer) {
 		var tau;
 		var length = resultBuffer.length;
 
@@ -162,7 +182,7 @@ function estimateFrequency(wave, sampleRate, expected_freq) {
 		for (tau = 0; tau < length; tau++) {
 			// If we are less than the threshold, continue on until we find the lowest value
 			// indicating the lowest dip in the wave since we first crossed the threshold.
-			if (resultBuffer[tau] < 0.1) {
+			if (resultBuffer[tau] < 0.45) {
 				while (tau + 1 < length && resultBuffer[tau + 1] < resultBuffer[tau]) {
 					tau++;
 				}
@@ -210,11 +230,10 @@ function estimateFrequency(wave, sampleRate, expected_freq) {
 
 		return betterTau;
 	}
-
-	var resultBuffer = autoCorrelationDifference(wave);
-	resultBuffer = cumulativeMeanNormalizedDifference(resultBuffer)
 	var expected_tau = Math.floor(sampleRate / expected_freq);
-	var tau = absoluteThreshold(resultBuffer, expected_tau)
+	var resultBuffer = autoCorrelationDifference2(wave);
+	resultBuffer = cumulativeMeanNormalizedDifference(resultBuffer)
+	var tau = absoluteThreshold(resultBuffer)
 	if (tau == -1) {
 		return tau;
 	}
