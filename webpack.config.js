@@ -1,6 +1,24 @@
 var Encore = require('@symfony/webpack-encore');
+const BabelEnginePlugin = require('babel-engine-plugin');
+
 
 Encore
+	.configureBabel(function(babelConfig) {
+		// add additional presets
+		babelConfig.presets.push('@babel/preset-flow');
+
+		// no plugins are added by default, but you can add some
+		babelConfig.plugins.push('styled-jsx/babel');
+	}, {
+		// node_modules is not processed through Babel by default
+		// but you can whitelist specific modules to process
+		//includeNodeModules: ['foundation-sites'],
+
+		// or completely control the exclude rule (note that you
+		// can't use both "includeNodeModules" and "exclude" at
+		// the same time)
+		//exclude: /bower_components/
+	})
 // directory where all compiled assets will be stored
 	.setOutputPath('web/build/')
 
@@ -73,6 +91,7 @@ Encore
 	.autoProvidejQuery()
 
 	.enableSourceMaps(!Encore.isProduction())
+
 
 // create hashed filenames (e.g. app.abc123.css)
 // .enableVersioning()

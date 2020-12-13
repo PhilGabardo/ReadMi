@@ -37,8 +37,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		})
 		// Error callback
 		.catch(function(err) {
-			console.log(err);
-			alert("ReadMi does not have access to your microphone.");
+			swal2.fire("ReadMi does not have access to your microphone.").then((result) => {window.location.href = '/';});
 		})
 } else if (navigator.getUserMedia) {
 	navigator.getUserMedia({audio: {
@@ -55,11 +54,10 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		})
 		// Error callback
 		.catch(function(err) {
-			console.log(err);
-			alert("ReadMi does not have access to your microphone.");
+			swal2.fire("ReadMi does not have access to your microphone.").then((result) => {window.location.href = '/';});;
 		})
 } else {
-	alert("ReadMi is not supported on this browser.");
+	swal2.fire("ReadMi is not supported on this browser.").then((result) => {window.location.href = '/';});;
 }
 
 

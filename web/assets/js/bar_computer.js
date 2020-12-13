@@ -2,7 +2,7 @@ import VexFlow from 'vexflow';
 function getVFBars(bars) {
 	let VF = VexFlow.Flow;
 	let vf_bars = [];
-	// treble
+	// tre ble
 	let total_area = 0.35 * (window.orientation == 0 ? window.innerWidth : window.innerHeight);
 	let stave_height = total_area / 2;
 	let spacing_between_lines_px = stave_height / 12;
