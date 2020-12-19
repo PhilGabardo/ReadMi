@@ -28,6 +28,7 @@ require_once __DIR__ . '/actions/CreateUserAction.php';
 require_once __DIR__ . '/actions/SendPasswordResetEmailAction.php';
 require_once __DIR__ . '/actions/PasswordResetAction.php';
 require_once __DIR__ . '/actions/DisplayPasswordResetAction.php';
+require_once __DIR__ . '/actions/PlayCustomSongAction.php';
 require_once __DIR__ . '/misc/DifficultyComputer.php';
 
 
@@ -170,10 +171,13 @@ $app->get('/', function(Request $request) use($app) {
 });
 
 $app->get('/python_test', function(Request $request) use($app) {
-	error_reporting(-1);
-	#$command = escapeshellcmd('./scripts/test.py');
-	#krumo($command);
-	return shell_exec("./scripts/test.py 2>&1");
+	$midi_url = $request->get('midi_url');
+	$midi_filename = '1.mid';
+	$hash = '128739128731TEST123123';
+	$output = shell_exec("python ./scripts/test.py {$midi_url} {$midi_filename} {$hash} 2>&1");
+	$start_pos = mb_strpos($output, $hash) + mb_strlen($hash);
+	$actual_output = mb_substr($output, $start_pos);
+	return $actual_output;
 });
 
 
