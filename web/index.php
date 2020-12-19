@@ -173,7 +173,7 @@ $app->get('/python_test', function(Request $request) use($app) {
 	error_reporting(-1);
 	#$command = escapeshellcmd('./scripts/test.py');
 	#krumo($command);
-	return shell_exec("python -V 2>&1");
+	return shell_exec("./scripts/test.py 2>&1");
 });
 
 
