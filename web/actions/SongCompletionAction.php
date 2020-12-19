@@ -23,9 +23,6 @@ class SongCompletionAction extends LoggedInAction {
 		$completed_songs = array_flip($instrument_data['completed_songs']);
 		$accuracy = $notes_correct / $total_notes;
 		$accuracy_as_percent = round($accuracy * 100, 3);
-		if (!$song_id) {
-			return json_encode(['msg' => "Your note accuracy was {$accuracy_as_percent}%!"]);
-		}
 		if (!isset($completed_songs[$song_id])) {
 			if ($accuracy < 0.8) {
 				return json_encode(['msg' => "Your note accuracy was {$accuracy_as_percent}%, you need 80% accuracy to complete this song. Practice makes perfect!"]);
