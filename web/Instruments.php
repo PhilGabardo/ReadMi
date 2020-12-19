@@ -65,7 +65,7 @@ class Instruments {
 		}
 	}
 
-	private static function getMinIndexForNotes(array $notes) {
+	public static function getMinIndexForNotes(array $notes) {
 		$min_index = 100000;
 		foreach ($notes as $note) {
 			$min_index = min($min_index, self::getIndexForNote($note['name'], $note['octave']));
@@ -73,7 +73,7 @@ class Instruments {
 		return $min_index;
 	}
 
-	private static function getMaxIndexForNotes(array $notes) {
+	public static function getMaxIndexForNotes(array $notes) {
 		$max_index = 0;
 		foreach ($notes as $note) {
 			$max_index = max($max_index, self::getIndexForNote($note['name'], $note['octave']));
