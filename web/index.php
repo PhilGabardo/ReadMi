@@ -169,6 +169,13 @@ $app->get('/', function(Request $request) use($app) {
 	return ReadMiAction::getResponse($app, $request);
 });
 
+$app->get('/python_test', function(Request $request) use($app) {
+	error_reporting(-1);
+	#$command = escapeshellcmd('./scripts/test.py');
+	#krumo($command);
+	return shell_exec("python -V 2>&1");
+});
+
 
 
 $app->run();
