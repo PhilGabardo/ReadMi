@@ -171,13 +171,15 @@ $app->get('/', function(Request $request) use($app) {
 });
 
 $app->get('/python_test', function(Request $request) use($app) {
+	/*
 	$midi_url = $request->get('midi_url');
 	$midi_filename = '1.mid';
 	$hash = '128739128731TEST123123';
 	$output = shell_exec("python ./scripts/test.py {$midi_url} {$midi_filename} {$hash} 2>&1");
 	$start_pos = mb_strpos($output, $hash) + mb_strlen($hash);
 	$actual_output = mb_substr($output, $start_pos);
-	return $actual_output;
+	return $actual_output;*/
+	return \Actions\PlayCustomSongAction::execute($app, $request);
 });
 
 
