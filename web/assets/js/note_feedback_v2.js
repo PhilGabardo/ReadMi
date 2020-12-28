@@ -51,12 +51,12 @@ export default class NoteFeedbackV2 {
 			return;
 		}
 		let note = note_feedback.notes[0].note;
-		if (note.attrs.type === 'GhostNote') {
+		if (note.attrs.type === 'GhostNote' || note.isRest()) {
 			note_feedback.notes.shift()
 			return;
 		}
-		if (normalized_context_time > note_feedback.notes[0].time_offset) {
-			if (normalized_context_time > (note_feedback.notes[0].time_offset + note_feedback.getSamplingBufferTime())) {
+		if (normalized_context_time > (note_feedback.notes[0].time_offset * 1000)) {
+			if (normalized_context_time > ((note_feedback.notes[0].time_offset * 1000) + note_feedback.getSamplingBufferTime())) {
 				// mark wrong
 				let jquery_note_bars = [];
 				let jquery_note_bar = $(note.attrs.el).prev('path')[0]

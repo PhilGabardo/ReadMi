@@ -9,7 +9,7 @@ export default class SongPlayer {
 		this.tick = null;
 		this.tickVolume = null;
 		this.soundHz = 1000;
-		this.scheduledNotes = this.appendTimingOffset(notes, beats_per_measure, beats_per_minute).flat();
+		this.scheduledNotes = notes.flat();
 		this.instrument = instrument;
 		//this.setController()
 		this.initAudio();
@@ -35,13 +35,13 @@ export default class SongPlayer {
 		// Schedule all the clicks ahead.
 		for (let i = 0; i < this.scheduledNotes.length; i++) {
 			let note = this.scheduledNotes[i].note;
-			if (note.attrs.type !== 'GhostNote') {
+			if (note.attrs.type !== 'GhostNote' && !note.isRest()) {
 				let props = note.getKeyProps()[0];
 				let key = props.key;
 				let octave = props.octave;
 				let offsetNote = KeySignatures.getOffsetNote(key, octave,  0 - Instruments.getInstrumentKeyOffset(this.instrument));
 				let freqency = note_detection.getFrequencyForNote(offsetNote.name, offsetNote.octave);
-				this.playNoteAtTime(freqency, now + this.scheduledNotes[i].timing_offset);
+				this.playNoteAtTime(freqency, now + this.scheduledNotes[i].time_offset);
 			}
 		}
 	}
@@ -78,23 +78,5 @@ export default class SongPlayer {
 				this.tickVolume.disconnect(this.audioCtx.destination);
 			}
 		})
-	}
-
-	appendTimingOffset(bars, beats_per_measure, beats_per_minute) {
-		for (let i = 0; i < bars.length; i++) {
-			let notes = bars[i];
-			if (notes.length === 0) {
-				continue;
-			}
-			let bar_timing_offset = i * (beats_per_measure / beats_per_minute) * 60;
-			bars[i][0]['timing_offset'] = bar_timing_offset;
-			for (let j = 0; j < notes.length; j++) {
-				if (j !== notes.length - 1) {
-					let timing_offset = bar_timing_offset + notes[j + 1].percentage * (beats_per_measure / beats_per_minute) * 60;
-					bars[i][j + 1]['timing_offset'] = timing_offset;
-				}
-			}
-		}
-		return bars;
 	}
 }

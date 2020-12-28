@@ -18,7 +18,7 @@ class PlayCustomSongAction extends LoggedInAction {
 		}
 		$midi_filename = "{$user_info['id']}.mid";
 		$hash = '128739128731TEST123123';
-		$output = shell_exec("python ./scripts/test.py {$midi_url} {$midi_filename} {$hash} 2>&1");
+		$output = shell_exec("python ./scripts/test.py {$midi_url} {$hash} 2>&1");
 		$start_pos = mb_strpos($output, $hash) + mb_strlen($hash);
 		$actual_output = json_decode(mb_substr($output, $start_pos), true);
 		if (isset($actual_output['error'])) {

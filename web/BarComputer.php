@@ -3,6 +3,9 @@
 namespace ReadMi;
 
 
+use Misc\ReadMiNote;
+use Misc\ReadMiSong;
+
 class BarComputer {
 	const TIMING_MAP = [
 		'0.25' => "16",
@@ -75,6 +78,8 @@ class BarComputer {
 	];
 
 	public static function getBars(array $notes, string $key, float $beat_value, float $beats_per_measure, bool $is_piano) {
+		$readmi_song = ReadMiSong::fromNotes($notes);
+		$readmi_notes = $readmi_song->getNotes();
 		$sum = 0;
 		$bars = [];
 		$current_bar = [];
@@ -83,9 +88,11 @@ class BarComputer {
 		foreach ($key_signature_info['notes'] as $note => $_) {
 			$default_notes_state[$note] = $key_signature_info['type'];
 		}
-		for ($i = 0; $i < count($notes); $i++) {
-			$note = $notes[$i];
-			$quarter_length = (float)$note['quarterLength'];
+		for ($i = 0; $i < count($readmi_notes); $i++) {
+			/** @var ReadMiNote $note */
+			$note = $readmi_notes[$i];
+			$note_props = $note->getProps();
+			$quarter_length = $note->getNumerator() / (float)$note->getDenominator();
 			if ($quarter_length == 0) {
 				continue;
 			}
@@ -94,16 +101,26 @@ class BarComputer {
 				if (!isset(self::TIMING_MAP[(string)$length_breakdown[$j]])) {
 					throw new Exception("Unknown note length: {$length_breakdown[$j]}");
 				}
-				$note_struct = [
-					'clef' => (int)$note['octave'] < 4 && $is_piano ? 'bass' : 'treble',
-					'keys' => [$note['name'] . '/' . $note['octave']],
-					'duration' => self::TIMING_MAP[(string)$length_breakdown[$j]],
-					'raw_duration' => $length_breakdown[$j],
-					'dot_count' => self::DOT_COUNT_MAP[(string)$length_breakdown[$j]],
-				];
-				$accidental = $note['name'][1] ?? 'n';
-				if ($default_notes_state[$note['name'][0]] != $accidental) {
-					$note_struct['accidental'] = $accidental;
+				if ($note_props['is_note']) {
+					$note_struct = [
+						'clef' => (int)$note_props['octave'] < 4 && $is_piano ? 'bass' : 'treble',
+						'keys' => [$note_props['name'] . '/' . $note_props['octave']],
+						'duration' => self::TIMING_MAP[(string)$length_breakdown[$j]],
+						'raw_duration' => $length_breakdown[$j],
+						'dot_count' => self::DOT_COUNT_MAP[(string)$length_breakdown[$j]],
+					];
+					$accidental = $note_props['name'][1] ?? 'n';
+					if ($default_notes_state[$note_props['name'][0]] != $accidental) {
+						$note_struct['accidental'] = $accidental;
+					}
+				} else {
+					$note_struct = [
+						'clef' => 'treble',
+						'keys' => ["b/4"],
+						'duration' => self::TIMING_MAP[(string)$length_breakdown[$j]] . 'r',
+						'raw_duration' => $length_breakdown[$j],
+						'dot_count' => self::DOT_COUNT_MAP[(string)$length_breakdown[$j]],
+					];
 				}
 				$current_bar[] = $note_struct;
 				$sum += $length_breakdown[$j] * ($beat_value / 4.0);

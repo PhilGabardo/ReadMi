@@ -13,12 +13,14 @@ export default class NoteScheduler {
 			}
 			this.note_percentages[i] = [{note: notes[0], percentage: 0, time_offset: time_offset}];
 			let accumuluated_percented = 0;
+			let better_time_offset = i * beats_per_measure * (60 / bpm);
 			for (let j = 0; j < notes.length; j++) {
 				let percentage = NoteTiming.getDurationAsPercentage(notes[j].duration, notes[j].dots, beat_value, beats_per_measure);
-				time_offset += notes[j].attrs.type === 'GhostNote' ? 0 : percentage * beats_per_measure * (60 / bpm) * 1000
+				time_offset += notes[j].attrs.type === 'GhostNote' ? 0 : percentage * beats_per_measure * (60 / bpm)
+				better_time_offset += notes[j].attrs.type === 'GhostNote' ? 0 : percentage * beats_per_measure * (60 / bpm);
 				accumuluated_percented += percentage;
 				if (j !== notes.length - 1) {
-					this.note_percentages[i].push({note: notes[j + 1], percentage: accumuluated_percented, time_offset: time_offset});
+					this.note_percentages[i].push({note: notes[j + 1], percentage: accumuluated_percented, time_offset: time_offset, better_time_offset: better_time_offset});
 				}
 			}
 		}

@@ -49,8 +49,7 @@ export default class ScheduledMetronome {
 
 		// Schedule all the clicks ahead.
 		for (let i = 0; i < this.scheduledTicks; i++) {
-			this.clickAtTime(now);
-			const x = now;
+			this.clickAtTime(now, i);
 			now += timeoutDuration;
 		}
 	}

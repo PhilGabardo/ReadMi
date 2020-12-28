@@ -2,13 +2,12 @@
 
 import sys
 
-if len(sys.argv) != 4:
+if len(sys.argv) != 3:
 	print("Invalid args.")
 	exit
 
 midi_url = sys.argv[1]
-midi_temp_filename = sys.argv[2]
-start_hash = sys.argv[3]
+start_hash = sys.argv[2]
 
 import requests
 import music21
@@ -20,23 +19,22 @@ import os
 output = {}
 
 try:
-	urllib.request.urlretrieve(midi_url, midi_temp_filename)
-	piece = converter.parse(midi_temp_filename)
-	os.remove(midi_temp_filename)
+	request = urllib.request.urlopen(midi_url, timeout=10)
+	piece = converter.parseData(request.read())
 	vexFlow = {}
 	notes = []
 	part = piece.chordify()
 	notes = []
-	for note in part.recurse().notes:
+	for note in part.recurse().notesAndRests:
 		if isinstance(note, music21.chord.Chord):
 			note.sortChromaticAscending()
 			pitch = note.pitches[-1]
 			notes.append({'is_note': True, 'name': pitch.name.replace('-', 'b'), 'octave': pitch.octave, 'quarterLength': str(note.quarterLength)})
 		else:
-			notes.append({'is_note': note.isNote, 'name': note.name.replace('-', 'b'), 'octave': note.octave, 'quarterLength': str(note.quarterLength)})
+			notes.append({'is_note': note.isNote, 'name': note.name.replace('-', 'b'), 'octave': note.octave if note.isNote else '', 'quarterLength': str(note.quarterLength)})
 	if len(notes) > 0:
 		output['name'] = midi_url
-		output['keySignature'] = part.keySignature.name.replace('-', 'b')
+		output['keySignature'] = part.keySignature.name.replace('-', 'b') if part.keySignature is not None else 'C Major'
 		output['beatValue'] = part.timeSignature.denominator
 		output['beatsPerMeasure'] = part.timeSignature.numerator
 		output['notes'] = notes

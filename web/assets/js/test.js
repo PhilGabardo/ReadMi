@@ -81,7 +81,6 @@ function startSession(audioStreamController) {
 	renderer.resize(300, 300);
 	let staveWidth = (boo.offsetWidth * 0.97 - keySigStaffWidth) / 3.0
 	let renderer_context = renderer.getContext();
-	let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure, 0);
 
 	swal2.fire('Notes will move across the screen towards a rectangular box. Play the note when it reaches the box.' +
 		'If you play the note correctly, it will turn green. Otherwise, it will turn red.').then((result) => {
@@ -99,6 +98,7 @@ function startSession(audioStreamController) {
 		}).then((result) => {
 			//let bpm_slider = document.getElementById('bpm');
 			let bpm_value = result.value;
+			let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure, bpm_value);
 			let metronome = new ScheduledMetronome(bpm_value, beats_per_measure * vf_bars.length)
 			let stave_updater = new StaveUpdater(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), bpm_value)
 			if (isPiano) {
@@ -111,8 +111,7 @@ function startSession(audioStreamController) {
 			let note_hinter = NoteHinter.getHinter(instrument, bpm_value, beats_per_measure, note_scheduler.getScheduledNotes(), keySignature);
 			note_hinter.setController();
 			let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_value, keySigStaffWidth);
-			let note_scheduler_2 = new NoteScheduler(vf_bars, beat_value, beats_per_measure, bpm_value);
-			let note_feedback = new NoteFeedbackV2(renderer_context, note_scheduler_2, audioStreamController, beats_per_measure, bpm_value, instrument)
+			let note_feedback = new NoteFeedbackV2(renderer_context, note_scheduler, audioStreamController, beats_per_measure, bpm_value, instrument)
 			let session_controller = new SessionController(note_feedback, metronome, songPlayer, timing_bar, beats_per_measure, bpm_value, bars.length, isDemo, songId, bpmRequirement, note_hinter, stave_updater);
 			session_controller.start();
 		})
