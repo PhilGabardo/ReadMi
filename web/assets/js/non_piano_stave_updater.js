@@ -114,6 +114,9 @@ export default class StaveUpdater {
 			}
 		}
 		for (let i = 3; i < this.scheduled_notes.length; i++) {
+			for (let j = 0; j < this.scheduled_notes[i].length; j++) {
+				this.scheduled_notes[i][j]['subtract_staves'] = i;
+			}
 			this.notes_queued_up.push(this.scheduled_notes[i]);
 		}
 		this.context.beginPath();
@@ -291,14 +294,12 @@ export default class StaveUpdater {
 			}
 
 			// get stave offset, and subtract from X if planted
-			let beats = (note_time_offset * bps) / (1000);
+			let beats = (note_time_offset * (101/60)) / (1000);
 			let staves = Math.floor(beats / this.beats_per_measure);
 
-			let _x = null;
-			if (staves >= 3) {
-				 _x = x - (staves - 2) * this.staveWidth;
-			} else {
-				_x = x;
+			let _x = x;
+			if (note.subtract_staves) {
+				_x -= (note.subtract_staves - 2) * this.staveWidth;
 			}
 
 

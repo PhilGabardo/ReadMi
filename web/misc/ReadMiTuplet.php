@@ -71,7 +71,7 @@ class ReadMiTuplet implements ReadMiNode {
 	public function getNotes(): array {
 		// TODO: support correctly tuplets
 		$total_timing = $this->getTotalTiming();
-		$new_note_arr = $this->children[0]->toArray();
+		$new_note_arr = $this->children[count($this->children) - 1]->toArray();
 		$new_note_arr['quarter_len_numerator'] = $total_timing['numerator'];
 		$new_note_arr['quarter_len_denominator'] = $total_timing['denominator'];
 		return [ReadMiNote::fromArray($new_note_arr)];
