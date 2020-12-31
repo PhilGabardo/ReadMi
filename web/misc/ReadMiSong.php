@@ -36,6 +36,10 @@ class ReadMiSong {
 				}
 			}
 		}
+		$last_child = $song->getLastChild();
+		if (!$last_child->isComplete()) {
+			$song->removeLastChild();
+		}
 		return $song;
 	}
 
@@ -80,6 +84,10 @@ class ReadMiSong {
 			}
 			throw new Exception("Invalid quarter length!");
 		}
+	}
+
+	private function removeLastChild() {
+		array_pop($this->children);
 	}
 
 	private static function float2rat($n, $tolerance = 1.e-6) {

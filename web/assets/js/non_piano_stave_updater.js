@@ -202,7 +202,7 @@ export default class StaveUpdater {
 		let beatsPassed = (timeInMs * bps) / (1000);
 		let new_notes_on_staff = [];
 
-		var x = (beatsPassed / this.beats_per_measure) * (this.staveWidth * 0.9992);
+		var x = (beatsPassed / this.beats_per_measure) * (this.staveWidth * 0.9996);
 
 		var queued_note = this.notes_queued_up.length > 0 ? this.notes_queued_up[0][0] : [];
 		let queued_note_stavesPassed = -1000000;

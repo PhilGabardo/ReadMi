@@ -34,7 +34,7 @@ try:
 			notes.append({'is_note': note.isNote, 'name': note.name.replace('-', 'b'), 'octave': note.octave if note.isNote else '', 'quarterLength': str(note.quarterLength)})
 	if len(notes) > 0:
 		output['name'] = midi_url
-		output['keySignature'] = part.keySignature.name.replace('-', 'b') if part.keySignature is not None else 'C Major'
+		output['keySignature'] = part.keySignature.name.replace('-', 'b') if part.keySignature is not None else 'C major'
 		output['beatValue'] = part.timeSignature.denominator
 		output['beatsPerMeasure'] = part.timeSignature.numerator
 		output['notes'] = notes

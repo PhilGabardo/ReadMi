@@ -157,10 +157,6 @@ class BarComputer {
 					$bars[] = $current_bar;
 					$current_bar = [];
 				}
-				/*
-				for ($k = 0; $k < $leftover_bars; $k++) {
-					$bars[] = [];
-				}*/
 			}
 		}
 		if (count($current_bar) > 0) {
