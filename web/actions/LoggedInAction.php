@@ -50,10 +50,35 @@ abstract class LoggedInAction extends ReadMiAction {
 		return floor($multiplier * $beat_value);
 	}
 
-	protected static function isPremiumUser($app) : bool {
+	protected static function getSubscriptionInfo($app) : array {
 		$customer = self::getStripeCustomer($app);
-		$client = new StripeClient(self::getSecretKey());
-		return $client->charges->all(['customer' => $customer->id])->count() === 1;
+		$subscriptions = $customer->subscriptions;
+		if (!$subscriptions) {
+			return [];
+		}
+		$subscriptions = $subscriptions->all()->data;
+		/** @var Subscription $subscription */
+		$subscription = reset($subscriptions);
+		if (!$subscription) {
+			return [];
+		}
+		$pretty_period_end = date('l jS \of F Y', $subscription->current_period_end);
+		return [
+			'start' => $subscription->start_date,
+			'status' =>	$subscription->status,
+			'cancel_at_period_end' => $subscription->cancel_at_period_end,
+			'status_pretty' => $subscription->cancel_at_period_end ? "Active (until $pretty_period_end)" : "Active",
+			'start_pretty' => date('l jS \of F Y', $subscription->start_date),
+			'period_end_pretty' => date('l jS \of F Y', $subscription->current_period_end),
+			'period_start_pretty' => date('l jS \of F Y', $subscription->current_period_start),
+			'period_start' => $subscription->current_period_start,
+			'period_end' => $subscription->current_period_end,
+		];
+	}
+
+	protected static function isPremiumUser($app) : bool {
+		$sub_info =  self::getSubscriptionInfo($app);
+		return = isset($sub_info['status']) ? self::getSubscriptionInfo($app)['status'] === 'active' : false;
 	}
 
 	protected static function getStripeCustomer($app) {
