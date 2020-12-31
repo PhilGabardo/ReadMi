@@ -23,7 +23,7 @@ try:
 	piece = converter.parseData(request.read())
 	vexFlow = {}
 	notes = []
-	part = piece.chordify()
+	part = piece.chordify(removeRedundantPitches=True)
 	notes = []
 	for note in part.recurse().notesAndRests:
 		if isinstance(note, music21.chord.Chord):

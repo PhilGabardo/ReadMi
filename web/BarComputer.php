@@ -124,13 +124,20 @@ class BarComputer {
 				}
 				$current_bar[] = $note_struct;
 				$sum += $length_breakdown[$j] * ($beat_value / 4.0);
-				$leftover_bars = 0;
-				while ($sum > 2 * $beats_per_measure) {
-					$leftover_bars++;
-					$sum -= $beats_per_measure;
-				}
+				//$leftover_bars = 0;
 				if ($sum > $beats_per_measure) {
 					$bars[] = $current_bar;
+					while ($sum > 2 * $beats_per_measure) {
+						//$leftover_bars++;
+						$note_val = $beats_per_measure * 4.0 / $beat_value;
+						$bars[] = [[
+							'clef' => "treble",
+							'duration' => self::GHOST_TIMING_MAP[(string)$note_val],
+							'raw_duration' => $note_val,
+							'ghost' => true,
+						]];
+						$sum -= $beats_per_measure;
+					}
 					$current_bar = [];
 					$remainder = ($sum - $beats_per_measure) * (4.0 / $beat_value);
 					$_length_breakdown = self::getLengthBreakDown($remainder);
@@ -150,9 +157,10 @@ class BarComputer {
 					$bars[] = $current_bar;
 					$current_bar = [];
 				}
+				/*
 				for ($k = 0; $k < $leftover_bars; $k++) {
 					$bars[] = [];
-				}
+				}*/
 			}
 		}
 		if (count($current_bar) > 0) {

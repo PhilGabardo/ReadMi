@@ -6,14 +6,11 @@
 
 /* The sidebar menu */
 .sidenav {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 25%; /* Set the width of the sidebar */
-    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    position: fixed;
+    top: 20%;
     z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
-    right: 0;
-    overflow-x: hidden; /* Disable horizontal scroll */
-    border-style: solid;
+    padding-left: 15vw;
+    padding-right:15vw;
 }
 
 /* The navigation menu links */

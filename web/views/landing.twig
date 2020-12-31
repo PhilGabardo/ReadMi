@@ -3,25 +3,28 @@
     <link rel="stylesheet" href="/build/landing_style.css">
     <link rel="stylesheet" href="/build/filterable_table.css">
     <div id="instrument_selection">
-        Your Instrument:
-        <select id="instrument">
-            {% for instrument_key, instrument_value in selectable_instruments %}
-                {% if instrument_key == instrument %}
-                    <option value="{{ instrument_key }}" selected>{{instrument_value}}</option>
-                {% else %}
-                    <option value="{{ instrument_key }}">{{instrument_value}}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
+        <div id="instrument_selection_label">
+            Your Instrument:
+        </div>
+        <div id="_instrument_selection">
+            <select id="instrument" placeholder="Choose an instrument">
+                {% for instrument_key, instrument_value in selectable_instruments %}
+                    {% if instrument_key == instrument %}
+                        <option value="{{ instrument_key }}" selected>{{instrument_value}}</option>
+                    {% else %}
+                        <option value="{{ instrument_key }}">{{instrument_value}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
     </div>
+    <script type="text/javascript" src="/build/instrument_change.js"></script>
     <div id="header">
         <header>
             <h1 id="_header">ReadMi{% if is_premium %}<sup id="gold_sub">Gold</sup>{% endif %}</h1>
-            <div id="sheet_sample"></div>
-            <h2 id="description">An interactive sight reading tool that provides real-time feedback.</h2>
         </header>
-        <u>Welcome,&nbsp;{{ user_name }}! You are Level</u>&nbsp;{{ level }} <br>
     </div>
+    <!--
     <div id="level_info">
         <div id="advance_info">To advance to the next level, complete 5 of the following with 80% note accuracy or higher:</div>
         <table id="completion_criteria">
@@ -31,29 +34,30 @@
                 </tr>
             {% endfor %}
         </table>
-    </div>
+    </div>-->
     <div class="sidenav">
         <table id="headerTable">
-            <tr>
-                <input class="filter" type="text" placeholder="Search for a song or artist..">
-            </tr>
-            <tr>
+            <div class="songFilter">
+                <input class="filter"  type="text" placeholder="Search for a song or artist..">
+            </div>
+            <div class="songFilter">
                 <select id="keyFilterSelect" placeholder="Key Signature">
                     <option value="">Key Signature...</option>
                     {% for k in key_signatures %}
                         <option>{{ k }}</option>
                     {% endfor %}
                 </select>
-            </tr>
-            <tr>
+            </div>
+            <div class="songFilter">
                 <select id="timeFilterSelect" placeholder="Time Signature">
                     <option value="">Time Signature...</option>
                     {% for t in time_signatures %}
                         <option>{{ t }}</option>
                     {% endfor %}
                 </select>
-            </tr>
+            </div>
         </table>
+        <script type="text/javascript" src="/build/filter_table.js"></script>
         <table id="songsTable">
             <tbody>
             {% for s in enabled_songs %}
@@ -69,7 +73,7 @@
             {% endfor %}
             {% for s in disabled_songs %}
                 <tr class="songDisabled">
-                    <td class="tooltiptext">Requires Level Up or Gold Account</td>
+                    <td class="tooltiptext">Requires Gold Account</td>
                     <td class="songName">
                         <span class="songTitle">{{ s.name }}</span><br>
                         <span class="songArtist">{{ s.artist }}</span><br>
@@ -81,7 +85,6 @@
             {% endfor %}
             </tbody>
         </table>
+        <script type="text/javascript" src="/build/add_row_handlers.js"></script>
     </div>
-    <script type="text/javascript" src="/build/filter_table.js"></script>
-    <script type="text/javascript" src="/build/landing.js"></script>
 {% endblock %}

@@ -4,24 +4,6 @@ import SongPlayer from './song_player'
 import BarComputer from './bar_computer'
 import NoteScheduler from './note_scheduler'
 
-function addRowHandlers() {
-	let table = document.getElementById("songsTable");
-	let rows = table.getElementsByTagName("tr");
-	for (let i = 0; i < rows.length; i++) {
-		let currentRow = table.rows[i];
-		let id = currentRow.dataset.value;
-		currentRow.onclick = function () {
-			if (currentRow.classList.contains('songDisabled')) {
-				$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="premium_info"></form>').appendTo($(document.body)).submit();
-			} else {
-				let id_param = '<input type="hidden" name="id" value="'+id+'">';
-				$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value="play_song">' + id_param + '</form>').appendTo($(document.body)).submit();
-			}
-		};
-	}
-}
-addRowHandlers();
-
 let currentName = "";
 let currentKeys = [];
 let currentTimes = [];
@@ -78,12 +60,6 @@ function filterTable(songName, songKeys, songTimes) {
 	}
 }
 
-$('.filter').selectize(
-	{
-		onType: function(value) {
-			currentName = value;
-			filterTable(currentName, currentKeys, currentTimes);
-		}});
 $('#keyFilterSelect').selectize(
 	{
 		maxItems: 3,
@@ -100,3 +76,11 @@ $('#timeFilterSelect').selectize(
 			filterTable(currentName, currentKeys, currentTimes);
 		}
 	});
+
+$('.filter').selectize(
+	{
+		onType: function(value) {
+			currentName = value;
+			filterTable(currentName, currentKeys, currentTimes);
+		}});
+

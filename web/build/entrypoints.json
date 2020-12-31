@@ -10,6 +10,11 @@
         "/build/filter_table.js"
       ]
     },
+    "add_row_handlers": {
+      "js": [
+        "/build/add_row_handlers.js"
+      ]
+    },
     "key_comparison": {
       "js": [
         "/build/key_comparison.js"
@@ -103,6 +108,11 @@
     "payment": {
       "js": [
         "/build/payment.js"
+      ]
+    },
+    "instrument_change": {
+      "js": [
+        "/build/instrument_change.js"
       ]
     },
     "instrument_select_action": {

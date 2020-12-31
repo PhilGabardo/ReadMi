@@ -1,10 +1,6 @@
-.selectize-input > input {
-    font-size:24px;
-}
-
 #headerTable {
     width:100%;
-    background: black;
+    position: fixed;
 }
 
 #songsTable thead, #songsTable tbody { display: table-row-group; }
@@ -19,8 +15,9 @@
     border-collapse: collapse; /* Collapse borders */
     width: 100%; /* Full-width */
     height: 100%;
-    font-size: 18px; /* Increase font-size */
+    font-size: 2.1vh; /* Increase font-size */
     table-layout: fixed;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
 
@@ -43,7 +40,7 @@
 #songsTable tbody{
     display:block;
     overflow:auto;
-    height: 100vh;
+    height: 70vh;
 }
 
 #songsTable thead tr {
@@ -56,7 +53,7 @@
 }
 
 .songName {
-    width:50%;
+    width:33%;
     font-family: 'Lobster';
 }
 
@@ -70,11 +67,11 @@
 }
 
 .songKey {
-    width:25%;
+    width:33%;
     font-family: 'Lobster';
 }
 .songTime {
-    width:25%;
+    width:33%;
     font-family: 'Lobster';
 }
 
@@ -125,4 +122,9 @@
 .songDisabled:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+.songFilter {
+    width: 33.3%;
+    display: inline-block;
 }

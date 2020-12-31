@@ -38,6 +38,7 @@ Encore
 	// will output as web/build/app.js
 	.addEntry('bar_computer', './web/assets/js/bar_computer.js')
 	.addEntry('filter_table', './web/assets/js/filter_table.js')
+	.addEntry('add_row_handlers', './web/assets/js/add_row_handlers.js')
 	.addEntry('key_comparison', './web/assets/js/key_comparison.js')
 	.addEntry('key_signature', './web/assets/js/key_signatures.js')
 	.addEntry('session_controller', './web/assets/js/session_controller.js')
@@ -57,6 +58,7 @@ Encore
 	.addEntry('login', './web/assets/js/login.js')
 	.addEntry('demo', './web/assets/js/demo.js')
 	.addEntry('payment', './web/assets/js/payment.js')
+	.addEntry('instrument_change', './web/assets/js/instrument_change.js')
 	.addEntry('instrument_select_action', './web/assets/js/instrument_select.js')
 	.addEntry('audio_context', './web/assets/js/audio_context.js')
 	.addEntry('feedback', './web/assets/js/feedback.js')

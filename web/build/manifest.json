@@ -1,6 +1,7 @@
 {
   "build/account_view.js": "/build/account_view.js",
   "build/account_view_style.css": "/build/account_view_style.css",
+  "build/add_row_handlers.js": "/build/add_row_handlers.js",
   "build/audio_context.js": "/build/audio_context.js",
   "build/audio_stream_controller.js": "/build/audio_stream_controller.js",
   "build/bar_computer.js": "/build/bar_computer.js",
@@ -14,6 +15,7 @@
   "build/feedback_style.css": "/build/feedback_style.css",
   "build/filter_table.js": "/build/filter_table.js",
   "build/filterable_table.css": "/build/filterable_table.css",
+  "build/instrument_change.js": "/build/instrument_change.js",
   "build/instrument_select.css": "/build/instrument_select.css",
   "build/instrument_select_action.js": "/build/instrument_select_action.js",
   "build/instruments.js": "/build/instruments.js",
