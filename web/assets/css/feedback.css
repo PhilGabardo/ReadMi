@@ -1,19 +1,30 @@
+.left-aligned {
+    -webkit-transform: rotate(-270deg);
+    transform: rotate(-270deg);
+    -ms-transform: rotate(-270deg);
+    -moz-transform: rotate(-270deg);
+    left: -40px;
+}
+
+.right-aligned {
+    -webkit-transform: rotate(270deg);
+    transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    right: -40px;
+}
+
 .feedback-button {
     height: 40px;
     border: solid 3px #CCCCCC;
     background: #333;
     width: 100px;
     line-height: 32px;
-    -webkit-transform: rotate(-270deg);
     font-weight: 600;
     color: white;
-    transform: rotate(-270deg);
-    -ms-transform: rotate(-270deg);
-    -moz-transform: rotate(-270deg);
     text-align: center;
     font-size: 17px;
     position: fixed;
-    left: -40px;
     z-index: 999;
 }
 
@@ -23,6 +34,11 @@
 
 #logout {
     top: 55%;
+}
+
+#subscription_info {
+    top: 40%;
+    color: gold;
 }
 
 #feedback-main {

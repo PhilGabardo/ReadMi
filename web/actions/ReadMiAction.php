@@ -26,8 +26,12 @@ abstract class ReadMiAction {
 				return PlaySongAction::execute($app, $request);
 			case 'premium_info':
 				return PremiumInfoAction::execute($app, $request);
+			case 'cancel_gold':
+				return CancelGoldAction::execute($app, $request);
 			case 'stripe_session_id':
 				return StripeSessionIdAction::execute($app, $request);
+			case 'get_subscription_info':
+				return GetSubscriptionInfoAction::execute($app, $request);
 			case 'payment_failure':
 				return PaymentFailureAction::execute($app, $request);
 			case 'instrument_select':

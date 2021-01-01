@@ -160,6 +160,11 @@
         "/build/reset_password.js"
       ]
     },
+    "subscription_info": {
+      "js": [
+        "/build/subscription_info.js"
+      ]
+    },
     "filterable_table": {
       "css": [
         "/build/filterable_table.css"
@@ -223,6 +228,11 @@
     "login_style": {
       "css": [
         "/build/login_style.css"
+      ]
+    },
+    "sweetalert_override": {
+      "css": [
+        "/build/sweetalert_override.css"
       ]
     }
   }

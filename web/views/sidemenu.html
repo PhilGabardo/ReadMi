@@ -1,0 +1,8 @@
+<link rel="stylesheet" href="/build/feedback_style.css">
+<button id="popup" class="feedback-button left-aligned">Feedback</button>
+<button id="logout" class="feedback-button left-aligned">Log Out</button>
+{% if is_premium %}
+<button id="subscription_info" class="feedback-button right-aligned">Subscription Info</button>
+<script type="text/javascript" src="/build/subscription_info.js"></script>
+{% endif %}
+<script type="text/javascript" src="/build/feedback.js"></script>

@@ -41,6 +41,8 @@
   "build/session_controller.js": "/build/session_controller.js",
   "build/song_player.js": "/build/song_player.js",
   "build/songs.css": "/build/songs.css",
+  "build/subscription_info.js": "/build/subscription_info.js",
+  "build/sweetalert_override.css": "/build/sweetalert_override.css",
   "build/test.js": "/build/test.js",
   "build/text.css": "/build/text.css",
   "build/timing.js": "/build/timing.js",

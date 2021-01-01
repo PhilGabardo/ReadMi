@@ -57,8 +57,11 @@ abstract class LoggedInAction extends ReadMiAction {
 			return [];
 		}
 		$subscriptions = $subscriptions->all()->data;
+		usort($subscriptions, function(Subscription $a, Subscription $b) {
+			return $a->start_date > $b->start_date ? -1 : 1;
+		});
 		/** @var Subscription $subscription */
-		$subscription = reset($subscriptions);
+		$subscription = $subscriptions[0];
 		if (!$subscription) {
 			return [];
 		}
@@ -78,7 +81,7 @@ abstract class LoggedInAction extends ReadMiAction {
 
 	protected static function isPremiumUser($app) : bool {
 		$sub_info =  self::getSubscriptionInfo($app);
-		return = isset($sub_info['status']) ? self::getSubscriptionInfo($app)['status'] === 'active' : false;
+		return isset($sub_info['status']) ? $sub_info['status'] === 'active' : false;
 	}
 
 	protected static function getStripeCustomer($app) {

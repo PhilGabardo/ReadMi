@@ -40,5 +40,5 @@ feedback_button.onclick = function() {
 				swal.close();
 			}
 		});
-}
+};
 

@@ -25,7 +25,7 @@ class StripeSessionIdAction extends LoggedInAction {
 				'price' => $product_id,
 				'quantity' => 1,
 			]],
-			'mode' => 'payment',
+			'mode' => 'subscription',
 			'success_url' => $host,
 			'cancel_url' => $host,
 		]);

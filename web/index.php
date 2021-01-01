@@ -29,6 +29,8 @@ require_once __DIR__ . '/actions/SendPasswordResetEmailAction.php';
 require_once __DIR__ . '/actions/PasswordResetAction.php';
 require_once __DIR__ . '/actions/DisplayPasswordResetAction.php';
 require_once __DIR__ . '/actions/PlayCustomSongAction.php';
+require_once __DIR__ . '/actions/GetSubscriptionInfoAction.php';
+require_once __DIR__ . '/actions/CancelGoldAction.php';
 require_once __DIR__ . '/misc/DifficultyComputer.php';
 require_once __DIR__ . '/misc/ReadMiNode.php';
 require_once __DIR__ . '/misc/ReadMiNote.php';

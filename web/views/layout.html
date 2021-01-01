@@ -25,11 +25,12 @@
 <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/build/layout_style.css">
 <link rel="stylesheet" href="/build/selectize_override.css">
+<link rel="stylesheet" href="/build/sweetalert_override.css">
 <link rel="stylesheet" href="/build/text.css">
+{% include "sidemenu.html" %}
 <div class="main_content">
   {% block content %}{% endblock %}
 </div>
-{% include "feedback.html" %}
 <script type="text/javascript" src="/build/layout.js"></script>
 
 </body>
