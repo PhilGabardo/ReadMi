@@ -25,17 +25,6 @@
     text-decoration: inherit;
 }
 
-.completed {
-    text-decoration: line-through;
-    color: green;
-}
-
-#completion_criteria {
-    border: dotted;
-    margin: auto;
-    margin-top: 10px;
-}
-
 #_header {
     margin-bottom: 0;
     font-size: 10vh;

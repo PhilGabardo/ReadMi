@@ -24,17 +24,6 @@
             <h1 id="_header">ReadMi{% if is_premium %}<sup id="gold_sub">Gold</sup>{% endif %}</h1>
         </header>
     </div>
-    <!--
-    <div id="level_info">
-        <div id="advance_info">To advance to the next level, complete 5 of the following with 80% note accuracy or higher:</div>
-        <table id="completion_criteria">
-            {% for song in completable_songs %}
-                <tr>
-                    <td class="{{ song.class }}"><div id="truncate_song">{{ song.name }}</div>&nbsp;at <u>&nbsp;{{ song.bpm }}&nbsp;BPM or higher</u></td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>-->
     <div class="sidenav">
         <table id="headerTable">
             <div class="songFilter">
@@ -61,7 +50,7 @@
         <table id="songsTable">
             <tbody>
             {% for s in enabled_songs %}
-                <tr data-value="{{s.id}}" class="{{s.class}}">
+                <tr data-value="{{s.id}}">
                     <td class="songName">
                         <span class="songTitle">{{ s.name }}</span><br>
                         <span class="songArtist">{{ s.artist }}</span><br>

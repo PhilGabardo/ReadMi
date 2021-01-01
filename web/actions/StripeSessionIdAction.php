@@ -11,8 +11,8 @@ use Stripe\Stripe;
 
 class StripeSessionIdAction extends LoggedInAction {
 
-	protected const DEV_PRODUCT_ID = 'price_1HRNu0Kfc5hHCIGNMj6oAx4R';
-	protected const PRODUCT_ID = 'price_1H8tJJKfc5hHCIGNEgXdJXBF';
+	protected const DEV_PRODUCT_ID = 'price_1I4q1UKfc5hHCIGNaQgH9ZSb';
+	protected const PRODUCT_ID = 'price_1I4q11Kfc5hHCIGNfLkqeZxF';
 
 	protected static function _execute(Application $app, Request $request): string {
 		$host = self::isDev() ? 'http://localhost:8080' : 'https://www.readmimusic.com';

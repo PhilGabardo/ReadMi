@@ -17,10 +17,6 @@
     text-decoration: inherit;
 }
 
-.completed {
-    text-decoration: line-through;
-    color: green;
-}
 
 #completion_criteria {
     border: dotted;

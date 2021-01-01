@@ -131,9 +131,7 @@ abstract class LoggedInAction extends ReadMiAction {
 			$row['time_signature'] = $row['beats_per_measure'] . '/' . $row['beat_value'];
 			$key_signatures[] = $row['key_signature'];
 			$time_signatures[] = $row['time_signature'];
-			$class = isset($completed_songs[$row['id']]) ? 'completed' : 'incomplete';
 			if ($row['level'] <= $level || $is_premium_user) {
-				$row['class'] = $class;
 				$enabled_songs[] = $row;
 			} else {
 				$disabled_songs[] = $row;
@@ -142,7 +140,6 @@ abstract class LoggedInAction extends ReadMiAction {
 				$completable_songs[] = [
 					'name' => $row['name'],
 					'bpm' => self::getBPMRequirement($level, $row['beat_value']),
-					'class' => $class,
 				];
 			}
 		}
