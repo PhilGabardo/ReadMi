@@ -4,19 +4,16 @@ import KeySignatures from './key_signatures'
 import AudioContext from './audio_context'
 
 export default class SongPlayer {
-	constructor(notes, instrument, beats_per_minute, beats_per_measure) {
-		this.audioCtx = AudioContext.getAudioContext()
+	constructor(notes, instrument) {
 		this.tick = null;
 		this.tickVolume = null;
 		this.soundHz = 1000;
 		this.scheduledNotes = notes.flat();
 		this.instrument = instrument;
-		//this.setController()
-		this.initAudio();
-		this.initialization_time = Date.now();
 	}
 
 	initAudio() {
+		this.audioCtx = AudioContext.getAudioContext()
 		this.tick = this.audioCtx.createOscillator();
 		this.tickVolume = this.audioCtx.createGain();
 
@@ -25,17 +22,20 @@ export default class SongPlayer {
 		this.tickVolume.gain.value = 0;
 
 		this.tick.connect(this.tickVolume);
-		//this.tickVolume.connect(this.audioCtx.destination);
+		if (document.getElementById('song-player-controller').checked) {
+			this.tickVolume.connect(this.audioCtx.destination);
+		}
 		this.tick.start(0);  // No offset, start immediately.
 	}
 
 	start() {
-
+		this.initAudio();
+		this.setController()
 		// Schedule all the clicks ahead.
 		for (let i = 0; i < this.scheduledNotes.length; i++) {
 			let note = this.scheduledNotes[i].note;
 			if (note.attrs.type !== 'GhostNote' && !note.isRest()) {
-				let time_to_play = ((Date.now() - this.initialization_time) / 1000) + this.scheduledNotes[i].time_offset;
+				let time_to_play = this.scheduledNotes[i].time_offset;
 				let props = note.getKeyProps()[0];
 				let key = props.key;
 				let octave = props.octave;

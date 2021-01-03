@@ -7,15 +7,12 @@ import AudioContext from './audio_context'
 export default class ScheduledMetronome {
 	constructor(tempo, ticks) {
 		this.tempo = tempo;
-		this.audioCtx = AudioContext.getAudioContext();
 		this.tick = null;
 		this.tickVolume = null;
 		this.soundHz = 1000;
 		this.scheduledTicks = ticks;
 		this.playingState = true;
-		this.initAudio();
 		this.setController();
-		this.initialization_time = Date.now();
 	}
 
 	reset(tempo, ticks){
@@ -26,6 +23,7 @@ export default class ScheduledMetronome {
 	}
 
 	initAudio() {
+		this.audioCtx = AudioContext.getAudioContext();
 		this.tick = this.audioCtx.createOscillator();
 		this.tickVolume = this.audioCtx.createGain();
 
@@ -38,19 +36,15 @@ export default class ScheduledMetronome {
 		this.tick.start(0);  // No offset, start immediately.
 	}
 
-	click(metronome) {
-		const time = (Date.now() - metronome.initialization_time) / 1000;
-		metronome.clickAtTime(Math.floor(time));
-	}
-
 	start() {
+		this.initAudio();
 		const timeoutDuration = (60 / this.tempo);
 
-		let now = (Date.now() - this.initialization_time) / 1000;
+		let now = 0;
 
 		// Schedule all the clicks ahead.
 		for (let i = 0; i < this.scheduledTicks; i++) {
-			this.clickAtTime(Math.floor(now), i);
+			this.clickAtTime(now, i);
 			now += timeoutDuration;
 		}
 	}

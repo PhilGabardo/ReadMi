@@ -6,7 +6,6 @@ export default class SessionController {
 		this.note_feedback = note_feedback;
 		this.metronome = metronome;
 		this.song_player = song_player;
-		this.timing_bar = timing_bar;
 		this.bpm = bpm;
 		this.beats_per_measure = beats_per_measure;
 		this.instrument = instrument;
@@ -41,9 +40,10 @@ export default class SessionController {
 
 	start() {
 		let boo = document.getElementById("boo");
-		this.stave_updater.start()
+		this.stave_updater.start();
+		this.metronome.start();
 		for (let i = 0; i < this.beats_per_measure; i++) {
-			setTimeout(this.metronome.click, (60 * 1000 * i / this.bpm), this.metronome);
+			//setTimeout(this.metronome.click, (60 * 1000 * i / this.bpm), this.metronome);
 			setTimeout(this.showCountDown, (60 * 1000 * i / this.bpm), this.beats_per_measure - i, 60 * 1000 / 2 / this.bpm);
 		}
 		setTimeout(this._start, this.getStaveTimeInMs(), this);
@@ -55,7 +55,7 @@ export default class SessionController {
 		timerCountdown.style.display = 'none';
 		session_controller.timing.startTiming()
 		session_controller.pause_controller_label.style.visibility = 'visible';
-		session_controller.metronome.start();
+		//session_controller.metronome.start();
 		session_controller.song_player.start();
 		//session_controller.timing_bar.start();
 		session_controller.note_feedback.start();

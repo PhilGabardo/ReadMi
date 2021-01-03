@@ -96,7 +96,6 @@ function startSession(audioStreamController) {
 			inputValue: 60,
 			confirmButtonText: 'Start!',
 		}).then((result) => {
-			//let bpm_slider = document.getElementById('bpm');
 			let bpm_value = result.value;
 			let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure, bpm_value);
 			let stave_updater = new StaveUpdater(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), bpm_value)
@@ -106,8 +105,7 @@ function startSession(audioStreamController) {
 				stave_updater.renderForNonPiano()
 			}
 			let metronome = new ScheduledMetronome(bpm_value, beats_per_measure * vf_bars.length)
-			let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_value, beats_per_measure);
-			songPlayer.setController();
+			let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument);
 			let note_hinter = NoteHinter.getHinter(instrument, bpm_value, beats_per_measure, note_scheduler.getScheduledNotes(), keySignature);
 			note_hinter.setController();
 			let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_value, keySigStaffWidth);
