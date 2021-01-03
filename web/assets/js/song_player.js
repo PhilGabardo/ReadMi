@@ -13,6 +13,7 @@ export default class SongPlayer {
 		this.instrument = instrument;
 		//this.setController()
 		this.initAudio();
+		this.initialization_time = Date.now();
 	}
 
 	initAudio() {
@@ -30,18 +31,17 @@ export default class SongPlayer {
 
 	start() {
 
-		let now = this.audioCtx.currentTime;
-
 		// Schedule all the clicks ahead.
 		for (let i = 0; i < this.scheduledNotes.length; i++) {
 			let note = this.scheduledNotes[i].note;
 			if (note.attrs.type !== 'GhostNote' && !note.isRest()) {
+				let time_to_play = ((Date.now() - this.initialization_time) / 1000) + this.scheduledNotes[i].time_offset;
 				let props = note.getKeyProps()[0];
 				let key = props.key;
 				let octave = props.octave;
 				let offsetNote = KeySignatures.getOffsetNote(key, octave,  0 - Instruments.getInstrumentKeyOffset(this.instrument));
 				let freqency = note_detection.getFrequencyForNote(offsetNote.name, offsetNote.octave);
-				this.playNoteAtTime(freqency, now + this.scheduledNotes[i].time_offset);
+				this.playNoteAtTime(freqency, time_to_play);
 			}
 		}
 	}

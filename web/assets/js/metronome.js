@@ -15,6 +15,7 @@ export default class ScheduledMetronome {
 		this.playingState = true;
 		this.initAudio();
 		this.setController();
+		this.initialization_time = Date.now();
 	}
 
 	reset(tempo, ticks){
@@ -38,18 +39,18 @@ export default class ScheduledMetronome {
 	}
 
 	click(metronome) {
-		const time = metronome.audioCtx.currentTime;
-		metronome.clickAtTime(time);
+		const time = (Date.now() - metronome.initialization_time) / 1000;
+		metronome.clickAtTime(Math.floor(time));
 	}
 
 	start() {
 		const timeoutDuration = (60 / this.tempo);
 
-		let now = this.audioCtx.currentTime;
+		let now = (Date.now() - this.initialization_time) / 1000;
 
 		// Schedule all the clicks ahead.
 		for (let i = 0; i < this.scheduledTicks; i++) {
-			this.clickAtTime(now, i);
+			this.clickAtTime(Math.floor(now), i);
 			now += timeoutDuration;
 		}
 	}
