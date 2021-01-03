@@ -2,24 +2,23 @@ import AudioContext from './audio_context'
 
 export default class Timing {
 	startTiming() {
-		this.audioCtx = AudioContext.getAudioContext()
-		this.startTime = this.audioCtx.currentTime;
+		this.startTime = Date.now();
 		this.pauseDelay = 0;
 	}
 
 	pause() {
-		this.pauseStart = this.audioCtx.currentTime
+		this.pauseStart = Date.now();
 	}
 
 	resume() {
-		this.pauseDelay += this.audioCtx.currentTime - this.pauseStart
+		this.pauseDelay += Date.now() - this.pauseStart;
 	}
 
 	getPauseDelay() {
-		return this.pauseDelay * 1000;
+		return this.pauseDelay;
 	}
 
 	getTimeSinceStart() {
-		return (this.audioCtx.currentTime - this.startTime - this.pauseDelay) * 1000
+		return Date.now() - this.startTime - this.pauseDelay;
 	}
 }
