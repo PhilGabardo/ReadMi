@@ -5,13 +5,15 @@ import VexFlow from 'vexflow';
 let div = document.getElementById("sheet_sample");
 let renderer = new VexFlow.Flow.Renderer(div, VexFlow.Flow.Renderer.Backends.SVG);
 
+let staveWidth = Math.min(window.innerWidth * 0.9, 400)
+
 // Size our SVG:
-renderer.resize(400, 100);
+renderer.resize(staveWidth, 100);
 
 // And get a drawing context:
 let context = renderer.getContext();
 // Create a stave at position 10, 40 of width 400 on the canvas.
-let stave = new VexFlow.Flow.Stave(0, 0, 400);
+let stave = new VexFlow.Flow.Stave(0, 0, staveWidth);
 
 // Add a clef and time signature.
 stave.addClef("treble").addTimeSignature("4/4");
@@ -39,7 +41,7 @@ let voice = new VexFlow.Flow.Voice({num_beats: 4,  beat_value: 4});
 voice.addTickables(notes);
 
 // Format and justify the notes to 400 pixels.
-let formatter = new VexFlow.Flow.Formatter().joinVoices([voice]).format([voice], 400);
+let formatter = new VexFlow.Flow.Formatter().joinVoices([voice]).format([voice], staveWidth - 20);
 
 // Render voice
 voice.draw(context, stave);

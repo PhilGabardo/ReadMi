@@ -114,7 +114,8 @@ function getKeySignatureInfo(key) {
 function getKeySignatureStaffWidth(key) {
 	let keySigInfo = getKeySignatureInfo(key);
 	let keySigNotesCount = Object.keys(keySigInfo.notes).length;
-	return 300 + keySigNotesCount * 10;
+	let baseWidth = 0.2 * (window.orientation == 0 ? window.innerHeight : window.innerWidth)
+	return baseWidth + keySigNotesCount * 10;
 }
 
 function getOffsetNote(key, octave, offset) {

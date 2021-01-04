@@ -150,7 +150,7 @@ export class PianoNoteHinter extends NoteHinter {
 		this.canvas.style.height = '10%';
 		this.canvas.style.display = "block";
 		this.canvas.style.position = "fixed";
-		this.canvas.style.bottom = '20%'
+		this.canvas.style.bottom = '10%'
 		this.canvas.style.outline = "black 3px solid";
 		this.canvas.style.left = '20%';
 		document.body.appendChild(this.canvas);
@@ -258,7 +258,7 @@ export class GuitarNoteHinter extends NoteHinter {
 		this.canvas.style.height = '10%';
 		this.canvas.style.display = "block";
 		this.canvas.style.position = "fixed";
-		this.canvas.style.bottom = '20%'
+		this.canvas.style.bottom = '10%'
 		//this.canvas.style.outline = "black 3px solid";
 		this.canvas.style.left = '20%';
 		document.body.appendChild(this.canvas);

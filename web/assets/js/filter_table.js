@@ -59,7 +59,7 @@ function filterTable(songName, songKeys, songTimes) {
 		tr[i].style.display = shouldFilter ? "none" : "";
 	}
 }
-
+/*
 $('#keyFilterSelect').selectize(
 	{
 		maxItems: 3,
@@ -76,7 +76,7 @@ $('#timeFilterSelect').selectize(
 			filterTable(currentName, currentKeys, currentTimes);
 		}
 	});
-
+*/
 $('.filter').selectize(
 	{
 		onType: function(value) {

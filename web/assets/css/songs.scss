@@ -2,21 +2,48 @@
     position: relative;
 }
 
-#header {
-    text-align: center;
-    width: 100%;
-    top: 0;
-    height: 25%;
-    display: table;
-    width: 100%;
-    font-size: 2.5vw;
+@media only screen and (min-width: 600px) {
+    #header {
+        text-align: center;
+        width: 100%;
+        top: 0;
+        height: 25%;
+        display: table;
+        width: 100%;
+        font-size: 2.5vw;
+    }
 
+    #_header {
+        vertical-align: middle;
+        display: table-cell;
+        width: 100%;
+        padding-left: 15vw;
+        padding-right: 15vw;
+        font-size: 3vw;
+        text-align: center;
+    }
 }
 
-#_header {
-    vertical-align: middle;
-    display: table-cell;
-    width: 100%;
+@media only screen and (max-width: 600px) {
+    #header {
+        text-align: center;
+        width: 100%;
+        top: 0;
+        height: 15%;
+        display: table;
+        width: 100%;
+        font-size: 2.5vw;
+    }
+
+    #_header {
+        vertical-align: middle;
+        display: table-cell;
+        width: 100%;
+        padding-left: 30vw;
+        padding-right: 30vw;
+        font-size: 3vw;
+        text-align: center;
+    }
 }
 
 .pause-controller {
@@ -24,13 +51,13 @@
         display: block;
         box-sizing: border-box;
         width: 0;
-        height: 74px;
+        height: 50px;
 
         border-color: transparent transparent transparent #202020;
         transition: 100ms all ease;
         cursor: pointer;
         border-style: double;
-        border-width: 0px 0 0px 60px;
+        border-width: 0px 0 0px 30px;
         visibility: hidden;
         margin: auto;
     }
@@ -39,7 +66,7 @@
         display: none;
         &:checked + label {
             border-style: solid;
-            border-width: 37px 0 37px 60px;
+            border-width: 25px 0 25px 50px;
         }
         &:focus + label {
             box-shadow: 0 0 5px lightblue;
@@ -48,21 +75,17 @@
 }
 
 #menu_div {
-    z-index: 100;
+    z-index: 0;
     position: fixed;
-    bottom: 2%;
-    right: 10%;
+    top: 2%;
+    right: 2%;
 }
 
 #menu {
     font-size: 15px;
     margin: auto;
-    margin-bottom: 10px;
-    background: hsla(80, 90%, 40%, 1);
-    color: white;
     font-weight: bold;
     text-align: left;
-    border: solid hsla(80, 90%, 40%, 0.5);
     border-right: none;
     box-shadow: 0 1px 3px black;
     border-radius: 1em 1em 1em 1em;
@@ -125,11 +148,12 @@ svg {
 
 #note_hint_div {
     position: fixed;
-    bottom: 2%;
-    left: 20%;
+    bottom: 12%;
+    left: 5%;
 }
 
 #note_hint {
+    font-size: small;
     background: #f8d486;
     padding: 10px;
     border-radius: 2em 2em 2em 2em;

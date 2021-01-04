@@ -182,7 +182,7 @@ function estimateFrequency(wave, sampleRate, expected_freq) {
 		for (tau = 0; tau < length; tau++) {
 			// If we are less than the threshold, continue on until we find the lowest value
 			// indicating the lowest dip in the wave since we first crossed the threshold.
-			if (resultBuffer[tau] < 0.45) {
+			if (resultBuffer[tau] < 0.3) {
 				while (tau + 1 < length && resultBuffer[tau + 1] < resultBuffer[tau]) {
 					tau++;
 				}

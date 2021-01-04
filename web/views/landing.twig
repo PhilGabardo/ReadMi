@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+    {% include "sidemenu.html" %}
     <link rel="stylesheet" href="/build/landing_style.css">
     <link rel="stylesheet" href="/build/filterable_table.css">
     <div id="instrument_selection">
@@ -29,6 +30,7 @@
             <div class="songFilter">
                 <input class="filter"  type="text" placeholder="Search for a song or artist..">
             </div>
+            <!--
             <div class="songFilter">
                 <select id="keyFilterSelect" placeholder="Key Signature">
                     <option value="">Key Signature...</option>
@@ -45,6 +47,7 @@
                     {% endfor %}
                 </select>
             </div>
+            -->
         </table>
         <script type="text/javascript" src="/build/filter_table.js"></script>
         <table id="songsTable">
