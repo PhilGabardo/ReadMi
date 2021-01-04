@@ -57,6 +57,9 @@ abstract class LoggedInAction extends ReadMiAction {
 			return [];
 		}
 		$subscriptions = $subscriptions->all()->data;
+		if (!$subscriptions) {
+			return [];
+		}
 		usort($subscriptions, function(Subscription $a, Subscription $b) {
 			return $a->start_date > $b->start_date ? -1 : 1;
 		});
