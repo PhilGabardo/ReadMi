@@ -73,5 +73,5 @@
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 100%; /* Set the width of the sidebar */
     z-index: 1; /* Stay on top */
-    padding-top: 12vh;
+    padding-top: 5vh;
 }

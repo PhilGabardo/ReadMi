@@ -13,6 +13,14 @@
         font-size: 2.5vw;
     }
 
+    .menu_option {
+        margin: 0px 3px 0px 3px;
+    }
+
+    input[type="checkbox"] {
+        margin: 0px 3px 0px 3px;
+    }
+
     #_header {
         vertical-align: middle;
         display: table-cell;
@@ -21,6 +29,53 @@
         padding-right: 15vw;
         font-size: 3vw;
         text-align: center;
+    }
+
+    .pause-controller {
+        width: 50px;
+        label {
+            display: block;
+            box-sizing: border-box;
+            width: 0;
+            height: 50px;
+
+            border-color: transparent transparent transparent #202020;
+            transition: 100ms all ease;
+            cursor: pointer;
+            border-style: double;
+            border-width: 0px 0 0px 30px;
+            visibility: hidden;
+            margin: auto;
+        }
+        input[type="checkbox"] {
+            position: absolute;
+            display: none;
+            &:checked + label {
+                border-style: solid;
+                border-width: 25px 0 25px 50px;
+            }
+            &:focus + label {
+                box-shadow: 0 0 5px lightblue;
+            }
+        }
+    }
+
+    #menu {
+        background: white;
+        font-size: 15px;
+        margin: auto;
+        font-weight: bold;
+        text-align: left;
+        border-right: none;
+        box-shadow: 0 1px 3px black;
+        border-radius: 1em 1em 1em 1em;
+    }
+
+    #menu_div {
+        z-index: 100;
+        position: fixed;
+        bottom: 5%;
+        left: 2%;
     }
 }
 
@@ -39,63 +94,57 @@
         vertical-align: middle;
         display: table-cell;
         width: 100%;
-        padding-left: 30vw;
-        padding-right: 30vw;
-        font-size: 3vw;
+        padding-left: 15vw;
+        padding-right: 15vw;
+        font-size: 5vw;
         text-align: center;
     }
-}
 
-.pause-controller {
-    label {
-        display: block;
-        box-sizing: border-box;
-        width: 0;
-        height: 50px;
+    .pause-controller {
+        width: 36px;
+        label {
+            display: block;
+            box-sizing: border-box;
+            width: 0;
+            height: 30px;
 
-        border-color: transparent transparent transparent #202020;
-        transition: 100ms all ease;
-        cursor: pointer;
-        border-style: double;
-        border-width: 0px 0 0px 30px;
-        visibility: hidden;
+            border-color: transparent transparent transparent #202020;
+            transition: 100ms all ease;
+            cursor: pointer;
+            border-style: double;
+            border-width: 0px 30px 0px 30px;
+            visibility: hidden;
+            margin: auto;
+        }
+        input[type="checkbox"] {
+            position: absolute;
+            display: none;
+            &:checked + label {
+                border-style: solid;
+                border-width: 15px 30px 15px 30px;
+            }
+            &:focus + label {
+                box-shadow: 0 0 5px lightblue;
+            }
+        }
+    }
+
+    #menu {
+        background: white;
+        font-size: 10px;
         margin: auto;
+        font-weight: bold;
+        text-align: left;
+        border-right: none;
+        box-shadow: 0 1px 3px black;
+        border-radius: 1em 1em 1em 1em;
     }
-    input[type="checkbox"] {
-        position: absolute;
-        display: none;
-        &:checked + label {
-            border-style: solid;
-            border-width: 25px 0 25px 50px;
-        }
-        &:focus + label {
-            box-shadow: 0 0 5px lightblue;
-        }
-    }
-}
 
-#menu_div {
-    z-index: 100;
-    position: fixed;
-    top: 2%;
-    right: 2%;
-}
-
-#menu {
-    background: white;
-    font-size: 15px;
-    margin: auto;
-    font-weight: bold;
-    text-align: left;
-    border-right: none;
-    box-shadow: 0 1px 3px black;
-    border-radius: 1em 1em 1em 1em;
-    #checkbox-cell {
-        width: 60%;
-    }
-    #pause-cell {
-        width: 40%;
-        row-span: 3;
+    #menu_div {
+        z-index: 100;
+        position: fixed;
+        bottom: 5%;
+        left: 0%;
     }
 }
 
@@ -149,14 +198,15 @@ svg {
 
 #note_hint_div {
     position: fixed;
-    bottom: 12%;
-    left: 5%;
+    bottom: 0%;
+    left: 45%;
+    z-index: 100;
 }
 
 #note_hint {
-    font-size: small;
+    font-size: 2vh;
     background: #f8d486;
-    padding: 10px;
+    padding: 1vh;
     border-radius: 2em 2em 2em 2em;
     display: none;
 }

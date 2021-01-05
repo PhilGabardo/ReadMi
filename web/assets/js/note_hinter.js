@@ -371,10 +371,10 @@ export class AltoSaxHinter extends NoteHinter {
 		let boo = document.getElementById("boo");
 		this.img = document.createElement("img");
 		//this.img.src = '../../assets/images/saxophone/14.gif';
-		this.img.style.height = '40%';
+		this.img.style.height = '30%';
 		this.img.style.display = "block";
 		this.img.style.position = "fixed";
-		this.img.style.bottom = '2%'
+		this.img.style.bottom = '5%'
 		this.img.style.left = '40%';
 
 		// This next line will just add it to the <body> tag
