@@ -96,7 +96,7 @@ function startSession(audioStreamController) {
 			inputValue: 60,
 			confirmButtonText: 'Start!',
 		}).then((result) => {
-			
+			window.scrollTo(0,1);
 			let bpm_value = result.value;
 			let note_scheduler = new NoteScheduler(vf_bars, beat_value, beats_per_measure, bpm_value);
 			let stave_updater = new StaveUpdater(renderer_context, staveWidth, keySignature, bars, beats_per_measure, beat_value, name, note_scheduler.getScheduledNotes(), bpm_value)
