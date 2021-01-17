@@ -116,11 +116,10 @@ abstract class LoggedInAction extends ReadMiAction {
 		$instrument = $user_info['instrument'];
 		$instrument_data = json_decode($user_info["{$instrument}_data"], true);
 		$level = $instrument_data['level'];
-		$is_piano = $instrument === 'piano' ? 1 : 0;
 		$max_note_index = Instruments::MAX_PLAYABLE_NOTE_INDEX[$instrument];
 		$min_note_index = Instruments::MIN_PLAYABLE_NOTE_INDEX[$instrument];
 		$enabled_songs_clause = self::isDev() ? '' : 'enabled = 1 and';
-		$st = $app['pdo']->prepare("SELECT id, name, level, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE {$enabled_songs_clause} piano = {$is_piano} and max_note_index <= {$max_note_index} and min_note_index >= {$min_note_index} ORDER BY level ASC");
+		$st = $app['pdo']->prepare("SELECT id, name, level, artist, key_signature, beat_value, beats_per_measure, is_premium FROM readmi_songs WHERE {$enabled_songs_clause} max_note_index <= {$max_note_index} and min_note_index >= {$min_note_index} ORDER BY level ASC");
 		$st->execute();
 
 		$key_signatures = [];

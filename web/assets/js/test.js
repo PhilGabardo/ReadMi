@@ -105,7 +105,7 @@ function startSession(audioStreamController) {
 			} else {
 				stave_updater.renderForNonPiano()
 			}
-			let metronome = new ScheduledMetronome(bpm_value, beats_per_measure * vf_bars.length)
+			let metronome = new ScheduledMetronome(bpm_value, beats_per_measure * (vf_bars.length + 1))
 			let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument);
 			let note_hinter = NoteHinter.getHinter(instrument, bpm_value, beats_per_measure, note_scheduler.getScheduledNotes(), keySignature);
 			note_hinter.setController();

@@ -15,22 +15,6 @@ class CreateUserAction extends LoggedOutAction {
 		if (!self::validateCaptcha($captcha)) {
 			return json_encode(['message' => 'Captcha check failed.']);
 		}
-
-		// username validation
-		$username = trim($request->get('username'));
-		if ($username == '') {
-			return json_encode(['message' => "Username is required."]);
-		}
-		if (!preg_match("/^[a-zA-Z0-9_]+$/", $username)) {
-			return json_encode(['message' => "Username can only contain numbers and letters."]);
-		}
-		$st = $app['pdo']->prepare("SELECT 1 FROM readmi_users WHERE username = '$username'");
-		$st->execute();
-		$val = $st->fetch();
-		if ((int)$val == 1) {
-			return json_encode(['message' => 'Username is already in use.']);
-		}
-
 		// email validation
 		$email = trim($request->get('email_address'));
 		if ($email == '') {
@@ -52,13 +36,13 @@ class CreateUserAction extends LoggedOutAction {
 		}
 
 		$password = md5($password);
-		$st = $app['pdo']->prepare("INSERT INTO readmi_users (username, email, password) VALUES('$username', '$email', '$password') RETURNING id");
+		$st = $app['pdo']->prepare("INSERT INTO readmi_users (email, password) VALUES('$email', '$password') RETURNING id");
 		$st->execute();
 		$id = $st->fetch();
 		if (isset($id['id'])) {
 			session_regenerate_id();
 			$_SESSION['loggedin'] = TRUE;
-			$_SESSION['username'] = $username;
+			$_SESSION['username'] = $email;
 			$_SESSION['id'] = $id['id'];
 			return json_encode(['success' => true]);
 		} else {

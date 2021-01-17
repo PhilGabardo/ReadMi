@@ -8,24 +8,33 @@ use Silex\Application;
 
 class DifficultyComputer {
 
-	public static function updateLevels(Application $app) {
-
-		$st = $app['pdo']->prepare("SELECT id, notes, key_signature, beat_value, beats_per_measure, piano FROM readmi_songs ORDER BY name ASC");
+	public static function computeBeatCounts(Application $app) {
+		$st = $app['pdo']->prepare("SELECT id, name, notes, key_signature, beat_value, beats_per_measure, piano FROM readmi_songs ORDER BY name ASC");
 		$st->execute();
-		$rows = $st->fetchAll();
-		$piano_songs = [];
-		$non_piano_songs = [];
-		foreach ($rows as $row) {
-			if ((int)$row['piano']) {
-				$piano_songs[] = $row;
-			} else {
-				$non_piano_songs[] = $row;
+		$songs = $st->fetchAll();
+		foreach ($songs as $song) {
+			try {
+				$key_signature = $song['key_signature'];
+				$beat_value = $song['beat_value'];
+				$beats_per_measure = $song['beats_per_measure'];
+				$notes = json_decode($song['notes'], true);
+				$bar_count = count(BarComputer::getBars($notes, $key_signature, $beat_value, $beats_per_measure, 1));
+				$beat_count = $bar_count * $beats_per_measure;
+				$st = $app['pdo']->prepare("UPDATE readmi_songs set beat_count = $beat_count where id = {$song['id']}");
+				$st->execute();
+			} catch (\Throwable $t) {
+				continue;
 			}
 		}
-		$piano_difficulty_map = self::getDifficultyMap($piano_songs, true);
-		self::updateLevelsFromDifficultyMap($app, $piano_difficulty_map);
-		$non_piano_difficulty_map = self::getDifficultyMap($non_piano_songs, false);
-		self::updateLevelsFromDifficultyMap($app, $non_piano_difficulty_map);
+	}
+
+	public static function updateLevels(Application $app) {
+
+		$st = $app['pdo']->prepare("SELECT id, name, notes, key_signature, beat_value, beats_per_measure, piano FROM readmi_songs ORDER BY name ASC");
+		$st->execute();
+		$rows = $st->fetchAll();
+		$difficulty_map = self::getDifficultyMap($rows, true);
+		self::updateLevelsFromDifficultyMap($app, $difficulty_map);;
 	}
 
 	private static function updateLevelsFromDifficultyMap(Application $app, array $difficulty_map) {
@@ -56,14 +65,19 @@ class DifficultyComputer {
 		$max_accidental_complexity = 0;
 		$max_timing_complexity = 0;
 		foreach ($songs as $song) {
-			$key_signature = $song['key_signature'];
-			$beat_value = $song['beat_value'];
-			$beats_per_measure = $song['beats_per_measure'];
-			$notes = json_decode($song['notes'], true);
-			$bars = BarComputer::getBars($notes, $key_signature, $beat_value, $beats_per_measure, $piano);
-			$norm_notes = self::array_flatten($bars);
-			$max_timing_complexity = max($max_timing_complexity, self::getTimingComplexity($norm_notes, $beat_value));
-			$max_accidental_complexity = max($max_accidental_complexity, self::getAccidentalComplexity($norm_notes));
+			try {
+				krumo($song['name']);
+				$key_signature = $song['key_signature'];
+				$beat_value = $song['beat_value'];
+				$beats_per_measure = $song['beats_per_measure'];
+				$notes = json_decode($song['notes'], true);
+				$bars = BarComputer::getBars($notes, $key_signature, $beat_value, $beats_per_measure, $piano);
+				$norm_notes = self::array_flatten($bars);
+				$max_timing_complexity = max($max_timing_complexity, self::getTimingComplexity($norm_notes, $beat_value));
+				$max_accidental_complexity = max($max_accidental_complexity, self::getAccidentalComplexity($norm_notes));
+			} catch (\Throwable $t) {
+				continue;
+			}
 		}
 		$difficulty_map = [];
 		foreach ($songs as $song) {
@@ -79,10 +93,7 @@ class DifficultyComputer {
 		$notes = json_decode($song['notes'], true);
 		$bars = BarComputer::getBars($notes, $key_signature, $beat_value, $beats_per_measure, $piano);
 		$norm_notes = self::array_flatten($bars);
-		$key_signature_complexity = self::getKeySignatureComplexity($key_signature);
-		$accidental_complexity = self::getAccidentalComplexity($norm_notes) / $max_accidental_complexity;
-		$timing_complexity = self::getTimingComplexity($norm_notes, $beat_value) / $max_timing_complexity;
-		return ($key_signature_complexity + $accidental_complexity + $timing_complexity) / 3;
+		return self::getTimingComplexity($norm_notes, $beat_value) / $max_timing_complexity;
 
 	}
 

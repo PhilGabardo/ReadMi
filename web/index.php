@@ -161,6 +161,14 @@ $app->get('/compute_levels', function(Request $request) use($app) {
 	return '';
 });
 
+$app->get('/compute_beat_counts', function(Request $request) use($app) {
+	if (ReadMiAction::isDev()) {
+		DifficultyComputer::computeBeatCounts($app);
+		return '';
+	}
+	return '';
+});
+
 $app->get('/audio_test', function(Request $request) use($app) {
 	return \Actions\AudioTestAction::execute($app, $request);
 });

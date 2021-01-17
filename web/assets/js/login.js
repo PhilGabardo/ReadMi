@@ -25,7 +25,7 @@ $('#back').click(function(){
 $('.login-form').submit(function(event) {
 	event.preventDefault();
 	var data = {};
-	data['username_or_email'] = $('#username_or_email').val();
+	data['email'] = $('#email').val();
 	data['password'] = $('#login_password').val();
 	data['action_type'] = 'login';
 
@@ -56,7 +56,6 @@ $('.login-form').submit(function(event) {
 $('.register-form').submit(function(event) {
 	event.preventDefault();
 	var data = {};
-	data['username'] = $('#create_username').val();
 	data['password'] = $('#create_password').val();
 	data['email_address'] = $('#create_email_address').val();
 	data['action_type'] = 'create_user';

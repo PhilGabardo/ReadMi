@@ -89,12 +89,14 @@ export default class NoteHinter {
 			note_hinter.vf_bars[offsettedStavesPassed].shift();
 		}
 		if (note && note.attrs.type !== 'GhostNote') {
-			let props = note.getKeyProps()[0];
-			let key = props.key;
-			let octave = props.octave;
-			note_hinter.undoLastHint(key, octave);
+			if (!note.isRest()) {
+				let props = note.getKeyProps()[0];
+				let key = props.key;
+				let octave = props.octave;
+				note_hinter.undoLastHint(key, octave);
+			}
 			let next_note = note_hinter.getNextNote(offsettedStavesPassed)
-			if (next_note) {
+			if (next_note && !next_note.isRest()) {
 				note_hinter.hint(next_note)
 			}
 		}

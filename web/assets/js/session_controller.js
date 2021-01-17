@@ -17,7 +17,10 @@ export default class SessionController {
 		this.song_id = song_id;
 		this.bpm_requirement = bpm_requirement;
 		this.note_hinter = note_hinter;
-		this.note_hinter.hint(this.note_hinter.getNextNote(0));
+		let first_note = this.note_hinter.getNextNote(0);
+		if (!first_note.isRest()) {
+			this.note_hinter.hint(first_note);
+		}
 		this.setPauseController();
 		this.stave_updater = stave_updater
 		this.timing = new Timing()
@@ -137,27 +140,10 @@ export default class SessionController {
 					}
 				})
 		} else {
-			let params = '';
-			params += '&song_id=' + session_controller.song_id;
-			params += '&notes_correct=' + session_controller.note_feedback.getCorrectNotes();
-			params += '&total_notes=' + session_controller.note_feedback.getTotalNotes();
-			params += '&bpm=' + session_controller.bpm;
-			params += '&bpm_requirement=' + session_controller.bpm_requirement;
-			fetch('/', {
-				method: "POST",
-				headers: new Headers({
-					'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
-				}),
-				body: "action_type=song_completion&" + params
-			}).then(function(response) {
-				return response.json();
-			}).then(function(responseJson) {
-				swal(responseJson.msg).then(
-					(confirmed) => {
-						$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value=""></form>').appendTo($(document.body)).submit();
-					}
-				);
-			});
+			swal('You played ' + session_controller.note_feedback.getCorrectNotes() + ' out of ' + session_controller.note_feedback.getTotalNotes() + ' notes correctly!')
+				.then((confirmed) => {
+					$('<form action="' + '/' + '" method="POST"><input type="hidden" name="action_type" value=""></form>').appendTo($(document.body)).submit();
+				});
 		}
 	}
 

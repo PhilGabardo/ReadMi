@@ -3,7 +3,7 @@
 namespace Misc;
 
 
-class ReadMiNote implements ReadMiNode {
+class ReadMiNote implements ReadMiNode, \JsonSerializable {
 	private $note_props;
 	private $quarter_len_numerator;
 	private $quarter_len_denominator;
@@ -52,5 +52,19 @@ class ReadMiNote implements ReadMiNode {
 
 	public function getDenominator() : float {
 		return $this->quarter_len_denominator;
+	}
+
+	/**
+	 * Specify data which should be serialized to JSON
+	 * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+	 * @return mixed data which can be serialized by <b>json_encode</b>,
+	 * which is a value of any type other than a resource.
+	 * @since 5.4.0
+	 */
+	function jsonSerialize() {
+		return [
+			'numerator' => $this->quarter_len_numerator,
+			'denominator' => $this->quarter_len_denominator,
+		];
 	}
 }
