@@ -59,7 +59,7 @@ export default class SessionController {
 		session_controller.timing.startTiming()
 		session_controller.pause_controller_label.style.visibility = 'visible';
 		//session_controller.metronome.start();
-		session_controller.song_player.start();
+		//session_controller.song_player.start();
 		//session_controller.timing_bar.start();
 		session_controller.note_feedback.start();
 		//session_controller.score_scroller.start()

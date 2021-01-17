@@ -4,12 +4,17 @@ import KeySignatures from './key_signatures'
 import AudioContext from './audio_context'
 
 export default class SongPlayer {
-	constructor(notes, instrument) {
+	constructor(notes, instrument, beats_per_minute, beats_per_measure) {
 		this.tick = null;
 		this.tickVolume = null;
 		this.soundHz = 1000;
 		this.scheduledNotes = notes.flat();
 		this.instrument = instrument;
+		this.beats_per_minute = beats_per_minute;
+		this.beats_per_measure = beats_per_measure;
+		this.initAudio()
+		this.scheduleNotes();
+		this.setController();
 	}
 
 	initAudio() {
@@ -28,10 +33,13 @@ export default class SongPlayer {
 		this.tick.start(0);  // No offset, start immediately.
 	}
 
-	start() {
-		this.initAudio();
-		this.setController()
+	scheduleNotes() {
+		//this.initAudio();
+		//this.setController()
+		//(60 * 1000 * i / this.bpm)
 		// Schedule all the clicks ahead.
+		let countdown_offset = (60 / this.beats_per_minute) * this.beats_per_measure;
+		console.log(countdown_offset);
 		for (let i = 0; i < this.scheduledNotes.length; i++) {
 			let note = this.scheduledNotes[i].note;
 			if (note.attrs.type !== 'GhostNote' && !note.isRest()) {
@@ -41,7 +49,7 @@ export default class SongPlayer {
 				let octave = props.octave;
 				let offsetNote = KeySignatures.getOffsetNote(key, octave,  0 - Instruments.getInstrumentKeyOffset(this.instrument));
 				let freqency = note_detection.getFrequencyForNote(offsetNote.name, offsetNote.octave);
-				this.playNoteAtTime(freqency, time_to_play);
+				this.playNoteAtTime(freqency, countdown_offset + time_to_play);
 			}
 		}
 	}
