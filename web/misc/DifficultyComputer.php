@@ -65,7 +65,6 @@ class DifficultyComputer {
 		$max_accidental_complexity = 0;
 		$max_timing_complexity = 0;
 		foreach ($songs as $song) {
-			try {
 				krumo($song['name']);
 				$key_signature = $song['key_signature'];
 				$beat_value = $song['beat_value'];
@@ -75,9 +74,6 @@ class DifficultyComputer {
 				$norm_notes = self::array_flatten($bars);
 				$max_timing_complexity = max($max_timing_complexity, self::getTimingComplexity($norm_notes, $beat_value));
 				$max_accidental_complexity = max($max_accidental_complexity, self::getAccidentalComplexity($norm_notes));
-			} catch (\Throwable $t) {
-				continue;
-			}
 		}
 		$difficulty_map = [];
 		foreach ($songs as $song) {

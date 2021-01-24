@@ -75,7 +75,8 @@
 #_instrument_selection {
     display: inline-grid;
     grid-row: 1;
-    grid-column: 2
+    grid-column: 2;
+    width: 100px;
 }
 
 
