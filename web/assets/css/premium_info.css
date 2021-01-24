@@ -2,8 +2,14 @@
     text-align: center;
 }
 
-#premium_info {
+body {
+    background: #cfc09f;
+}
 
+#premium_info {
+    background: white;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    margin: 10%;
 }
 
 #_header {
@@ -13,6 +19,7 @@
 ul {
     font-size: 3vh;
     list-style: none;
+    padding: 0px;
 }
 
 #checkout-button {
@@ -20,5 +27,5 @@ ul {
 }
 
 .main_content {
-    margin-top: 25vh;
+    margin-top: 20vh;
 }

@@ -24,7 +24,6 @@ feedback_button.onclick = function() {
 			return results.json();
 		})
 		.then(responseJson => {
-			console.log(responseJson)
 			var success = responseJson.success;
 			if (success) {
 				swal("Feedback sent!");
