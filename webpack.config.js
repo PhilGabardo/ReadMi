@@ -69,6 +69,7 @@ Encore
 	.addEntry('non_piano_stave_updater', './web/assets/js/non_piano_stave_updater.js')
 	.addEntry('reset_password', './web/assets/js/reset_password.js')
 	.addEntry('subscription_info', './web/assets/js/subscription_info.js')
+	.addEntry('beat_count_updater', './web/assets/js/beat_count_updater.js')
 
 
 	// will output as web/build/global.css

@@ -12,6 +12,7 @@ import NoteFeedbackV2 from './note_feedback_v2'
 import swal2 from 'sweetalert2';
 import NoteHinter from './note_hinter'
 import StaveUpdater from './non_piano_stave_updater'
+import BeatCountUpdater from './beat_count_updater'
 
 window.onorientationchange = function() {
 	var orientation = window.orientation;
@@ -105,13 +106,13 @@ function startSession(audioStreamController) {
 			} else {
 				stave_updater.renderForNonPiano()
 			}
+			let beatCountUpdater = new BeatCountUpdater(beat_count, bpm_value)
 			let metronome = new ScheduledMetronome(bpm_value, beats_per_measure * (vf_bars.length + 1))
 			let songPlayer = new SongPlayer(note_scheduler.getScheduledNotes(), instrument, bpm_value, beats_per_measure);
 			let note_hinter = NoteHinter.getHinter(instrument, bpm_value, beats_per_measure, note_scheduler.getScheduledNotes(), keySignature);
 			note_hinter.setController();
-			let timing_bar = new TimingBar(renderer_context, staveWidth, staveHeight, beats_per_measure, bpm_value, keySigStaffWidth);
 			let note_feedback = new NoteFeedbackV2(renderer_context, note_scheduler, audioStreamController, beats_per_measure, bpm_value, instrument)
-			let session_controller = new SessionController(note_feedback, metronome, songPlayer, timing_bar, beats_per_measure, bpm_value, bars.length, isDemo, songId, bpmRequirement, note_hinter, stave_updater);
+			let session_controller = new SessionController(note_feedback, metronome, songPlayer, beats_per_measure, bpm_value, bars.length, isDemo, note_hinter, stave_updater, beatCountUpdater);
 			session_controller.start();
 		})
 	});

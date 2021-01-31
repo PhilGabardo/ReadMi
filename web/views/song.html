@@ -28,6 +28,7 @@
 		</tr>
 	</table>
 </div>
+<div id="beat_count_div"><text id="beat_count"></text></div>
 <div id="note_hint_div"><text id="note_hint">Next Note:</text></div>
 <div id="boo">
 </div>
@@ -42,5 +43,6 @@
 	var isDemo = '{{ is_demo }}';
 	var songId = '{{ song_id }}';
 	var bpmRequirement = '{{ bpm_requirement }}';
+	var beat_count = bars.length * beatsPerMeasure;
 </script>
 <script type="text/javascript" src="/build/test.js"></script>

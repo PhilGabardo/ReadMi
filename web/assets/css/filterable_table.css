@@ -53,7 +53,7 @@
 }
 
 .songName {
-    width:70%;
+    width:60%;
     font-family: 'Lobster';
 }
 
@@ -67,12 +67,17 @@
 }
 
 .songKey {
-    width:15%;
+    width:10%;
     font-family: 'Lobster';
 }
 .songTime {
-    width:15%;
+    width:30%;
     font-family: 'Lobster';
+    text-align: center;
+}
+
+.songLength {
+    font-size: 10px;
 }
 
 

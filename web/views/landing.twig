@@ -60,7 +60,10 @@
                         <span class="songLevel">Level&nbsp;{{ s.level }}</span>
                     </td>
                     <td class="songKey">{{ s.key_signature }}</td>
-                    <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>
+                    <td class="songTime">
+                        <span class="songTiming">{{ s.beats_per_measure }}/{{ s.beat_value }}</span><br>
+                        <span class="songLength">{{ s.beat_count }} beats long</span><br>
+                    </td>
                 </tr>
             {% endfor %}
             {% for s in disabled_songs %}
@@ -72,7 +75,10 @@
                         <span class="songLevel">Level&nbsp;{{ s.level }}</span>
                     </td>
                     <td class="songKey">{{ s.key_signature }}</td>
-                    <td class="songTime">{{ s.beats_per_measure }}/{{ s.beat_value }}</td>
+                    <td class="songTime">
+                        <span class="songTiming">{{ s.beats_per_measure }}/{{ s.beat_value }}</span><br>
+                        <span class="songLength">{{ s.beat_count }} beats long</span><br>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

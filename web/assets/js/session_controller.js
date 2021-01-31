@@ -2,7 +2,7 @@ import Timing from './timing'
 import swal from 'sweetalert';
 
 export default class SessionController {
-	constructor(note_feedback, metronome, song_player, timing_bar, beats_per_measure, bpm, total_bar_count, is_demo, song_id, bpm_requirement, note_hinter, stave_updater) {
+	constructor(note_feedback, metronome, song_player, beats_per_measure, bpm, total_bar_count, is_demo, note_hinter, stave_updater, beat_count_updater) {
 		this.note_feedback = note_feedback;
 		this.metronome = metronome;
 		this.song_player = song_player;
@@ -14,16 +14,16 @@ export default class SessionController {
 		this.total_bar_count = total_bar_count;;
 		this.pause_controller_label = document.getElementById('pause-controller-label');
 		this.is_demo = is_demo;
-		this.song_id = song_id;
-		this.bpm_requirement = bpm_requirement;
 		this.note_hinter = note_hinter;
+		this.beat_count_updater = beat_count_updater;
 		let first_note = this.note_hinter.getNextNote(0);
 		if (!first_note.isRest()) {
 			this.note_hinter.hint(first_note);
 		}
 		this.setPauseController();
-		this.stave_updater = stave_updater
-		this.timing = new Timing()
+		this.stave_updater = stave_updater;
+		this.beat_count_updater = beat_count_updater;
+		this.timing = new Timing();
 	}
 
 	setPauseController() {
@@ -65,6 +65,7 @@ export default class SessionController {
 		//session_controller.score_scroller.start()
 		session_controller.completion = setTimeout(session_controller.complete, session_controller.getTotalTimeInMs(), session_controller);
 		session_controller.note_hinter.start();
+		session_controller.beat_count_updater.start();
 	}
 
 	invertState() {
@@ -77,6 +78,7 @@ export default class SessionController {
 			//this.timing_bar.pause();
 			//this.score_scroller.pause();
 			this.note_hinter.pause();
+			this.beat_count_updater.pause();
 			this.playingState = false;
 			window.clearTimeout(this.completion);
 		} else {
@@ -87,6 +89,7 @@ export default class SessionController {
 			this.note_feedback.resume();
 			//this.timing_bar.resume();
 			//this.score_scroller.resume();
+			this.beat_count_updater.resume();
 			this.note_hinter.resume();
 			this.playingState = true;
 			this.completion = setTimeout(this.complete, this.getTotalTimeInMs() - this.timing.getTimeSinceStart(), this);
@@ -99,6 +102,7 @@ export default class SessionController {
 		session_controller.metronome.pause();
 		session_controller.song_player.pause();
 		session_controller.note_feedback.pause();
+		session_controller.beat_count_updater.pause();
 		//session_controller.timing_bar.pause();
 		//session_controller.timing_bar.clearLastChild();
 		//session_controller.score_scroller.pause();

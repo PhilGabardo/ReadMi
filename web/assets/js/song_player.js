@@ -39,7 +39,6 @@ export default class SongPlayer {
 		//(60 * 1000 * i / this.bpm)
 		// Schedule all the clicks ahead.
 		let countdown_offset = (60 / this.beats_per_minute) * this.beats_per_measure;
-		console.log(countdown_offset);
 		for (let i = 0; i < this.scheduledNotes.length; i++) {
 			let note = this.scheduledNotes[i].note;
 			if (note.attrs.type !== 'GhostNote' && !note.isRest()) {
