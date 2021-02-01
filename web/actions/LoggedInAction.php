@@ -83,6 +83,10 @@ abstract class LoggedInAction extends ReadMiAction {
 	}
 
 	protected static function isPremiumUser($app) : bool {
+		$user_info = self::getUserInfo($app);
+		if ($user_info['is_super_user']) {
+			return true;
+		}
 		$sub_info =  self::getSubscriptionInfo($app);
 		return isset($sub_info['status']) ? $sub_info['status'] === 'active' : false;
 	}
