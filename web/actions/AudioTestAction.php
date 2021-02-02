@@ -32,7 +32,6 @@ class AudioTestAction extends LoggedOutAction {
 			],
 			'is_demo' => true,
 			'song_id' => 0,
-			'bpm_requirement' => 0,
 			'instrument' => $instrument,
 			'bars' => json_encode($bars),
 		]);

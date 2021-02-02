@@ -45,7 +45,6 @@ class PlayCustomSongAction extends LoggedInAction {
 				's' => $song_row,
 				'is_demo' => false,
 				'song_id' => '',
-				'bpm_requirement' => '',
 				'bars' => json_encode($bars),
 				'instrument' => $instrument,
 			] + self::getLoggedInData($app, false));

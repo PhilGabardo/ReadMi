@@ -15,7 +15,6 @@ class SongCompletionAction extends LoggedInAction {
 		$notes_correct = $request->get('notes_correct');
 		$total_notes = $request->get('total_notes');
 		$bpm = $request->get('bpm');
-		$bpm_requirement = $request->get('bpm_requirement');
 		$user_info = self::getUserInfo($app);
 		$instrument = $user_info['instrument'];
 		$instrument_data = json_decode($user_info["{$instrument}_data"], true);

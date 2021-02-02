@@ -45,11 +45,6 @@ abstract class LoggedInAction extends ReadMiAction {
 		return true;
 	}
 
-	protected static function getBPMRequirement(int $level, int $beat_value) : int {
-		$multiplier = 10 + min(10, $level / 10);
-		return floor($multiplier * $beat_value);
-	}
-
 	protected static function getSubscriptionInfo($app) : array {
 		$customer = self::getStripeCustomer($app);
 		$subscriptions = $customer->subscriptions;
